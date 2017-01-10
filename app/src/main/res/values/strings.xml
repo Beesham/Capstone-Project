@@ -1,3 +1,13 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">BeerAC</string>
+    <string name="home_activity">Home</string>
+
+    <!-- Menu -->
+    <string name="menu_settings">Settings</string>
+    <string name="menu_mybeers">My Beers</string>
+    <string name="menu_search">Search</string>
+
+    <!-- Home -->
+    <string name="beers_had"><xliff:g id="beers_had">%02d</xliff:g> beers had</string>
+
 </resources>
