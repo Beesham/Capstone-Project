@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_deatils"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:showIn="@layout/activity_details"
+        tools:context="com.beesham.beerac.ui.DetailsActivityFragment">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pharetra condimentum porta. Sed feugiat imperdiet dui ut pellentesque. Sed laoreet dolor ac hendrerit elementum. Praesent suscipit mi est. Donec imperdiet ligula turpis, ac rhoncus quam finibus hendrerit. Nulla et purus id ipsum ultricies ultrices. Sed ex odio, facilisis sit amet hendrerit eget, sagittis a elit. Donec tristique purus ac felis consequat rhoncus.
+
+Fusce quis tortor molestie, maximus lacus ac, finibus ligula. Sed nec nulla ut erat mollis aliquet. Aenean dignissim porta luctus. Vestibulum scelerisque mauris in augue porttitor facilisis. Nulla maximus metus a mattis mattis. Nunc accumsan aliquet nunc vitae efficitur. Nulla facilisi. Pellentesque sagittis nisi est, vel condimentum leo euismod eget. Curabitur eget aliquam elit. In tincidunt non tellus quis scelerisque. Fusce nisi felis, rutrum vitae sem consequat, gravida dignissim ante. Vivamus vel arcu quis erat condimentum scelerisque.
+
+Proin mattis et orci ac mattis. Maecenas nec nibh consectetur, sollicitudin massa varius, viverra erat. Nullam nec laoreet erat, a ultrices ante. Donec scelerisque mi a leo consequat, ac mattis erat faucibus. Mauris vestibulum, ante eu imperdiet ultrices, ipsum purus luctus metus, vitae iaculis dolor urna at odio. In iaculis facilisis suscipit. Proin malesuada justo ut odio feugiat, id scelerisque massa lobortis."/>
+
+</android.support.design.widget.CoordinatorLayout>

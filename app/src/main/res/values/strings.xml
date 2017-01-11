@@ -9,5 +9,7 @@
 
     <!-- Home -->
     <string name="beers_had"><xliff:g id="beers_had">%02d</xliff:g> beers had</string>
+    <string name="title_activity_details">Details</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
