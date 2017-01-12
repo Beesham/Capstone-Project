@@ -1,6 +1,6 @@
 <resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">BeerAC</string>
-    <string name="home_activity">Home</string>
+    <string name="title_activity_home">Home</string>
 
     <!-- Menu -->
     <string name="menu_settings">Settings</string>
@@ -11,5 +11,8 @@
     <string name="beers_had"><xliff:g id="beers_had">%02d</xliff:g> beers had</string>
     <string name="title_activity_details">Details</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Search -->
+    <string name="search_hint">Search beers1</string>
 
 </resources>
