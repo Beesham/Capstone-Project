@@ -66,6 +66,18 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        switch(item.getItemId()){
+            case R.id.mybeers:
+                launchMyBeersActivity();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void launchMyBeersActivity(){
+        Intent i = new Intent(HomeActivity.this, SavesActivity.class);
+        startActivity(i);
     }
 }
