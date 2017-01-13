@@ -2,6 +2,7 @@ package com.beesham.beerac.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.beesham.beerac.R;
@@ -12,6 +13,7 @@ import butterknife.ButterKnife;
 public class SavesActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
