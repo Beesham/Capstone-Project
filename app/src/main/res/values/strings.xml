@@ -15,4 +15,9 @@
     <!-- Search -->
     <string name="search_hint">Search beers1</string>
 
+    <!-- Saves -->
+    <string name="title_activity_saves">My Beers</string>
+
+
+
 </resources>
