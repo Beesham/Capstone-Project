@@ -33,5 +33,5 @@ public class BeerColumns {
     public static final String IMAGEURLLARGE = "image_url_large";
     @DataType(DataType.Type.TEXT) @NotNull
     public static final String YEAR = "year";
-    
+
 }
