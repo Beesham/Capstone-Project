@@ -14,7 +14,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
                 android:name=".ui.DetailsActivity"
                 android:label="@string/title_activity_details"
@@ -23,7 +22,6 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.beesham.beerac.ui.HomeActivity"/>
         </activity>
-
         <activity
                 android:name=".ui.SearchActivity"
                 android:launchMode="singleTop">
@@ -35,12 +33,16 @@
                     android:name="android.app.searchable"
                     android:resource="@xml/searchable"/>
         </activity>
-
-        <activity android:name=".ui.SavesActivity"
-            android:label="@string/title_activity_saves">
+        <activity
+                android:name=".ui.SavesActivity"
+                android:label="@string/title_activity_saves">
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.beesham.beerac.ui.HomeActivity"/>
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.beesham.beerac.ui.HomeActivity"/>
+        </activity>
+        <activity
+                android:name=".ui.SettingsActivity"
+                android:label="@string/title_activity_settings">
         </activity>
     </application>
 
