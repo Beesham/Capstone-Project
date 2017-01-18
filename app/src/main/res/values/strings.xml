@@ -18,6 +18,9 @@
     <!-- Saves -->
     <string name="title_activity_saves">My Beers</string>
 
+    <!-- Details -->
+    <string name="ally_toolbar_titile"></string>
+
 
 
 </resources>
