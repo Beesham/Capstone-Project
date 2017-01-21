@@ -67,6 +67,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
+            case R.id.settings:
+                launchSettingsActivity();
+                return true;
+
             case R.id.mybeers:
                 launchMyBeersActivity();
                 return true;
@@ -78,6 +82,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private void launchMyBeersActivity(){
         Intent i = new Intent(HomeActivity.this, SavesActivity.class);
+        startActivity(i);
+    }
+
+    private void launchSettingsActivity(){
+        Intent i = new Intent(HomeActivity.this, SettingsActivity.class);
         startActivity(i);
     }
 }
