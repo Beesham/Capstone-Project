@@ -28,9 +28,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.beesham.beerac.R;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -278,8 +280,6 @@ public class SettingsActivity extends PreferenceActivity {
 */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v(LOG_TAG, "onActivityResult");
-
         if(requestCode == LocationEditTextPreference.PLACE_PICKER_REQUEST){
             if(resultCode == RESULT_OK){
                 Place place = PlacePicker.getPlace(this, data);
@@ -291,13 +291,26 @@ public class SettingsActivity extends PreferenceActivity {
                     address = String.format("(%.2f, %.2f", latLng.latitude, latLng.longitude);
                 }
 
+                String country = null;
+                try {
+                    country = Utils.getCountryName(this, latLng.latitude, latLng.longitude);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.pref_location_key), address);
+                editor.putString(getString(R.string.pref_location_key), country);
                 editor.commit();
 
                 Preference locationPreference = findPreference(getString(R.string.pref_location_key));
-                setPreferenceSummary(locationPreference, address);
+                if(country != null) {
+                    setPreferenceSummary(locationPreference, country);
+                }else{
+                    Toast.makeText(this, R.string.location_error, Toast.LENGTH_SHORT).show();
+                }
+
 
                /* // Add attributions for our new PlacePicker location.
                 if (mAttribution != null) {
