@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.service.BeerACIntentService;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -17,13 +18,18 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        Log.v(LOG_TAG, "inSearchAct");
-
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.v(LOG_TAG, "query: " + query);
+
+            launchBeerACIntentService(query);
         }
+    }
+
+    private void launchBeerACIntentService(String queryString){
+        Log.v(LOG_TAG, "launching intent service");
+        BeerACIntentService.startBeerQueryService(this, queryString);
     }
 }
