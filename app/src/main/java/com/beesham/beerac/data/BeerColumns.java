@@ -17,7 +17,7 @@ public class BeerColumns {
     public static final String BEERID = "beer_id";
     @DataType(DataType.Type.TEXT) @NotNull
     public static final String NAME = "name";
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     public static final String DESCRIPTION = "description";
     @DataType(DataType.Type.TEXT) @NotNull
     public static final String FOODPARINGS = "food_parings";
@@ -31,7 +31,7 @@ public class BeerColumns {
     public static final String IMAGEURLMEDIUM = "image_url_medium";
     @DataType(DataType.Type.TEXT)
     public static final String IMAGEURLLARGE = "image_url_large";
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     public static final String YEAR = "year";
 
 }
