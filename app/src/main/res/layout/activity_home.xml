@@ -34,18 +34,6 @@
                     android:text="@string/title_activity_home"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
-            <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                <android.support.v7.widget.SearchView
-                        android:id="@+id/search_view"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-            </RelativeLayout>
-
         </android.support.v7.widget.Toolbar>
 
         <FrameLayout
