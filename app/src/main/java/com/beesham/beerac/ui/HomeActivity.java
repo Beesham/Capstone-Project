@@ -1,5 +1,7 @@
 package com.beesham.beerac.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +23,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
-    @BindView(R.id.search_view) SearchView mSearchView;
+    //@BindView(R.id.search_view) SearchView mSearchView;
     @BindView(R.id.toolbar_title) TextView mToolbarTitle;
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
@@ -41,26 +43,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mToolbarTitle.setVisibility(View.GONE);
-            }
-        });
-
-        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                mToolbarTitle.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.home, menu);
+
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true);
+        searchView.setIconified(true);
+
         return true;
     }
 
