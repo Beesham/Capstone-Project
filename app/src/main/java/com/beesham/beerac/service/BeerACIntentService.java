@@ -20,14 +20,21 @@ public class BeerACIntentService extends IntentService {
 
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.beesham.beerac.service.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.beesham.beerac.service.extra.PARAM2";
 
 
-    private final String BREWERY_BASE_URL = "http://api.brewerydb.com/v2/?";
-    private final String KEY = "enter key kere";
+    private final String BREWERY_BASE_URL = "http://api.brewerydb.com/v2";
+    private final String KEY = "b0c0eceef49f7ecd827331cde0912036";
+    private final String PATH_SEARCH = "search";
 
+    private final String PARAM_KEY = "key";
     private final String PARMA_BEER_MULTI = "beers";
-    private final String PARMA_BEER_SINGLE = "beer";
+    //private final String PARMA_BEER_SINGLE = "beer";
+    private final String PARAM_QUERY = "q";
+    private final String PARAM_TYPE = "type";
+
+    private final String PARMA_BEER_SINGLE = "search?q=&type=beer";
+
+    String type = "beer";
 
 
     public BeerACIntentService() {
@@ -35,11 +42,10 @@ public class BeerACIntentService extends IntentService {
     }
 
 
-    public static void startBeerQueryService(Context context, String param1, String param2) {
+    public static void startBeerQueryService(Context context, String queryString) {
         Intent intent = new Intent(context, BeerACIntentService.class);
         intent.setAction(ACTION_GET_BEERS);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
+        intent.putExtra(EXTRA_PARAM1, queryString);
         context.startService(intent);
     }
 
@@ -48,19 +54,21 @@ public class BeerACIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_GET_BEERS.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
+                final String queryString = intent.getStringExtra(EXTRA_PARAM1);
+                getSingleBeer(queryString);
             }
         }
     }
 
-    private void getBeers(){
-        Uri beersUri = Uri.parse(BREWERY_BASE_URL).buildUpon()
-                .appendPath(PARMA_BEER_MULTI)
-                .build();
+    private void getSingleBeer(String queryString){
 
-        Log.v(LOG_TAG, "beerUri: " + beersUri.toString());
+        Uri.Builder builder = Uri.parse(BREWERY_BASE_URL).buildUpon()
+                .appendPath(PATH_SEARCH)
+                .appendQueryParameter(PARAM_QUERY, queryString)
+                .appendQueryParameter(PARAM_TYPE, type)
+                .appendQueryParameter(PARAM_KEY, KEY);
+
+        Log.v(LOG_TAG, "beerUri: " + builder.build().toString());
 
     }
 
