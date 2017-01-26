@@ -36,6 +36,8 @@ public class BeerACIntentService extends IntentService {
     private final String BREWERY_BASE_URL = "http://api.brewerydb.com/v2";
     private final String KEY = "b0c0eceef49f7ecd827331cde0912036";
     private final String PATH_SEARCH = "search";
+    private final String PATH_BEER = "beer";
+
 
     private final String PARAM_KEY = "key";
     private final String PARMA_BEER_MULTI = "beers";
@@ -43,7 +45,6 @@ public class BeerACIntentService extends IntentService {
     private final String PARAM_QUERY = "q";
     private final String PARAM_TYPE = "type";
 
-    private final String PATH_BEER = "beer";
 
     String type = "beer";
 
