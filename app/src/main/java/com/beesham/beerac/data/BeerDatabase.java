@@ -11,5 +11,7 @@ import net.simonvt.schematic.annotation.Table;
 public class BeerDatabase {
     public static final int VERSION = 1;
 
-    @Table(BeerColumns.class) public static final String BEERS = "beers";
+    @Table(Columns.SavedBeerColumns.class) public static final String SAVED_BEERS = "savedBeers";
+    @Table(Columns.SavedBeerColumns.class) public static final String SEARCHED_BEERS = "searchedBeers";
+
 }
