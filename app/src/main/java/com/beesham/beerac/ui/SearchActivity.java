@@ -19,7 +19,7 @@ public class SearchActivity extends AppCompatActivity {
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
+    //@BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
 
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
 
@@ -36,13 +36,12 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.v(LOG_TAG, "query: " + query);
 
             launchBeerACIntentService(query);
         }
 
         //mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter();
-        mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
+       // mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
     }
 
     private void launchBeerACIntentService(String queryString){
