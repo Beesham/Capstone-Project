@@ -1,21 +1,29 @@
 package com.beesham.beerac.service;
 
 import android.app.IntentService;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.beesham.beerac.data.BeerProvider;
+import com.beesham.beerac.data.Columns;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static java.security.AccessController.getContext;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -96,7 +104,12 @@ public class BeerACIntentService extends IntentService {
     }
 
     private void run(String url){
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        OkHttpClient client = builder.connectTimeout(5, TimeUnit.MINUTES)
+                .readTimeout(5, TimeUnit.MINUTES)
+                .writeTimeout(5, TimeUnit.MINUTES)
+                .build();
 
         Request request = new Request.Builder()
                 .url(url)
@@ -144,13 +157,68 @@ public class BeerACIntentService extends IntentService {
 
         JSONArray beerListJsonArray = beerListJsonObj.getJSONArray(KEY_DATA);
 
+        Vector<ContentValues> contentValuesVector = new Vector<>(beerListJsonArray.length());
+
         for(int i = 0; i < beerListJsonArray.length(); i++){
-            Log.v(LOG_TAG, "Beer name: " + beerListJsonArray.getJSONObject(i).getString(KEY_NAME));
+            String name;
+            String id;
+            String description = null;
+            String labels;
+            String imageUrlIcon;
+            String imageUrlMedium;
+            String imageUrlLarge;
+
+            name =  beerListJsonArray.getJSONObject(i).getString(KEY_NAME);
+            id =  beerListJsonArray.getJSONObject(i).getString(KEY_BEERID);
+
 
             if(beerListJsonArray.getJSONObject(i).has(KEY_DESCRIPTION)) {
-                Log.v(LOG_TAG, "Beer description: " + beerListJsonArray.getJSONObject(i).getString(KEY_DESCRIPTION));
+                description = beerListJsonArray.getJSONObject(i)
+                        .getString(KEY_DESCRIPTION);
             }
 
+            if(beerListJsonArray.getJSONObject(i).has(KEY_LABELS)) {
+                labels = "Y";
+
+                imageUrlIcon = beerListJsonArray.getJSONObject(i)
+                        .getJSONObject(KEY_LABELS)
+                        .getString(KEY_IMAGEURL_ICON);
+
+                imageUrlMedium = beerListJsonArray.getJSONObject(i)
+                        .getJSONObject(KEY_LABELS)
+                        .getString(KEY_IMAGEURL_MEDIUM);
+
+                imageUrlLarge = beerListJsonArray.getJSONObject(i)
+                        .getJSONObject(KEY_LABELS)
+                        .getString(KEY_IMAGEURL_LARGE);
+            }else{
+                labels = "N";
+            }
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(Columns.SearchedBeerColumns.NAME, name);
+            contentValues.put(Columns.SearchedBeerColumns.BEERID, id);
+            contentValues.put(Columns.SearchedBeerColumns.DESCRIPTION, description);
+            contentValues.put(Columns.SearchedBeerColumns.LABELS, labels);
+
+            contentValuesVector.add(contentValues);
+        }
+
+        logBeers(contentValuesVector);
+    }
+
+    private void logBeers(Vector<ContentValues> contentValuesVector){
+        int inserted = 0;
+        if(contentValuesVector.size() > 0){
+            ContentValues[] contentValuesArray = new ContentValues[contentValuesVector.size()];
+            contentValuesVector.toArray(contentValuesArray);
+
+            getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
+            Log.v(LOG_TAG, "Content URI " + BeerProvider.SearchedBeers.CONTENT_URI);
+
+            inserted = getContentResolver().bulkInsert(BeerProvider.SearchedBeers.CONTENT_URI, contentValuesArray);
+
+            Log.v(LOG_TAG, "Rows inserted: " + inserted);
         }
     }
 

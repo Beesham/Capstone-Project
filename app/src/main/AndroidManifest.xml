@@ -68,7 +68,12 @@
 
         <service
             android:name=".service.BeerACIntentService"
-            android:exported="false"></service>
+            android:exported="false"/>
+
+        <provider
+            android:authorities="com.beesham.beerac.data.BeerProvider"
+            android:name="com.beesham.beerac.data.generated.BeerProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
