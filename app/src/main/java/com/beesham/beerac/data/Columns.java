@@ -25,7 +25,7 @@ public class Columns {
         @DataType(DataType.Type.TEXT)
         public static final String DESCRIPTION = "description";
         @DataType(DataType.Type.TEXT)
-        @NotNull
+        //@NotNull
         public static final String FOODPARINGS = "food_parings";
         @DataType(DataType.Type.TEXT)
         @NotNull
