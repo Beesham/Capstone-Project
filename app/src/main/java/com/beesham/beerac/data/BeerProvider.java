@@ -15,7 +15,7 @@ import net.simonvt.schematic.annotation.TableEndpoint;
 public class BeerProvider {
     public static final String AUTHORITY = "com.beesham.beerac.data.BeerProvider";
 
-    static final Uri BASE_CONTENT_URI = Uri.parse("content://"+AUTHORITY);
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://"+AUTHORITY);
 
     interface Path{
         String SAVED_BEERS = "saved_beers";
@@ -36,14 +36,14 @@ public class BeerProvider {
     public static class SavedBeers{
         @ContentUri(
                 path = Path.SAVED_BEERS,
-                type = "vnd.android.cursor.dir/beers"
+                type = "vnd.android.cursor.dir/saved_beers"
         )
         public static final Uri CONTENT_URI = buildUri(Path.SAVED_BEERS);
 
         @InexactContentUri(
                 name = "BEER_ID",
                 path = Path.SAVED_BEERS + "/*",
-                type = "vnd.android.cursor.item/beers",
+                type = "vnd.android.cursor.item/saved_beers",
                 whereColumn = Columns.SavedBeerColumns.NAME,
                 pathSegment = 1
         )
@@ -57,14 +57,14 @@ public class BeerProvider {
     public static class SearchedBeers{
         @ContentUri(
                 path = Path.SEARCHED_BEERS,
-                type = "vnd.android.cursor.dir/beers"
+                type = "vnd.android.cursor.dir/searched_beers"
         )
         public static final Uri CONTENT_URI = buildUri(Path.SEARCHED_BEERS);
 
         @InexactContentUri(
                 name = "BEER_ID",
                 path = Path.SEARCHED_BEERS + "/*",
-                type = "vnd.android.cursor.item/beers",
+                type = "vnd.android.cursor.item/searched_beers",
                 whereColumn = Columns.SearchedBeerColumns.NAME,
                 pathSegment = 1
         )

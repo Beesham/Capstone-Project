@@ -12,6 +12,5 @@ public class BeerDatabase {
     public static final int VERSION = 1;
 
     @Table(Columns.SavedBeerColumns.class) public static final String SAVED_BEERS = "savedBeers";
-    @Table(Columns.SavedBeerColumns.class) public static final String SEARCHED_BEERS = "searchedBeers";
-
+    @Table(Columns.SearchedBeerColumns.class) public static final String SEARCHED_BEERS = "searchedBeers";
 }
