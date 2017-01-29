@@ -24,13 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!--TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_activity_search"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/-->
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 
