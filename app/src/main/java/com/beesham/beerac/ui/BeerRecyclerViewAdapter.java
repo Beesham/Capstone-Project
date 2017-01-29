@@ -1,5 +1,7 @@
 package com.beesham.beerac.ui;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.data.Columns;
 
 import java.util.ArrayList;
 
@@ -20,6 +23,8 @@ import butterknife.BindView;
 public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Beer> mBeerList;
+    private final Context mContext;
+    private Cursor mCursor;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView beer_icon_imageView;
@@ -33,8 +38,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
         }
     }
 
-    public BeerRecyclerViewAdapter(ArrayList beerList) {
-        mBeerList = beerList;
+    public BeerRecyclerViewAdapter(Context context) {
+        mContext = context;
     }
 
     @Override
@@ -48,14 +53,23 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Beer beer = mBeerList.get(position);
+        mCursor.moveToPosition(position);
+
         //holder.drinkBeer_icon_imageView.setImageResource(beer.getUrl_icon());
-        holder.beer_name_textView.setText(beer.getName());
+        holder.beer_name_textView.setText(mCursor.getString(
+                mCursor.getColumnIndex(Columns.SearchedBeerColumns.NAME)));
         holder.drinkBeer_icon_imageView.setImageResource(R.mipmap.ic_launcher);
     }
 
     @Override
     public int getItemCount() {
-        return mBeerList.size();
+        if(mCursor == null) return 0;
+        return mCursor.getCount();
     }
+
+    public void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
+        notifyDataSetChanged();
+    }
+
 }
