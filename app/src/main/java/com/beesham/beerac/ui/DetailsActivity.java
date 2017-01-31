@@ -5,11 +5,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.beesham.beerac.R;
 
 public class DetailsActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = DetailsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,11 @@ public class DetailsActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle.containsKey("uri")){
+            Log.v(LOG_TAG, bundle.getString("uri"));
+        }
     }
 
 }

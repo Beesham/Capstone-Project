@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -26,6 +27,9 @@ import com.beesham.beerac.service.BeerACIntentService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEERS;
+import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
+
 public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
@@ -37,6 +41,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
+    private Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +61,17 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
         }
 
-        mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(this);
+        mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(this, new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
+            @Override
+            public void onClick(BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
+                Uri uri = BeerProvider.SearchedBeers.withName(beerViewHolder.beer_name_textView.getText().toString());
+
+                Log.v(LOG_TAG, "I was clicked: " + uri.toString());
+
+                Bundle args = new Bundle();
+                args.putString("uri", uri.toString());
+            }
+        });
         mRecyclerView = (RecyclerView) findViewById(R.id.beer_recycler_view);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -67,7 +82,10 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
     private void launchBeerACIntentService(String queryString){
         Log.v(LOG_TAG, "launching intent service");
-        BeerACIntentService.startBeerQueryService(this, queryString);
+        Intent intent = new Intent(this, BeerACIntentService.class);
+        intent.setAction(ACTION_GET_BEERS);
+        intent.putExtra(BeerACIntentService.EXTRA_QUERY, queryString);
+        BeerACIntentService.startBeerQueryService(this, intent);
     }
 
     @Override
@@ -76,7 +94,11 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         final String[] projections = {
                 Columns.SearchedBeerColumns.BEERID,
                 Columns.SearchedBeerColumns.NAME,
-                Columns.SearchedBeerColumns.DESCRIPTION
+                Columns.SearchedBeerColumns.DESCRIPTION,
+                Columns.SearchedBeerColumns.LABELS,
+                Columns.SearchedBeerColumns.IMAGEURLICON,
+                Columns.SearchedBeerColumns.IMAGEURLLARGE,
+                Columns.SearchedBeerColumns.IMAGEURLMEDIUM,
         };
 
         return new CursorLoader(
@@ -91,11 +113,12 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if(!data.moveToFirst()) {return;}
+        mCursor = data;
+        if(!mCursor.moveToFirst()) {return;}
 
-        mBeerRecyclerViewAdapter.swapCursor(data);
+        mBeerRecyclerViewAdapter.swapCursor(mCursor);
 
-        Log.v(LOG_TAG, "size of cursor: " + data.getCount());
+        Log.v(LOG_TAG, "size of cursor: " + mCursor.getCount());
     }
 
     @Override
