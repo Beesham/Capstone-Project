@@ -8,6 +8,7 @@ public class Beer {
     private String name;
     private String id;
     private String description;
+    private String abv;
     private boolean labels;
     private int year;
     private String url_icon;
@@ -17,12 +18,14 @@ public class Beer {
     public Beer(String name,
                 String id,
                 String description,
+                String abv,
                 boolean labels,
                 int year) {
 
         this.name = name;
         this.id = id;
         this.description = description;
+        this.abv = abv;
         this.labels = labels;
         this.year = year;
     }
