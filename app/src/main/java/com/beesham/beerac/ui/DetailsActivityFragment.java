@@ -56,9 +56,11 @@ public class DetailsActivityFragment extends Fragment{
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getActivity().getIntent().getExtras();
-        if(bundle.containsKey("uri")){
-            mUri = Uri.parse(bundle.getString("uri"));
-            Log.v(LOG_TAG, mUri.toString());
+        if(bundle != null) {
+            if (bundle.containsKey("uri")) {
+                mUri = Uri.parse(bundle.getString("uri"));
+                Log.v(LOG_TAG, mUri.toString());
+            }
         }
     }
 
@@ -68,30 +70,32 @@ public class DetailsActivityFragment extends Fragment{
         final View view =  inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
 
-        new BeerDetailsAsyncTask(new BeerDetailsAsyncTask.AsyncResponse() {
-            @Override
-            public void processFinish(String results) {
-                mResponseStr = results;
-                progressBar.setVisibility(View.GONE);
+        if(mUri != null) {
+            new BeerDetailsAsyncTask(new BeerDetailsAsyncTask.AsyncResponse() {
+                @Override
+                public void processFinish(String results) {
+                    mResponseStr = results;
+                    progressBar.setVisibility(View.GONE);
 
-                Beer beer = null;
+                    Beer beer = null;
 
-                try {
-                    beer = Utils.extractBeerDetails(mResponseStr);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    try {
+                        beer = Utils.extractBeerDetails(mResponseStr);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    beerNameTextView.setText(beer.getName());
+                    descriptionTextView.setText(beer.getDescription());
+
+                    if (!TextUtils.isEmpty(beer.getUrl_large())) {
+                        Picasso.with(getContext())
+                                .load(beer.getUrl_large())
+                                .into(beerImageView);
+                    }
                 }
-
-                beerNameTextView.setText(beer.getName());
-                descriptionTextView.setText(beer.getDescription());
-
-                if(!TextUtils.isEmpty(beer.getUrl_large())){
-                    Picasso.with(getContext())
-                            .load(beer.getUrl_large())
-                            .into(beerImageView);
-                }
-            }
-        }).execute(mUri);
+            }).execute(mUri);
+        }
 
         return view;
     }

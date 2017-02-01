@@ -31,11 +31,6 @@ public class DetailsActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        Bundle bundle = getIntent().getExtras();
-        if(bundle.containsKey("uri")){
-            Log.v(LOG_TAG, bundle.getString("uri"));
-        }
     }
 
 }
