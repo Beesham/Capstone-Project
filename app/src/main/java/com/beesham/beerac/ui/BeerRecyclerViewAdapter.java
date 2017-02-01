@@ -2,13 +2,16 @@ package com.beesham.beerac.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,19 +45,48 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
         void onClick(BeerViewHolder beerViewHolder);
     }
 
-    public class BeerViewHolder extends RecyclerView.ViewHolder
-                                    implements View.OnClickListener{
+    public class BeerViewHolder extends RecyclerView.ViewHolder{
+                                    //implements View.OnClickListener{
         @BindView(R.id.beer_image_image_view) ImageView beer_icon_imageView;
-        @BindView(R.id.drink_beer_image_view) ImageView drinkBeer_icon_imageView;
+        @BindView(R.id.drink_beer_image_container) FrameLayout drinkBeer_icon_container;
         @BindView(R.id.beer_name_text_view) TextView beer_name_textView;
 
         public BeerViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
-            v.setOnClickListener(this);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.v(LOG_TAG, "I was clicked " + beer_name_textView.getText());
+                    //mOnClickHandler.onClick(this);
+
+                    mCursor.moveToPosition(getPosition());
+
+                    Bundle args = new Bundle();
+                    args.putString("uri", BeerACIntentService.buildBeerByIdUri(
+                            mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
+                    ));
+
+                    mContext.startActivity(new Intent(mContext, DetailsActivity.class)
+                            .putExtras(args));
+                }
+            });
+
+            drinkBeer_icon_container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mCursor.moveToPosition(getPosition());
+
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    prefs.edit()
+                            .putString("drink_beer", mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID)))
+                    .commit();
+                    Log.v(LOG_TAG, "I want to drink this beer");
+                }
+            });
         }
 
-        @Override
+        /*@Override
         public void onClick(View view) {
             Log.v(LOG_TAG, "I was clicked " + beer_name_textView.getText());
             mOnClickHandler.onClick(this);
@@ -66,11 +98,9 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                     mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
             ));
 
-
-
             mContext.startActivity(new Intent(mContext, DetailsActivity.class)
                     .putExtras(args));
-        }
+        }*/
     }
 
     public BeerRecyclerViewAdapter(Context context,
@@ -109,7 +139,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
         }
         holder.beer_name_textView.setText(mCursor.getString(
                 mCursor.getColumnIndex(Columns.SearchedBeerColumns.NAME)));
-        holder.drinkBeer_icon_imageView.setImageResource(R.mipmap.ic_launcher);
+
+
     }
 
     @Override
