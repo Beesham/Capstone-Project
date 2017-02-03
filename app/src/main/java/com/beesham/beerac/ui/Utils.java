@@ -136,6 +136,7 @@ public class Utils {
         JSONObject dataJsonObj = beerJsonObj.getJSONObject(KEY_DATA);
 
         name = dataJsonObj.getString(KEY_NAME);
+        id = dataJsonObj.getString(KEY_BEERID);
 
         if(dataJsonObj.has(KEY_DESCRIPTION)) {
             description = dataJsonObj.getString(KEY_DESCRIPTION);
@@ -147,7 +148,7 @@ public class Utils {
             imageUrlLarge = imagesJsonObj.getString(KEY_IMAGEURL_LARGE);
         }
 
-        Beer beer = new Beer(name, null, description, null, hasImages, 0);
+        Beer beer = new Beer(name, id, description, null, hasImages, 0);
         if(hasImages) beer.setUrl_large(imageUrlLarge);
 
         return beer;
