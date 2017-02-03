@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
+import com.beesham.beerac.ui.Beer;
 import com.beesham.beerac.ui.Utils;
 
 import org.json.JSONArray;
@@ -98,11 +99,30 @@ public class BeerACIntentService extends IntentService {
         String response = run(buildBeerByIdUri(queryString));
         Log.v(LOG_TAG, "response: " + response);
 
-        /*try {
-            extractBeers(response);
+        Beer beer = null;
+
+        try {
+            beer = Utils.extractBeerDetails(response);
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Columns.SavedBeerColumns.BEERID, beer.getId());
+        contentValues.put(Columns.SavedBeerColumns.DESCRIPTION, beer.getDescription());
+        contentValues.put(Columns.SavedBeerColumns.NAME, beer.getName());
+
+        if(beer.hasLabels()){
+            contentValues.put(Columns.SavedBeerColumns.LABELS, "Y");
+            contentValues.put(Columns.SavedBeerColumns.IMAGEURLICON, beer.getUrl_icon());
+            contentValues.put(Columns.SavedBeerColumns.IMAGEURLMEDIUM, beer.getUrl_medium());
+            contentValues.put(Columns.SavedBeerColumns.IMAGEURLLARGE, beer.getUrl_large());
+        }else{
+            contentValues.put(Columns.SavedBeerColumns.LABELS, "N");
+        }
+
+        Log.v(LOG_TAG, "beer: " + beer.toString());
+        logBeers(contentValues);
     }
 
     public static String buildBeerByIdUri(String queryString){
@@ -129,8 +149,8 @@ public class BeerACIntentService extends IntentService {
 
         try {
             Response response = client.newCall(request).execute();
-            //Log.v(LOG_TAG, "response: " + response.body().string());
             responseStr = response.body().string();
+            Log.v(LOG_TAG, "response: " + responseStr);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -152,6 +172,10 @@ public class BeerACIntentService extends IntentService {
 
             Log.v(LOG_TAG, "Rows inserted: " + inserted);
         }
+    }
+
+    private void logBeers(ContentValues contentValues) {
+        getContentResolver().insert(BeerProvider.SavedBeers.CONTENT_URI, contentValues);
     }
 
 }

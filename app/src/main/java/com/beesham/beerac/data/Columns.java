@@ -28,7 +28,7 @@ public class Columns {
         //@NotNull
         public static final String FOODPARINGS = "food_parings";
         @DataType(DataType.Type.TEXT)
-        @NotNull
+        //@NotNull
         public static final String ISORGANIC = "is_organic";
         @DataType(DataType.Type.TEXT)
         @NotNull
