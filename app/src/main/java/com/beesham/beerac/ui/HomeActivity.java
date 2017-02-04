@@ -24,12 +24,15 @@ import android.widget.TextView;
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
+import com.beesham.beerac.service.BeerACIntentService;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEERS;
+import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -61,6 +64,15 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         if(prefs.contains("drink_beer")) {
             mBeerId = prefs.getString("drink_beer", null);
             Log.v(LOG_TAG, mBeerId);
+        }
+
+        if(savedInstanceState == null){
+            mBeerId = "oeGSxs";
+            Log.v(LOG_TAG, "launching intent service");
+            Intent intent = new Intent(this, BeerACIntentService.class);
+            intent.setAction(ACTION_GET_BEER_DETAILS);
+            intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
+            BeerACIntentService.startBeerQueryService(this, intent);
         }
 
         getSupportLoaderManager().initLoader(0, null, this);
@@ -129,7 +141,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 Columns.SavedBeerColumns.LABELS,
                 Columns.SavedBeerColumns.IMAGEURLICON,
                 Columns.SavedBeerColumns.IMAGEURLLARGE,
-                Columns.SavedBeerColumns.IMAGEURLMEDIUM,
+                Columns.SavedBeerColumns.IMAGEURLMEDIUM
         };
 
         return new CursorLoader(
