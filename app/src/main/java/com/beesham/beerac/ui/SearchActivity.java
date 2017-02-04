@@ -98,7 +98,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
                 Columns.SearchedBeerColumns.LABELS,
                 Columns.SearchedBeerColumns.IMAGEURLICON,
                 Columns.SearchedBeerColumns.IMAGEURLLARGE,
-                Columns.SearchedBeerColumns.IMAGEURLMEDIUM,
+                Columns.SearchedBeerColumns.IMAGEURLMEDIUM
         };
 
         return new CursorLoader(

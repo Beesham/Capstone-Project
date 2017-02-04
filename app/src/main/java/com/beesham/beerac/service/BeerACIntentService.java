@@ -97,8 +97,6 @@ public class BeerACIntentService extends IntentService {
 
     private void getBeerById(String queryString){
         String response = run(buildBeerByIdUri(queryString));
-        Log.v(LOG_TAG, "response: " + response);
-
         Beer beer = null;
 
         try {
@@ -150,7 +148,6 @@ public class BeerACIntentService extends IntentService {
         try {
             Response response = client.newCall(request).execute();
             responseStr = response.body().string();
-            Log.v(LOG_TAG, "response: " + responseStr);
         } catch (IOException e) {
             e.printStackTrace();
         }
