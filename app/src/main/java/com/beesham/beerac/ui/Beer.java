@@ -9,6 +9,8 @@ public class Beer {
     private String id;
     private String description;
     private String abv;
+    private String foodParings;
+    private String isOrganic;
     private boolean labels;
     private int year;
     private String url_icon;
@@ -74,6 +76,23 @@ public class Beer {
     public void setUrl_large(String url_large) {
         this.url_large = url_large;
     }
+
+    public String getFoodParings() {
+        return foodParings;
+    }
+
+    public void setFoodPairings(String foodParings) {
+        this.foodParings = foodParings;
+    }
+
+    public String getIsOrganic() {
+        return isOrganic;
+    }
+
+    public void setIsOrganic(String isOrganic) {
+        this.isOrganic = isOrganic;
+    }
+
 
     @Override
     public String toString() {
