@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by beesham on 21/01/17.
@@ -188,5 +189,51 @@ public class Utils {
         }
 
         return beer;
+    }
+
+    /**
+     * BAC is calculated using Widmark Formula
+     * % BAC = (A x 5.14 / W x r) – .015 x H
+     * A = liquid ounces of alcohol consumed
+     * W = a person’s weight in pounds
+     * r = a gender constant of alcohol distribution (.73 for men and .66 for women)
+     * H = hours elapsed since drinking commenced
+     * @param numOfBeers
+     * @param abv
+     * @param gender
+     * @param bodyWeight
+     */
+    public static double calculateBAC(int numOfBeers,
+                                    double abv,
+                                    double standardDrinkSize,
+                                    String gender,
+                                    double bodyWeight,
+                                    long timePassed){
+        final double AVG_ALC_ELIM_RATE = 0.015;
+        final double LIQ_OZ_TO_WHT_OZ = 5.14;   //conversion factor of .823 x 100/16, wherein .823 is used to convert liquid ounces to ounces of weight
+        final double ALC_DIST_MALE = 0.73;
+        final double ALC_DIST_FEMALE = 0.66;
+        double bac = 0.00;
+
+        double a = numOfBeers*(standardDrinkSize*abv);
+
+        if(gender.equals("Male")) {
+            bac = (a * (LIQ_OZ_TO_WHT_OZ / bodyWeight) * ALC_DIST_MALE) - (AVG_ALC_ELIM_RATE * timePassed);
+        }else if(gender.equals("Female")){
+            bac = (a * (LIQ_OZ_TO_WHT_OZ / bodyWeight) * ALC_DIST_FEMALE) - (AVG_ALC_ELIM_RATE * timePassed);
+        }
+
+        return bac;
+    }
+
+    public static long getTimePassed(long startedDrinkingTime){
+        long currentTimeInMillis = System.currentTimeMillis();
+        long elapsedTime = currentTimeInMillis - startedDrinkingTime;
+
+        return TimeUnit.MILLISECONDS.toHours(elapsedTime);
+    }
+
+    public static double kgToLbs(double bodyWeightInKg){
+        return bodyWeightInKg*2.2;  // 1kg = 2.2Lbs
     }
 }
