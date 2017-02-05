@@ -12,9 +12,7 @@ import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.ui.Beer;
 import com.beesham.beerac.ui.Utils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Vector;

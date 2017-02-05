@@ -15,7 +15,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCPx0gkdDT5SakMexAG9SLdrCt0k3gRTVw" />
 
-        <activity android:name=".ui.HomeActivity">
+        <activity android:name="com.beesham.beerac.ui.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,7 +26,7 @@
         </activity>
 
         <activity
-            android:name=".ui.DetailsActivity"
+            android:name="com.beesham.beerac.ui.DetailsActivity"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme">
             <meta-data
@@ -35,9 +35,9 @@
         </activity>
 
         <activity
-            android:name=".ui.SearchActivity"
+            android:name="com.beesham.beerac.ui.SearchActivity"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".ui.HomeActivity"
+            android:parentActivityName="com.beesham.beerac.ui.HomeActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -51,7 +51,7 @@
         </activity>
 
         <activity
-            android:name=".ui.SavesActivity"
+            android:name="com.beesham.beerac.ui.SavesActivity"
             android:label="@string/title_activity_saves">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -59,7 +59,7 @@
         </activity>
 
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name="com.beesham.beerac.ui.SettingsActivity"
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

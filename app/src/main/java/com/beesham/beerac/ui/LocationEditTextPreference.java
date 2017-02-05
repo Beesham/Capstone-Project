@@ -2,9 +2,7 @@ package com.beesham.beerac.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.app.AlertDialog;
@@ -16,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;

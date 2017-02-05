@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,12 +21,9 @@ import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEERS;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 /**
