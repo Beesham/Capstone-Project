@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -208,22 +209,23 @@ public class Utils {
                                     double standardDrinkSize,
                                     String gender,
                                     double bodyWeight,
-                                    long timePassed){
+                                    double timePassed){
         final double AVG_ALC_ELIM_RATE = 0.015;
-        final double LIQ_OZ_TO_WHT_OZ = 5.14;   //conversion factor of .823 x 100/16, wherein .823 is used to convert liquid ounces to ounces of weight
+        final double LIQ_OZ_TO_WGHT_OZ = 5.14;   //conversion factor of .823 x 100/16, wherein .823 is used to convert liquid ounces to ounces of weight
         final double ALC_DIST_MALE = 0.73;
         final double ALC_DIST_FEMALE = 0.66;
         double bac = 0.00;
 
-        double a = numOfBeers*(standardDrinkSize*abv);
+        double a = numOfBeers * standardDrinkSize * (abv/100);
 
         if(gender.equals("Male")) {
-            bac = (a * (LIQ_OZ_TO_WHT_OZ / bodyWeight) * ALC_DIST_MALE) - (AVG_ALC_ELIM_RATE * timePassed);
+            bac = ((a * LIQ_OZ_TO_WGHT_OZ) / (bodyWeight * ALC_DIST_MALE)) - AVG_ALC_ELIM_RATE * timePassed;
         }else if(gender.equals("Female")){
-            bac = (a * (LIQ_OZ_TO_WHT_OZ / bodyWeight) * ALC_DIST_FEMALE) - (AVG_ALC_ELIM_RATE * timePassed);
+            bac = ((a * LIQ_OZ_TO_WGHT_OZ) / (bodyWeight * ALC_DIST_FEMALE)) - AVG_ALC_ELIM_RATE * timePassed;
         }
 
-        return bac;
+        DecimalFormat threeDForm = new DecimalFormat("#.###");
+        return Double.valueOf(threeDForm.format(bac));
     }
 
     public static long getTimePassed(long startedDrinkingTime){

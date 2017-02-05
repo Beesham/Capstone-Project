@@ -1,11 +1,9 @@
 package com.beesham.beerac.ui;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -14,10 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewParent;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
@@ -28,7 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEERS;
-import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
