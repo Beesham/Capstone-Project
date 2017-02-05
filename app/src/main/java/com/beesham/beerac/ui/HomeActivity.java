@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
@@ -66,9 +67,18 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.v(LOG_TAG, mBeerId);
         }
 
-        if(savedInstanceState == null){
+        /*if(savedInstanceState == null){
             mBeerId = "oeGSxs";
             Log.v(LOG_TAG, "launching intent service");
+            Intent intent = new Intent(this, BeerACIntentService.class);
+            intent.setAction(ACTION_GET_BEER_DETAILS);
+            intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
+            BeerACIntentService.startBeerQueryService(this, intent);
+        }*/
+
+        if(checkForFirstLaunch()){
+            mBeerId = "oeGSxs";
+            Log.v(LOG_TAG, "launching intent servicefor first launch");
             Intent intent = new Intent(this, BeerACIntentService.class);
             intent.setAction(ACTION_GET_BEER_DETAILS);
             intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
@@ -76,6 +86,36 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         getSupportLoaderManager().initLoader(0, null, this);
+    }
+
+    private boolean checkForFirstLaunch(){
+        final String PREF_NAME = "com.beesham.beerac.PREF_FILE";
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int NONE_EXIST = -1;
+        int currentVersionCode = 0;
+
+        try{
+            currentVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        int savedVersionCode = preferences.getInt(PREF_VERSION_CODE_KEY, NONE_EXIST);
+
+        if(currentVersionCode == savedVersionCode){
+            return false;
+        }else if(currentVersionCode == NONE_EXIST){
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(PREF_VERSION_CODE_KEY, currentVersionCode);
+            editor.apply();
+            return true;    //New install, first launch, user cleared app data
+        }else if(currentVersionCode == savedVersionCode){
+            //Place upgrade code here
+            Log.v(LOG_TAG, "upgrading");
+        }
+
+        return true;
     }
 
     @Override
@@ -87,6 +127,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             mBeerId = prefs.getString("drink_beer", null);
             Log.v(LOG_TAG, mBeerId);
         }
+        getSupportLoaderManager().restartLoader(0, null, this);
     }
 
     @Override

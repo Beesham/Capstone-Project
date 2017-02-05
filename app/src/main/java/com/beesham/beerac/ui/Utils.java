@@ -132,7 +132,7 @@ public class Utils {
         String id;
         String description = "";
         String isOrganic;
-        String foodPairings;
+        String foodPairings = "";
         String abv;
         int year = 0;
         String imageUrlIcon = null;
@@ -155,6 +155,8 @@ public class Utils {
         }catch(JSONException e){
             if(e.getMessage().equals("No value for foodPairings")){
                 foodPairings = "";
+            }else if(e.getMessage().equals("No value for abv")){
+                abv = "";
             }else{
                 throw e;
             }
