@@ -1,6 +1,7 @@
 package com.beesham.beerac.data;
 
 import net.simonvt.schematic.annotation.AutoIncrement;
+import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.NotNull;
 import net.simonvt.schematic.annotation.PrimaryKey;
@@ -13,7 +14,7 @@ public class Columns {
 
     public static class SavedBeerColumns {
         @DataType(DataType.Type.INTEGER)
-        @PrimaryKey
+        @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
         @AutoIncrement
         public static final String _ID = "_id";
         @DataType(DataType.Type.TEXT)
@@ -25,8 +26,7 @@ public class Columns {
         @DataType(DataType.Type.TEXT)
         public static final String DESCRIPTION = "description";
         @DataType(DataType.Type.TEXT)
-        @NotNull
-        public static final String FOODPARINGS = "food_parings";
+        public static final String FOOD_PARINGS = "food_pairings";
         @DataType(DataType.Type.TEXT)
         @NotNull
         public static final String ISORGANIC = "is_organic";
@@ -45,7 +45,7 @@ public class Columns {
 
     public static class SearchedBeerColumns {
         @DataType(DataType.Type.INTEGER)
-        @PrimaryKey
+        @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
         @AutoIncrement
         public static final String _ID = "_id";
         @DataType(DataType.Type.TEXT)
