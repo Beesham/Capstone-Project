@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -36,12 +37,19 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
-    //@BindView(R.id.search_view) SearchView mSearchView;
     @BindView(R.id.toolbar_title) TextView mToolbarTitle;
+    @BindView(R.id.bac_text_view) TextView mBACTextView;
+    @BindView(R.id.total_beers_text_view) TextView mTotalBeersTextView;
+    @BindView(R.id.increment_beers_button) TextView mIncrementBeerTextView;
+    @BindView(R.id.decrement_beers_button) TextView mDecrementBeerTextView;
+
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
 
     private String mBeerId;
+    private double mABV;
+    private int mBeerCount = 0;
+    private double mBAC = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +72,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.v(LOG_TAG, mBeerId);
         }
 
-        /*if(savedInstanceState == null){
-            mBeerId = "oeGSxs";
-            Log.v(LOG_TAG, "launching intent service");
-            Intent intent = new Intent(this, BeerACIntentService.class);
-            intent.setAction(ACTION_GET_BEER_DETAILS);
-            intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
-            BeerACIntentService.startBeerQueryService(this, intent);
-        }*/
-
         if(checkForFirstLaunch()){
-            mBeerId = "oeGSxs";
-            Log.v(LOG_TAG, "launching intent servicefor first launch");
+            mBeerId = "oeGSxs"; //Naughty 90 Beer
             Intent intent = new Intent(this, BeerACIntentService.class);
             intent.setAction(ACTION_GET_BEER_DETAILS);
             intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
@@ -83,36 +81,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         getSupportLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean checkForFirstLaunch(){
-        final String PREF_NAME = "com.beesham.beerac.PREF_FILE";
-        final String PREF_VERSION_CODE_KEY = "version_code";
-        final int NONE_EXIST = -1;
-        int currentVersionCode = 0;
-
-        try{
-            currentVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        int savedVersionCode = preferences.getInt(PREF_VERSION_CODE_KEY, NONE_EXIST);
-
-        if(currentVersionCode == savedVersionCode){
-            return false;
-        }else if(currentVersionCode == NONE_EXIST){
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(PREF_VERSION_CODE_KEY, currentVersionCode);
-            editor.apply();
-            return true;    //New install, first launch, user cleared app data
-        }else if(currentVersionCode == savedVersionCode){
-            //Place upgrade code here
-            Log.v(LOG_TAG, "upgrading");
-        }
-
-        return true;
     }
 
     @Override
@@ -170,12 +138,81 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         startActivity(i);
     }
 
+    private boolean checkForFirstLaunch(){
+        final String PREF_NAME = "com.beesham.beerac.PREF_FILE";
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int NONE_EXIST = -1;
+        int currentVersionCode = 0;
+
+        try{
+            currentVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        int savedVersionCode = preferences.getInt(PREF_VERSION_CODE_KEY, NONE_EXIST);
+
+        if(currentVersionCode == savedVersionCode){
+            return false;
+        }else if(currentVersionCode == NONE_EXIST){
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(PREF_VERSION_CODE_KEY, currentVersionCode);
+            editor.apply();
+            return true;    //New install, first launch, user cleared app data
+        }else if(currentVersionCode == savedVersionCode){
+            //Place upgrade code here
+            Log.v(LOG_TAG, "upgrading");
+        }
+
+        return true;
+    }
+
+
+    public void increaseBeerCount(View v){
+        mBeerCount++;
+        mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
+        updateBAC();
+    }
+
+    public void decreaseBeerCount(View v){
+        if(mBeerCount != 0)
+            mBeerCount--;
+
+        mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
+        updateBAC();
+    }
+
+    private void updateBAC(){
+        getBAC();
+        mBACTextView.setText(getString(R.string.bac_format, mBAC));
+    }
+
+    private void getBAC(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String gender = preferences.getString(getString(R.string.pref_gender_key),
+                getString(R.string.pref_gender_default));
+
+        double bodyWeight = Double.parseDouble(preferences.getString(getString(R.string.pref_body_weight_key),
+                getString(R.string.pref_default_body_weight)));
+
+        long timePassed = Utils.getTimePassed(System.currentTimeMillis());     //TODO: implement time picker
+
+        mBAC = Utils.calculateBAC(mBeerCount,
+                mABV,
+                12,     //TODO: get from prefs
+                gender,
+                bodyWeight,
+                timePassed);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         final String[] projections = {
                 Columns.SavedBeerColumns.BEERID,
                 Columns.SavedBeerColumns.NAME,
                 Columns.SavedBeerColumns.DESCRIPTION,
+                Columns.SavedBeerColumns.ABV,
                 Columns.SavedBeerColumns.LABELS,
                 Columns.SavedBeerColumns.IMAGEURLICON,
                 Columns.SavedBeerColumns.IMAGEURLLARGE,
@@ -197,12 +234,13 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         if(!data.moveToFirst()) return;
 
         data.moveToFirst();
-        if(data.getString(data.getColumnIndex(Columns.SearchedBeerColumns.LABELS)).equals("Y")){
+        if(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals("Y")){
             Picasso.with(this)
-                    .load(data.getString(data.getColumnIndex(Columns.SearchedBeerColumns.IMAGEURLLARGE)))
+                    .load(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)))
                     .into(mBeerImage);
         }
 
+        mABV = Double.parseDouble(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.ABV)));
 
 
         Log.v(LOG_TAG, "cursor size: " + data.getCount());
