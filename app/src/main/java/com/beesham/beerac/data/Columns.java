@@ -26,6 +26,9 @@ public class Columns {
         @DataType(DataType.Type.TEXT)
         public static final String DESCRIPTION = "description";
         @DataType(DataType.Type.TEXT)
+        @NotNull
+        public static final String ABV = "abv";
+        @DataType(DataType.Type.TEXT)
         public static final String FOOD_PARINGS = "food_pairings";
         @DataType(DataType.Type.TEXT)
         @NotNull

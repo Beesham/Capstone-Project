@@ -238,4 +238,12 @@ public class Utils {
     public static double kgToLbs(double bodyWeightInKg){
         return bodyWeightInKg*2.2;  // 1kg = 2.2Lbs
     }
+
+    public static String doubleToString(double d){
+        return Double.toString(d);
+    }
+
+    public static String integerToString(int i){
+        return Integer.toString(i);
+    }
 }

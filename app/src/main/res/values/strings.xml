@@ -8,7 +8,8 @@
     <string name="menu_search">Search</string>
 
     <!-- Home -->
-    <string name="beers_had"><xliff:g id="beers_had">%02d</xliff:g> beers had</string>
+    <string name="beers_had"><xliff:g id="beers_had">%d</xliff:g> beers had</string>
+    <string name="bac_format">BAC: <xliff:g id="bac_format">%.02f</xliff:g>%%</string>
     <string name="title_activity_details">Details</string>
     <string name="action_settings">Settings</string>
 
@@ -31,13 +32,14 @@
 
     <string name="pref_gender_label">Gender</string>
     <string name="pref_gender_key">gender</string>
+    <string name="pref_gender_default">Male</string>
     <string-array name="pref_gender_list_titles">
         <item>Male</item>
         <item>Female</item>
     </string-array>
     <string-array name="pref_gender_list_values">
-        <item>1</item>
-        <item>0</item>
+        <item>Male</item>
+        <item>Female</item>
     </string-array>
 
 
