@@ -108,6 +108,7 @@ public class BeerACIntentService extends IntentService {
         contentValues.put(Columns.SavedBeerColumns.DESCRIPTION, beer.getDescription());
         contentValues.put(Columns.SavedBeerColumns.NAME, beer.getName());
         contentValues.put(Columns.SavedBeerColumns.ISORGANIC, beer.getIsOrganic());
+        contentValues.put(Columns.SavedBeerColumns.ABV, beer.getAbv());
 
         if(beer.hasLabels()){
             contentValues.put(Columns.SavedBeerColumns.LABELS, "Y");

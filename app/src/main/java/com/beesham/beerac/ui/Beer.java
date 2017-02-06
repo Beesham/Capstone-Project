@@ -45,6 +45,10 @@ public class Beer {
         return description;
     }
 
+    public String getAbv() {
+        return abv;
+    }
+
     public boolean hasLabels() {
         return labels;
     }
