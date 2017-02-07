@@ -48,7 +48,7 @@ public class Columns {
 
     public static class SearchedBeerColumns {
         @DataType(DataType.Type.INTEGER)
-        @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
+        @PrimaryKey
         @AutoIncrement
         public static final String _ID = "_id";
         @DataType(DataType.Type.TEXT)
