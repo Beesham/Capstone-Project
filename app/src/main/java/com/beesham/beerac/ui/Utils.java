@@ -221,17 +221,20 @@ public class Utils {
 
         double a = numOfBeers * drinkSize * (abv/100);
 
-        if(gender.equals("Male")) {
+        if (gender.equals("Male")) {
             bac = ((a * LIQ_OZ_TO_WGHT_OZ) / (bodyWeight * ALC_DIST_MALE)) - AVG_ALC_ELIM_RATE * timePassed;
-        }else if(gender.equals("Female")){
+        } else if (gender.equals("Female")) {
             bac = ((a * LIQ_OZ_TO_WGHT_OZ) / (bodyWeight * ALC_DIST_FEMALE)) - AVG_ALC_ELIM_RATE * timePassed;
         }
 
         DecimalFormat threeDForm = new DecimalFormat("#.###");
+        if(bac < 0){
+            return 0;
+        }
         return Double.valueOf(threeDForm.format(bac));
     }
 
-    public static long getTimePassed(long startedDrinkingTime){
+    public static double getTimePassed(long startedDrinkingTime){
         Calendar calendar = Calendar.getInstance();
 
         long curHourInMillis = TimeUnit.HOURS.toMillis(calendar.get(Calendar.HOUR_OF_DAY));
@@ -239,7 +242,12 @@ public class Utils {
 
         long elapsedTime = (curHourInMillis + curMinInMillis) - startedDrinkingTime;
 
-        return TimeUnit.MILLISECONDS.toHours(elapsedTime);
+        double elapsedHours =  TimeUnit.MILLISECONDS.toHours(elapsedTime);
+        double elapsedMins = (TimeUnit.MILLISECONDS.toMinutes(elapsedTime)%60)/60.0;
+
+        Log.v("UTILS", "elapsed time: " + (elapsedHours + elapsedMins));
+
+        return (elapsedHours + elapsedMins);
     }
 
     public static double kgToLbs(double bodyWeightInKg){
