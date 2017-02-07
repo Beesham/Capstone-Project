@@ -32,6 +32,7 @@ import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -52,7 +53,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.decrement_beers_button) TextView mDecrementBeerTextView;
     @BindView(R.id.units_spinner) Spinner mUnitsSpinner;
     @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
-    @BindView(R.id.end_drinking_time_text_view) TextView mEndDrinkTimeTextView;
+    //@BindView(R.id.end_drinking_time_text_view) TextView mEndDrinkTimeTextView;
     @BindView(R.id.volume_edit_text) TextView mVolumeEditText;
 
 
@@ -137,14 +138,20 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        mEndDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
+
+        Calendar calendar = Calendar.getInstance();
+        setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+
+        mVolumeEditText.setText("355");
+
+       /* mEndDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "timePicker");
                 start_end_time_selector = 1;
             }
-        });
+        });*/
 
     }
 
@@ -285,7 +292,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
             mStartTime = (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
         }else{
-            mEndDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
+            //mEndDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
         }
     }
 

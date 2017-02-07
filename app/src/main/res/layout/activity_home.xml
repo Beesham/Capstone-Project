@@ -63,32 +63,42 @@
 
     </android.support.design.widget.AppBarLayout>
 
-        <RelativeLayout
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/bac_text_view"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textAlignment="center"
-                    android:text="BAC: 0.00%"
-                    android:layout_below="@+id/linear_layout"
-                    android:layout_marginTop="24dp"/>
-
-            <EditText
+                    android:text="TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="27dp"
-                    android:id="@+id/volume_edit_text"
-                    tools:text="355"/>
+                    android:layout_marginTop="35dp"
+                    android:id="@+id/drinking_time_start_text_view"
+                    tools:text="3:00PM"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:ems="3"
+                        android:id="@+id/volume_edit_text"
+                        tools:text="355"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+                <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/units_spinner"/>
+            </LinearLayout>
 
             <LinearLayout
                     android:id="@+id/linear_layout"
@@ -98,7 +108,7 @@
                     android:layout_below="@+id/volume_edit_text"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginTop="87dp">
+                    android:layout_marginTop="16dp">
 
                 <Button
                     android:text="-"
@@ -127,26 +137,18 @@
                     android:onClick="increaseBeerCount"/>
             </LinearLayout>
 
-            <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/units_spinner"
-                    android:layout_alignBottom="@+id/volume_edit_text"
-                    android:layout_toRightOf="@+id/volume_edit_text"
-                    />
-
             <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/volume_edit_text"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="35dp"
-                    android:id="@+id/drinking_time_start_text_view"
-                    tools:text="3:00PM"/>
+                    android:id="@+id/bac_text_view"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textAlignment="center"
+                    android:text="BAC: 0.00%"
+                    android:layout_below="@+id/linear_layout"
+                    android:layout_marginTop="24dp"
+                    android:layout_weight="1"/>
 
-            <TextView
+            <!--TextView
                     android:text="TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -154,9 +156,9 @@
                     android:layout_toLeftOf="@+id/units_spinner"
                     android:layout_toStartOf="@+id/units_spinner"
                     android:id="@+id/end_drinking_time_text_view"
-                    tools:text="now"/>
+                    tools:text="now"/-->
 
-        </RelativeLayout>
+        </LinearLayout>
 
    </LinearLayout>
 
