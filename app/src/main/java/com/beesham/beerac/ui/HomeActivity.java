@@ -250,7 +250,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         double bodyWeight = Double.parseDouble(mPreferences.getString(getString(R.string.pref_body_weight_key),
                 getString(R.string.pref_default_body_weight)));
 
-        long timePassed = Utils.getTimePassed(mStartTime);     //TODO: implement time picker
+        double timePassed = Utils.getTimePassed(mStartTime);     //TODO: implement time picker
         Log.v(LOG_TAG, "time passed: " + timePassed);
 
         double drinkSize;
@@ -260,6 +260,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         }else{
             drinkSize = Double.parseDouble(mVolumeEditText.getText().toString());
         }
+
+        Log.v(LOG_TAG, "abv: " + mABV);
 
         mBAC = Utils.calculateBAC(mBeerCount,
                 mABV,

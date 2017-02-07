@@ -74,7 +74,7 @@
                     android:id="@+id/bac_text_view"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textAlignment="center"
-                    android:text="BAC: 0.02%"
+                    android:text="BAC: 0.00%"
                     android:layout_below="@+id/linear_layout"
                     android:layout_marginTop="24dp"/>
 
