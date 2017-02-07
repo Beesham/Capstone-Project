@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.R.attr.data;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -57,6 +58,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
     private static final String PREF_FILE = "com.beesham.beerac.PREF_FILE";
+
+    private int LOADER_INIT_ID = 0;
+    private int LOADER_ID = 1;
 
     private String mBeerId;
     private double mABV;
@@ -85,18 +89,24 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        SharedPreferences prefs = getSharedPreferences("com.drink_beer", Context.MODE_PRIVATE); //PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE); //PreferenceManager.getDefaultSharedPreferences(this);
         if(prefs.contains("drink_beer")) {
-            mBeerId = prefs.getString("drink_beer", null);
+            mBeerId = prefs.getString("drink_beer", "oeGSxs");
             Log.v(LOG_TAG, mBeerId);
         }
 
         if(checkForFirstLaunch()){
             mBeerId = "oeGSxs"; //Naughty 90 Beer
+            prefs.edit().putString("drink_beer", mBeerId).apply();
+
             Intent intent = new Intent(this, BeerACIntentService.class);
             intent.setAction(ACTION_GET_BEER_DETAILS);
             intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
             BeerACIntentService.startBeerQueryService(this, intent);
+
+            getSupportLoaderManager().initLoader(LOADER_INIT_ID, null, this);
+        }else{
+            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
@@ -136,7 +146,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        getSupportLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -198,6 +207,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         final String PREF_VERSION_CODE_KEY = "version_code";
         final int NONE_EXIST = -1;
         int currentVersionCode = 0;
+        boolean status = true;
 
         try{
             currentVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -209,18 +219,20 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         int savedVersionCode = preferences.getInt(PREF_VERSION_CODE_KEY, NONE_EXIST);
 
         if(currentVersionCode == savedVersionCode){
-            return false;
+            status = false;
         }else if(currentVersionCode == NONE_EXIST){
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt(PREF_VERSION_CODE_KEY, currentVersionCode);
             editor.apply();
-            return true;    //New install, first launch, user cleared app data
-        }else if(currentVersionCode == savedVersionCode){
+            status = true;    //New install, first launch, user cleared app data
+        }else if(currentVersionCode > savedVersionCode){
             //Place upgrade code here
-            Log.v(LOG_TAG, "upgrading");
+            status = true;
         }
 
-        return true;
+        preferences.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode)
+                .commit();
+        return status;
     }
 
 
@@ -250,9 +262,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         double bodyWeight = Double.parseDouble(mPreferences.getString(getString(R.string.pref_body_weight_key),
                 getString(R.string.pref_default_body_weight)));
 
-        double timePassed = Utils.getTimePassed(mStartTime);     //TODO: implement time picker
-        Log.v(LOG_TAG, "time passed: " + timePassed);
-
+        double timePassed = Utils.getTimePassed(mStartTime);
         double drinkSize;
 
         if(mPreferences.getString(getString(R.string.pref_units_key), null).equals("mL")){
@@ -260,8 +270,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         }else{
             drinkSize = Double.parseDouble(mVolumeEditText.getText().toString());
         }
-
-        Log.v(LOG_TAG, "abv: " + mABV);
 
         mBAC = Utils.calculateBAC(mBeerCount,
                 mABV,
@@ -276,7 +284,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         if(start_end_time_selector == 0) {
             mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
             mStartTime = (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
-            Log.v(LOG_TAG, "startTime: " + mStartTime);
         }else{
             mEndDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
         }
@@ -295,14 +302,31 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 Columns.SavedBeerColumns.IMAGEURLMEDIUM
         };
 
-        return new CursorLoader(
-                this,
-                BeerProvider.SavedBeers.CONTENT_URI,
-                projections,
-                Columns.SavedBeerColumns.BEERID + "=?",
-                new String[]{mBeerId},
-                null
-        );
+        switch (id) {
+            case 0 :{
+                return new CursorLoader(
+                        this,
+                        BeerProvider.SavedBeers.CONTENT_URI,
+                        projections,
+                        null,
+                        null,
+                        null
+                );
+            }
+
+            case 1 :{
+                return new CursorLoader(
+                        this,
+                        BeerProvider.SavedBeers.CONTENT_URI,
+                        projections,
+                        Columns.SavedBeerColumns.BEERID + "=?",
+                        new String[]{mBeerId},
+                        null
+                );
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -317,8 +341,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         mABV = Double.parseDouble(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.ABV)));
-
-
+        
         Log.v(LOG_TAG, "cursor size: " + data.getCount());
     }
 
