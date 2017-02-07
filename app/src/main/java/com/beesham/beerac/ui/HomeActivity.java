@@ -1,10 +1,7 @@
 package com.beesham.beerac.ui;
 
-import android.app.Dialog;
 import android.app.SearchManager;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
@@ -37,14 +32,15 @@ import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
-public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        TimePickerFragment.TimeSetter{
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
@@ -56,7 +52,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.units_spinner) Spinner mUnitsSpinner;
     @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
     @BindView(R.id.end_drinking_time_text_view) TextView mEndDrinkTimeTextView;
-
+    @BindView(R.id.volume_edit_text) TextView mVolumeEditText;
 
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
@@ -66,6 +62,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     private double mABV;
     private int mBeerCount = 0;
     private double mBAC = 0;
+    private int start_end_time_selector = 0;
+    private long mStartTime;
+    private int mEndTime;
 
     private SharedPreferences mPreferences;
 
@@ -124,6 +123,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "timePicker");
+                start_end_time_selector = 0;
             }
         });
 
@@ -132,6 +132,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "timePicker");
+                start_end_time_selector = 1;
             }
         });
 
@@ -249,14 +250,34 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         double bodyWeight = Double.parseDouble(mPreferences.getString(getString(R.string.pref_body_weight_key),
                 getString(R.string.pref_default_body_weight)));
 
-        long timePassed = Utils.getTimePassed(System.currentTimeMillis());     //TODO: implement time picker
+        long timePassed = Utils.getTimePassed(mStartTime);     //TODO: implement time picker
+        Log.v(LOG_TAG, "time passed: " + timePassed);
+
+        double drinkSize;
+
+        if(mPreferences.getString(getString(R.string.pref_units_key), null).equals("mL")){
+            drinkSize = Utils.mLToOz(Integer.parseInt(mVolumeEditText.getText().toString()));
+        }else{
+            drinkSize = Double.parseDouble(mVolumeEditText.getText().toString());
+        }
 
         mBAC = Utils.calculateBAC(mBeerCount,
                 mABV,
-                12,     //TODO: get from prefs
+                drinkSize,
                 gender,
                 bodyWeight,
                 timePassed);
+    }
+
+    @Override
+    public void setTime(int hourOfDay, int minute) {
+        if(start_end_time_selector == 0) {
+            mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
+            mStartTime = (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
+            Log.v(LOG_TAG, "startTime: " + mStartTime);
+        }else{
+            mEndDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
+        }
     }
 
     @Override
@@ -304,24 +325,4 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
-        }
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
-            
-        }
-    }
 }
