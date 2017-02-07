@@ -1,12 +1,16 @@
 package com.beesham.beerac.ui;
 
+import android.app.Dialog;
 import android.app.SearchManager;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -14,19 +18,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,20 +53,29 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.total_beers_text_view) TextView mTotalBeersTextView;
     @BindView(R.id.increment_beers_button) TextView mIncrementBeerTextView;
     @BindView(R.id.decrement_beers_button) TextView mDecrementBeerTextView;
+    @BindView(R.id.units_spinner) Spinner mUnitsSpinner;
+    @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
+    @BindView(R.id.end_drinking_time_text_view) TextView mEndDrinkTimeTextView;
+
 
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
+    private static final String PREF_FILE = "com.beesham.beerac.PREF_FILE";
 
     private String mBeerId;
     private double mABV;
     private int mBeerCount = 0;
     private double mBAC = 0;
 
+    private SharedPreferences mPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         setSupportActionBar(mToolbar);
         mBeerImage.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +99,41 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
             BeerACIntentService.startBeerQueryService(this, intent);
         }
+
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.units, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mUnitsSpinner.setAdapter(spinnerAdapter);
+        mUnitsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+                mPreferences.edit()
+                        .putString(getString(R.string.pref_units_key), parent.getItemAtPosition(position).toString())
+                        .commit();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        mStartDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "timePicker");
+            }
+        });
+
+        mEndDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "timePicker");
+            }
+        });
 
         getSupportLoaderManager().initLoader(0, null, this);
     }
@@ -139,7 +194,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private boolean checkForFirstLaunch(){
-        final String PREF_NAME = "com.beesham.beerac.PREF_FILE";
         final String PREF_VERSION_CODE_KEY = "version_code";
         final int NONE_EXIST = -1;
         int currentVersionCode = 0;
@@ -150,7 +204,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             e.printStackTrace();
         }
 
-        SharedPreferences preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
         int savedVersionCode = preferences.getInt(PREF_VERSION_CODE_KEY, NONE_EXIST);
 
         if(currentVersionCode == savedVersionCode){
@@ -189,11 +243,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void getBAC(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String gender = preferences.getString(getString(R.string.pref_gender_key),
+        String gender = mPreferences.getString(getString(R.string.pref_gender_key),
                 getString(R.string.pref_gender_default));
 
-        double bodyWeight = Double.parseDouble(preferences.getString(getString(R.string.pref_body_weight_key),
+        double bodyWeight = Double.parseDouble(mPreferences.getString(getString(R.string.pref_body_weight_key),
                 getString(R.string.pref_default_body_weight)));
 
         long timePassed = Utils.getTimePassed(System.currentTimeMillis());     //TODO: implement time picker
@@ -249,5 +302,26 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+            
+        }
     }
 }
