@@ -13,7 +13,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -206,7 +209,7 @@ public class Utils {
      */
     public static double calculateBAC(int numOfBeers,
                                     double abv,
-                                    double standardDrinkSize,
+                                    double drinkSize,
                                     String gender,
                                     double bodyWeight,
                                     double timePassed){
@@ -216,7 +219,7 @@ public class Utils {
         final double ALC_DIST_FEMALE = 0.66;
         double bac = 0.00;
 
-        double a = numOfBeers * standardDrinkSize * (abv/100);
+        double a = numOfBeers * drinkSize * (abv/100);
 
         if(gender.equals("Male")) {
             bac = ((a * LIQ_OZ_TO_WGHT_OZ) / (bodyWeight * ALC_DIST_MALE)) - AVG_ALC_ELIM_RATE * timePassed;
@@ -229,14 +232,22 @@ public class Utils {
     }
 
     public static long getTimePassed(long startedDrinkingTime){
-        long currentTimeInMillis = System.currentTimeMillis();
-        long elapsedTime = currentTimeInMillis - startedDrinkingTime;
+        Calendar calendar = Calendar.getInstance();
+
+        long curHourInMillis = TimeUnit.HOURS.toMillis(calendar.get(Calendar.HOUR_OF_DAY));
+        long curMinInMillis =  TimeUnit.MINUTES.toMillis(calendar.get(Calendar.MINUTE));
+
+        long elapsedTime = (curHourInMillis + curMinInMillis) - startedDrinkingTime;
 
         return TimeUnit.MILLISECONDS.toHours(elapsedTime);
     }
 
     public static double kgToLbs(double bodyWeightInKg){
         return bodyWeightInKg*2.2;  // 1kg = 2.2Lbs
+    }
+
+    public static double mLToOz(int mL){
+        return mL /  29.5735296875;
     }
 
     public static String doubleToString(double d){
