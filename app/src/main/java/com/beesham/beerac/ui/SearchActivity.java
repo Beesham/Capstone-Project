@@ -1,5 +1,9 @@
 package com.beesham.beerac.ui;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,6 +33,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.adView) AdView mAdView;
     //@BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
 
     private static final int BEERS_LOADER = 0;
@@ -72,6 +77,13 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
         getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
+
+        //MobileAds.initialize(getApplicationContext(), "ca-app-pub-9835470545063758~1394766028");
+        AdRequest request = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+                .addTestDevice("22D3A58CFBB4E012B9BDABD394696C04")  // An example device ID
+                .build();
+        mAdView.loadAd(request);
     }
 
     private void launchBeerACIntentService(String queryString){
