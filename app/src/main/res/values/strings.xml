@@ -127,4 +127,7 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
 
+    <!-- Ads -->
+    <string name="banner_ad_unit_id">ca-app-pub-9835470545063758/2871499220</string>
+
 </resources>
