@@ -1,6 +1,5 @@
 package com.beesham.beerac.ui;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
@@ -43,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.data;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -92,7 +90,12 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         mBeerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle args = new Bundle();
+                args.putString("uri", BeerACIntentService.buildBeerByIdUri(mBeerId));
+
                 Intent i = new Intent(HomeActivity.this, DetailsActivity.class);
+                i.putExtras(args);
+
                 startActivity(i);
             }
         });
