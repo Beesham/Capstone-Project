@@ -3,6 +3,8 @@ package com.beesham.beerac.ui;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import android.app.SearchManager;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
@@ -41,6 +44,9 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
     private Cursor mCursor;
+
+    private Tracker mTracker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +90,9 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
                 .addTestDevice("22D3A58CFBB4E012B9BDABD394696C04")  // An example device ID
                 .build();
         mAdView.loadAd(request);
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     private void launchBeerACIntentService(String queryString){
@@ -92,6 +101,14 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         intent.setAction(ACTION_GET_BEERS);
         intent.putExtra(BeerACIntentService.EXTRA_QUERY, queryString);
         BeerACIntentService.startBeerQueryService(this, intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mTracker.setScreenName("Search");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

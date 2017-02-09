@@ -1,5 +1,9 @@
 package com.beesham.beerac.ui;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
@@ -72,6 +77,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     private int mEndTime;
 
     private SharedPreferences mPreferences;
+
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +160,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });*/
 
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
     }
 
     @Override
@@ -165,6 +175,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             Log.v(LOG_TAG, mBeerId);
         }
         getSupportLoaderManager().restartLoader(0, null, this);
+
+        mTracker.setScreenName("Home");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override

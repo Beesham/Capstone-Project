@@ -1,5 +1,8 @@
 package com.beesham.beerac.ui;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.service.BeerDetailsAsyncTask;
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +35,8 @@ public class DetailsActivityFragment extends Fragment{
 
     Uri mUri;
     String mResponseStr = null;
+
+    private Tracker mTracker;
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
     @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
@@ -51,6 +57,17 @@ public class DetailsActivityFragment extends Fragment{
                 Log.v(LOG_TAG, mUri.toString());
             }
         }
+
+        AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
+        mTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mTracker.setScreenName("Details");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
