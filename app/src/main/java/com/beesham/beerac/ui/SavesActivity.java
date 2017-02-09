@@ -1,5 +1,8 @@
 package com.beesham.beerac.ui;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
@@ -13,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 
@@ -30,6 +34,8 @@ public class SavesActivity extends AppCompatActivity  implements LoaderManager.L
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
     private Cursor mCursor;
+
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,17 @@ public class SavesActivity extends AppCompatActivity  implements LoaderManager.L
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
         getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mTracker.setScreenName("Home");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     @Override
