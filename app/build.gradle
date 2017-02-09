@@ -45,3 +45,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     annotationProcessor 'net.simonvt.schematic:schematic-compiler:0.7.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
