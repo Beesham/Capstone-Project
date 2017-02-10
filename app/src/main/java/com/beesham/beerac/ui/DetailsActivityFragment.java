@@ -3,8 +3,11 @@ package com.beesham.beerac.ui;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +21,8 @@ import android.widget.TextView;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
+import com.beesham.beerac.data.Columns;
+import com.beesham.beerac.service.BeerACIntentService;
 import com.beesham.beerac.service.BeerDetailsAsyncTask;
 import com.squareup.picasso.Picasso;
 
@@ -26,8 +31,10 @@ import org.json.JSONException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
+
 /**
- * A placeholder fragment containing a simple view.
+ * Details fragment showing beer details and allows for user to save/fav a beer
  */
 public class DetailsActivityFragment extends Fragment{
 
@@ -37,6 +44,7 @@ public class DetailsActivityFragment extends Fragment{
     String mResponseStr = null;
 
     private Tracker mTracker;
+    private Beer beer;
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
     @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
@@ -52,8 +60,8 @@ public class DetailsActivityFragment extends Fragment{
 
         Bundle bundle = getActivity().getIntent().getExtras();
         if(bundle != null) {
-            if (bundle.containsKey("uri")) {
-                mUri = Uri.parse(bundle.getString("uri"));
+            if (bundle.containsKey(getString(R.string.beer_details_uri_key))) {
+                mUri = Uri.parse(bundle.getString(getString(R.string.beer_details_uri_key)));
                 Log.v(LOG_TAG, mUri.toString());
             }
         }
@@ -66,7 +74,7 @@ public class DetailsActivityFragment extends Fragment{
     public void onResume() {
         super.onResume();
 
-        mTracker.setScreenName("Details");
+        mTracker.setScreenName(getString(R.string.details_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
@@ -82,8 +90,6 @@ public class DetailsActivityFragment extends Fragment{
                 public void processFinish(String results) {
                     mResponseStr = results;
                     progressBar.setVisibility(View.GONE);
-
-                    Beer beer = null;
 
                     try {
                         beer = Utils.extractBeerDetails(mResponseStr);
@@ -102,6 +108,18 @@ public class DetailsActivityFragment extends Fragment{
                 }
             }).execute(mUri);
         }
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String beerId =  beer.getId();
+                Intent intent = new Intent(getActivity(), BeerACIntentService.class);
+                intent.setAction(ACTION_GET_BEER_DETAILS);
+                intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
+                BeerACIntentService.startBeerQueryService(getActivity(), intent);
+            }
+        });
 
         return view;
     }
