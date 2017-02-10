@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
-    private static final String PREF_FILE = "com.beesham.beerac.PREF_FILE";
+    private static String PREF_FILE;
     private static final String TIME_PICKER_FRAG_TAG = "com.beesham.beerac.TIMEPICKER";
 
     private int LOADER_INIT_ID = 0;
@@ -83,6 +83,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+        PREF_FILE = getString(R.string.pref_file);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -165,7 +167,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         if(prefs.contains(getString(R.string.preferred_beer_key))) {
             mBeerId = prefs.getString(getString(R.string.preferred_beer_key), getString(R.string.default_preferred_beer));
         }
-        getSupportLoaderManager().restartLoader(0, null, this);
+        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
