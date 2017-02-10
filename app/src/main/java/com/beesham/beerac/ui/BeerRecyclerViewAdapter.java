@@ -61,7 +61,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                     mCursor.moveToPosition(getPosition());
 
                     Bundle args = new Bundle();
-                    args.putString("uri", BeerACIntentService.buildBeerByIdUri(
+                    args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
                             mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
                     ));
 
