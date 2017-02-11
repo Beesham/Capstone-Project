@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
@@ -44,10 +45,9 @@ import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
-public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
-        TimePickerFragment.TimeSetter{
+public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener{ //implements LoaderManager.LoaderCallbacks<Cursor>,        TimePickerFragment.TimeSetter{
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+/*    @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
     @BindView(R.id.toolbar_title) TextView mToolbarTitle;
     @BindView(R.id.bac_text_view) TextView mBACTextView;
@@ -56,12 +56,12 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.decrement_beers_button) TextView mDecrementBeerTextView;
     @BindView(R.id.units_spinner) Spinner mUnitsSpinner;
     @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
-    //@BindView(R.id.end_drinking_time_text_view) TextView mEndDrinkTimeTextView;
-    @BindView(R.id.volume_edit_text) TextView mVolumeEditText;
+    @BindView(R.id.volume_edit_text) TextView mVolumeEditText;*/
 
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
-    private static final String PREF_FILE = "com.beesham.beerac.PREF_FILE";
+    private static String PREF_FILE;
+    private static final String TIME_PICKER_FRAG_TAG = "com.beesham.beerac.TIMEPICKER";
 
     private int LOADER_INIT_ID = 0;
     private int LOADER_ID = 1;
@@ -82,7 +82,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
+ /*       ButterKnife.bind(this);
+
+        PREF_FILE = getString(R.string.pref_file);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -91,24 +93,24 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
-                args.putString("uri", BeerACIntentService.buildBeerByIdUri(mBeerId));
-
-                Intent i = new Intent(HomeActivity.this, DetailsActivity.class);
-                i.putExtras(args);
-
-                startActivity(i);
+                if(mBeerId != null) {
+                    args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
+                    Intent i = new Intent(HomeActivity.this, DetailsActivity.class);
+                    i.putExtras(args);
+                    startActivity(i);
+                }
             }
         });
 
-        SharedPreferences prefs = getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE); //PreferenceManager.getDefaultSharedPreferences(this);
-        if(prefs.contains("drink_beer")) {
-            mBeerId = prefs.getString("drink_beer", "oeGSxs");
+        SharedPreferences prefs = getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+        if(prefs.contains(getString(R.string.preferred_beer_key))) {
+            mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
             Log.v(LOG_TAG, mBeerId);
         }
 
         if(checkForFirstLaunch()){
-            mBeerId = "oeGSxs"; //Naughty 90 Beer
-            prefs.edit().putString("drink_beer", mBeerId).apply();
+            mBeerId =getString(R.string.default_preferred_beer); //Naughty 90 Beer
+            prefs.edit().putString(getString(R.string.preferred_beer_key), mBeerId).apply();
 
             Intent intent = new Intent(this, BeerACIntentService.class);
             intent.setAction(ACTION_GET_BEER_DETAILS);
@@ -117,7 +119,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
             getSupportLoaderManager().initLoader(LOADER_INIT_ID, null, this);
         }else{
-            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+            if(mBeerId != null)
+                getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
@@ -143,7 +146,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
-                timePicker.show(getSupportFragmentManager(), "timePicker");
+                timePicker.show(getSupportFragmentManager(), TIME_PICKER_FRAG_TAG);
                 start_end_time_selector = 0;
             }
         });
@@ -152,37 +155,32 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         Calendar calendar = Calendar.getInstance();
         setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
-        mVolumeEditText.setText("355");
-
-       /* mEndDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.show(getSupportFragmentManager(), "timePicker");
-                start_end_time_selector = 1;
-            }
-        });*/
+        mVolumeEditText.setText(getString(R.string.default_volume));
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker = application.getDefaultTracker();
-
+        mTracker = application.getDefaultTracker();*/
     }
 
     @Override
+    public void onFragmentInteraction(Uri uri) {
+        //TODO
+    }
+/*
+    @Override
     protected void onResume() {
         super.onResume();
-        Log.v(LOG_TAG, "onResume");
-        SharedPreferences prefs = getSharedPreferences("com.drink_beer", Context.MODE_PRIVATE);
-        if(prefs.contains("drink_beer")) {
-            mBeerId = prefs.getString("drink_beer", null);
-            Log.v(LOG_TAG, mBeerId);
+        SharedPreferences prefs = getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+        if(prefs.contains(getString(R.string.preferred_beer_key))) {
+            if(mBeerId != null) {
+                mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
+                getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+            }
         }
-        getSupportLoaderManager().restartLoader(0, null, this);
 
-        mTracker.setScreenName("Home");
+        mTracker.setScreenName(getString(R.string.home_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
+    }*/
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -224,10 +222,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     private void launchSettingsActivity(){
         Intent i = new Intent(HomeActivity.this, SettingsActivity.class);
         startActivity(i);
-    }
-
+    }*/
+/*
     private boolean checkForFirstLaunch(){
-        final String PREF_VERSION_CODE_KEY = "version_code";
+        final String PREF_VERSION_CODE_KEY = getString(R.string.pref_version_code_key);
         final int NONE_EXIST = -1;
         int currentVersionCode = 0;
         boolean status = true;
@@ -364,13 +362,11 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         mABV = Double.parseDouble(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.ABV)));
-        
-        Log.v(LOG_TAG, "cursor size: " + data.getCount());
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-    }
+    }*/
 
 }
