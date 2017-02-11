@@ -7,10 +7,10 @@ import android.os.Bundle;
 
 import com.beesham.beerac.R;
 
-
 public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener{ //implements LoaderManager.LoaderCallbacks<Cursor>,        TimePickerFragment.TimeSetter{
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
+
 
     private boolean mTwoPane;
 
@@ -31,7 +31,9 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
         } else {
             mTwoPane = false;
         }
+
     }
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {
