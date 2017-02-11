@@ -38,13 +38,14 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
     private final BeerRecyclerViewAdapterOnClickHandler mOnClickHandler;
 
     private Cursor mCursor;
+    private static String PREF_FILE;
+
 
     public static interface BeerRecyclerViewAdapterOnClickHandler{
         void onClick(BeerViewHolder beerViewHolder);
     }
 
     public class BeerViewHolder extends RecyclerView.ViewHolder{
-                                    //implements View.OnClickListener{
         @BindView(R.id.beer_image_image_view) ImageView beer_icon_imageView;
         @BindView(R.id.drink_beer_image_container) FrameLayout drinkBeer_icon_container;
         @BindView(R.id.beer_name_text_view) TextView beer_name_textView;
@@ -55,13 +56,10 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.v(LOG_TAG, "I was clicked " + beer_name_textView.getText());
-                    //mOnClickHandler.onClick(this);
-
                     mCursor.moveToPosition(getPosition());
 
                     Bundle args = new Bundle();
-                    args.putString("uri", BeerACIntentService.buildBeerByIdUri(
+                    args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
                             mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
                     ));
 
@@ -75,7 +73,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                 public void onClick(View view) {
                     mCursor.moveToPosition(getPosition());
 
-                    final SharedPreferences prefs = mContext.getSharedPreferences("com.drink_beer", Context.MODE_PRIVATE); //PreferenceManager.getDefaultSharedPreferences(mContext);
+                    final SharedPreferences prefs = mContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE); //PreferenceManager.getDefaultSharedPreferences(mContext);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("Drink this beer?");
@@ -84,7 +82,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                         public void onClick(DialogInterface dialog, int id) {
                             String beerId =  mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID));
                             prefs.edit()
-                                    .putString("drink_beer", beerId)
+                                    .putString(mContext.getString(R.string.preferred_beer_key), beerId)
                                     .commit();
 
                             Intent intent = new Intent(mContext, BeerACIntentService.class);
@@ -128,6 +126,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                                    BeerRecyclerViewAdapterOnClickHandler handler) {
         mContext = context;
         mOnClickHandler = handler;
+        PREF_FILE = mContext.getString(R.string.pref_file);
     }
 
     @Override

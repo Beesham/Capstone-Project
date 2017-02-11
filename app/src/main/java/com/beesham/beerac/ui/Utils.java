@@ -138,7 +138,7 @@ public class Utils {
         String description = "";
         String isOrganic;
         String foodPairings = "";
-        String abv;
+        String abv = null;
         int year = 0;
         String imageUrlIcon = null;
         String imageUrlMedium = null;
@@ -152,10 +152,10 @@ public class Utils {
 
         name = dataJsonObj.getString(KEY_NAME);
         id = dataJsonObj.getString(KEY_BEERID);
-        abv = dataJsonObj.getString(KEY_ABV);
         isOrganic = dataJsonObj.getString(KEY_IS_ORGANIC);
 
         try {
+            abv = dataJsonObj.getString(KEY_ABV);
             foodPairings = dataJsonObj.getString(KEY_FOOD_PAIRINGS);
         }catch(JSONException e){
             if(e.getMessage().equals("No value for foodPairings")){
