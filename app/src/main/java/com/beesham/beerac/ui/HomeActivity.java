@@ -95,10 +95,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 Bundle args = new Bundle();
                 if(mBeerId != null) {
                     args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
-
                     Intent i = new Intent(HomeActivity.this, DetailsActivity.class);
                     i.putExtras(args);
-
                     startActivity(i);
                 }
             }
