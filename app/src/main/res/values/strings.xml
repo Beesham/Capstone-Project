@@ -2,16 +2,28 @@
     <string name="app_name">BeerAC</string>
     <string name="title_activity_home">Home</string>
 
+    <string name="beer_details_uri_key">beer_uri</string>
+    <string name="preferred_beer_key">preferred_beer</string>
+
+    <string name="default_preferred_beer">oeGSxs</string>
+
+    <string name="pref_version_code_key">version_code</string>
+
+    <string name="pref_file">com.beesham.beerac.PREF_FILE</string>
+
     <!-- Menu -->
     <string name="menu_settings">Settings</string>
     <string name="menu_mybeers">My Beers</string>
     <string name="menu_search">Search</string>
 
     <!-- Home -->
+    <string name="home_screen_title">Home</string>
     <string name="beers_had"><xliff:g id="beers_had">%d</xliff:g> beers had</string>
     <string name="bac_format">BAC: <xliff:g id="bac_format">%.03f</xliff:g>%%</string>
     <string name="title_activity_details">Details</string>
     <string name="action_settings">Settings</string>
+
+    <string name="default_volume">355</string>
 
     <!-- Home Units Spinner -->
     <string-array name="units">
@@ -29,6 +41,7 @@
     <string name="title_activity_saves">My Beers</string>
 
     <!-- Details -->
+    <string name="details_screen_title">Details</string>
     <string name="ally_toolbar_titile"></string>
     <string name="title_activity_settings">Settings</string>
 
@@ -125,7 +138,6 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-
 
     <!-- Ads -->
     <string name="banner_ad_unit_id">ca-app-pub-9835470545063758/2871499220</string>

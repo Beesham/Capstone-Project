@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+        <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                      xmlns:tools="http://schemas.android.com/tools"
+                      android:id="@+id/activity_home"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      tools:context="com.beesham.beerac.ui.HomeActivity">
+
+    <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.beesham.beerac.ui.HomeFragment"/>
+
+</FrameLayout>
+
+<!--android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_home"
@@ -147,19 +161,8 @@
                     android:layout_below="@+id/linear_layout"
                     android:layout_marginTop="24dp"
                     android:layout_weight="1"/>
-
-            <!--TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/drinking_time_start_text_view"
-                    android:layout_toLeftOf="@+id/units_spinner"
-                    android:layout_toStartOf="@+id/units_spinner"
-                    android:id="@+id/end_drinking_time_text_view"
-                    tools:text="now"/-->
-
         </LinearLayout>
 
    </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout-->
