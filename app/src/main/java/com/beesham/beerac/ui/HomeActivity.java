@@ -93,18 +93,20 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
-                args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
+                if(mBeerId != null) {
+                    args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
 
-                Intent i = new Intent(HomeActivity.this, DetailsActivity.class);
-                i.putExtras(args);
+                    Intent i = new Intent(HomeActivity.this, DetailsActivity.class);
+                    i.putExtras(args);
 
-                startActivity(i);
+                    startActivity(i);
+                }
             }
         });
 
-        SharedPreferences prefs = getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE); //PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
         if(prefs.contains(getString(R.string.preferred_beer_key))) {
-            mBeerId = prefs.getString(getString(R.string.preferred_beer_key), getString(R.string.default_preferred_beer));
+            mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
             Log.v(LOG_TAG, mBeerId);
         }
 
@@ -119,7 +121,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
             getSupportLoaderManager().initLoader(LOADER_INIT_ID, null, this);
         }else{
-            getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+            if(mBeerId != null)
+                getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
@@ -165,9 +168,11 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onResume();
         SharedPreferences prefs = getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
         if(prefs.contains(getString(R.string.preferred_beer_key))) {
-            mBeerId = prefs.getString(getString(R.string.preferred_beer_key), getString(R.string.default_preferred_beer));
+            if(mBeerId != null) {
+                mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
+                getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+            }
         }
-        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
