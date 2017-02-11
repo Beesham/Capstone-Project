@@ -78,80 +78,106 @@
 
     </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:id="@+id/drinking_time_start_text_view"
-                    tools:text="3:00PM"
-                    android:layout_gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+                android:layout_height="match_parent">
 
             <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <EditText
+                <TextView
+                        android:text="TextView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:ems="3"
-                        android:id="@+id/volume_edit_text"
-                        tools:text="355"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="35dp"
+                        android:id="@+id/drinking_time_start_text_view"
+                        tools:text="3:00PM"
+                        android:layout_gravity="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-                <Spinner
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                    <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:ems="3"
+                            android:id="@+id/volume_edit_text"
+                            tools:text="355"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+                    <Spinner
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/units_spinner"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:id="@+id/linear_layout"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/volume_edit_text"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="16dp">
+
+                    <Button
+                            android:text="-"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/decrement_beers_button"
+                            android:layout_weight="1"
+                            android:onClick="decreaseBeerCount"/>
+
+                    <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0 beers had"
+                            android:ems="10"
+                            android:id="@+id/total_beers_text_view"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:inputType="number"/>
+
+                    <Button
+                            android:text="+"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/increment_beers_button"
+                            android:layout_weight="1"
+                            android:onClick="increaseBeerCount"/>
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/bac_text_view"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textAlignment="center"
+                        android:text="BAC: 0.00%"
+                        android:layout_below="@+id/linear_layout"
+                        android:layout_marginTop="24dp"
+                        android:layout_weight="1"/>
+
+                <!--TextView
+                        android:text="TextView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:id="@+id/units_spinner"/>
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/drinking_time_start_text_view"
+                        android:layout_toLeftOf="@+id/units_spinner"
+                        android:layout_toStartOf="@+id/units_spinner"
+                        android:id="@+id/end_drinking_time_text_view"
+                        tools:text="now"/-->
+
             </LinearLayout>
-
-            <LinearLayout
-                    android:id="@+id/linear_layout"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/volume_edit_text"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="16dp">
-
-                <Button
-                    android:text="-"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/decrement_beers_button"
-                    android:layout_weight="1"
-                    android:onClick="decreaseBeerCount"/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0 beers had"
-                    android:ems="10"
-                    android:id="@+id/total_beers_text_view"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:inputType="number"/>
-
-                <Button
-                    android:text="+"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/increment_beers_button"
-                    android:layout_weight="1"
-                    android:onClick="increaseBeerCount"/>
-            </LinearLayout>
-
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -163,7 +189,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_weight="1"/>
         </LinearLayout>
-
+    </android.support.v4.widget.NestedScrollView>
    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout-->
