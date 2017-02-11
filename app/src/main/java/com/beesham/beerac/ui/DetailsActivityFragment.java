@@ -6,11 +6,11 @@ import com.google.android.gms.analytics.Tracker;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -29,7 +29,6 @@ import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
-import com.beesham.beerac.service.BeerDetailsAsyncTask;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -42,6 +41,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 /**
@@ -129,6 +129,15 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
                 Columns.SavedBeerColumns.BEERID + "=?",
                 new String[]{beer.getId()}
         );
+
+        if(result > 0){
+            getActivity().getSharedPreferences(getString(R.string.pref_file), MODE_PRIVATE)
+                    .edit()
+                    .putString(getString(R.string.preferred_beer_key), null)
+                    .commit();
+        }
+
+        getActivity().finish();
     }
 
     private boolean checkIfBeerExists(){
