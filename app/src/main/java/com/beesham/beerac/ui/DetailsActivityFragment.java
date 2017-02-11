@@ -3,13 +3,18 @@ package com.beesham.beerac.ui;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import android.content.AsyncTaskLoader;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +26,7 @@ import android.widget.TextView;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
+import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.beesham.beerac.service.BeerDetailsAsyncTask;
@@ -28,20 +34,24 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 /**
  * Details fragment showing beer details and allows for user to save/fav a beer
  */
-public class DetailsActivityFragment extends Fragment{
+public class DetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Beer>{
 
     private static final String LOG_TAG = DetailsActivityFragment.class.getSimpleName();
 
     Uri mUri;
-    String mResponseStr = null;
 
     private Tracker mTracker;
     private Beer beer;
@@ -50,6 +60,8 @@ public class DetailsActivityFragment extends Fragment{
     @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
     @BindView(R.id.photo) ImageView beerImageView;
     @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.fab) FloatingActionButton mFab;
+
 
     public DetailsActivityFragment() {
     }
@@ -85,42 +97,108 @@ public class DetailsActivityFragment extends Fragment{
         ButterKnife.bind(this, view);
 
         if(mUri != null) {
-            new BeerDetailsAsyncTask(new BeerDetailsAsyncTask.AsyncResponse() {
-                @Override
-                public void processFinish(String results) {
-                    mResponseStr = results;
-                    progressBar.setVisibility(View.GONE);
-
-                    try {
-                        beer = Utils.extractBeerDetails(mResponseStr);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    beerNameTextView.setText(beer.getName());
-                    descriptionTextView.setText(beer.getDescription());
-
-                    if (!TextUtils.isEmpty(beer.getUrl_large())) {
-                        Picasso.with(getContext())
-                                .load(beer.getUrl_large())
-                                .into(beerImageView);
-                    }
-                }
-            }).execute(mUri);
+            getLoaderManager().initLoader(0, null, this).forceLoad();
         }
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String beerId =  beer.getId();
-                Intent intent = new Intent(getActivity(), BeerACIntentService.class);
-                intent.setAction(ACTION_GET_BEER_DETAILS);
-                intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
-                BeerACIntentService.startBeerQueryService(getActivity(), intent);
+
+                if(!checkIfBeerExists()) {
+                    String beerId = beer.getId();
+                    Intent intent = new Intent(getActivity(), BeerACIntentService.class);
+                    intent.setAction(ACTION_GET_BEER_DETAILS);
+                    intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
+                    BeerACIntentService.startBeerQueryService(getActivity(), intent);
+
+                    mFab.setImageResource(R.drawable.ic_favourite_fill);
+                }
+                else {
+                    removeBeer();
+                    mFab.setImageResource(R.drawable.ic_favourite_outline);
+                }
             }
         });
 
         return view;
+    }
+
+    private void removeBeer(){
+        int result = getActivity().getContentResolver().delete(
+                BeerProvider.SavedBeers.CONTENT_URI,
+                Columns.SavedBeerColumns.BEERID + "=?",
+                new String[]{beer.getId()}
+        );
+    }
+
+    private boolean checkIfBeerExists(){
+        final String[] projections = {
+                Columns.SavedBeerColumns.BEERID,
+        };
+
+        Cursor c = getActivity().getContentResolver().query(
+                BeerProvider.SavedBeers.CONTENT_URI,
+                projections,
+                Columns.SavedBeerColumns.BEERID + "=?",
+                new String[]{beer.getId()},
+                null);
+
+        if(c.getCount() > 0){
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Loader<Beer> onCreateLoader(int id, Bundle args) {
+        return new android.support.v4.content.AsyncTaskLoader<Beer>(getActivity()) {
+            @Override
+            public Beer loadInBackground() {
+                String responseStr = null;
+                OkHttpClient client = new OkHttpClient();
+
+                Request request = new Request.Builder()
+                        .url(mUri.toString())
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+                    responseStr = response.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    return Utils.extractBeerDetails(responseStr);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Beer> loader, Beer data) {
+        beer = data;
+
+        if(checkIfBeerExists())
+            mFab.setImageResource(R.drawable.ic_favourite_fill);
+
+        progressBar.setVisibility(View.GONE);
+        beerNameTextView.setText(beer.getName());
+        descriptionTextView.setText(beer.getDescription());
+
+        if (!TextUtils.isEmpty(beer.getUrl_large())) {
+            Picasso.with(getContext())
+                    .load(beer.getUrl_large())
+                    .into(beerImageView);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+
     }
 }
