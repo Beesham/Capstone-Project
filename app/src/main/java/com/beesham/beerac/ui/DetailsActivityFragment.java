@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -56,8 +57,8 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     private Beer beer;
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
-    @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
-    @BindView(R.id.photo) ImageView beerImageView;
+    @Nullable @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
+    @Nullable @BindView(R.id.photo) ImageView beerImageView;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
 
@@ -76,8 +77,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
                 mUri = Uri.parse(bundle.getString(getString(R.string.beer_details_uri_key)));
                 Log.v(LOG_TAG, mUri.toString());
             }
-        }else{
-            Log.v(LOG_TAG, "bun null");
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
@@ -198,13 +197,15 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             mFab.setImageResource(R.drawable.ic_favourite_fill);
 
         progressBar.setVisibility(View.GONE);
-        beerNameTextView.setText(beer.getName());
+        if(beerNameTextView != null) beerNameTextView.setText(beer.getName());
         descriptionTextView.setText(beer.getDescription());
 
-        if (!TextUtils.isEmpty(beer.getUrl_large())) {
-            Picasso.with(getContext())
-                    .load(beer.getUrl_large())
-                    .into(beerImageView);
+        if(beerImageView != null) {
+            if (!TextUtils.isEmpty(beer.getUrl_large())) {
+                Picasso.with(getContext())
+                        .load(beer.getUrl_large())
+                        .into(beerImageView);
+            }
         }
     }
 

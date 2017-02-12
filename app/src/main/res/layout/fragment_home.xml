@@ -115,8 +115,7 @@ android:fitsSystemWindows="true">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/decrement_beers_button"
-                    android:layout_weight="1"
-                    android:onClick="decreaseBeerCount"/>
+                    android:layout_weight="1"/>
 
             <EditText
                     android:layout_width="match_parent"
@@ -133,8 +132,7 @@ android:fitsSystemWindows="true">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/increment_beers_button"
-                    android:layout_weight="1"
-                    android:onClick="increaseBeerCount"/>
+                    android:layout_weight="1"/>
         </LinearLayout>
 
         <TextView
