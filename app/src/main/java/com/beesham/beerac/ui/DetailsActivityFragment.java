@@ -107,6 +107,16 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        if(getArguments() != null){
+            if(getArguments().getString("act_started_frag").equals(HomeActivity.LOG_TAG)){
+                beerNameTextView.setVisibility(View.GONE);
+                beerImageView.setVisibility(View.GONE);
+            }else{
+                beerNameTextView.setVisibility(View.VISIBLE);
+                beerImageView.setVisibility(View.VISIBLE);
+            }
+        }
+
 
 
         if(mUri != null) {
