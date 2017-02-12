@@ -19,8 +19,14 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.beer_detail_container, new DetailsActivityFragment())
+                    .commit();
+        }
+
     }
 
 }

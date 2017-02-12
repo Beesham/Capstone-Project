@@ -2,10 +2,13 @@ package com.beesham.beerac.ui;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
+import com.beesham.beerac.R;
 import com.beesham.beerac.data.Columns;
 
 import org.json.JSONArray;
@@ -21,6 +24,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by beesham on 21/01/17.
@@ -250,6 +255,22 @@ public class Utils {
         return (elapsedHours + elapsedMins);
     }
 
+    public static String getBeerIdFromPrefs(Context context){
+        String beerId = null;
+
+        //Get sharedPreferences instance
+        SharedPreferences prefs = context.getSharedPreferences(
+                context.getString(R.string.pref_file),
+                Context.MODE_PRIVATE);
+
+        //Get preferred beer beerID from prefs
+        if(prefs.contains(context.getString(R.string.preferred_beer_key))) {
+            beerId = prefs.getString(context.getString(R.string.preferred_beer_key), null);
+        }
+
+        return beerId;
+    }
+
     public static double kgToLbs(double bodyWeightInKg){
         return bodyWeightInKg*2.2;  // 1kg = 2.2Lbs
     }
@@ -264,5 +285,40 @@ public class Utils {
 
     public static String integerToString(int i){
         return Integer.toString(i);
+    }
+
+    public static boolean checkForFirstLaunch(Context context){
+        final String PREF_VERSION_CODE_KEY = context.getString(R.string.pref_version_code_key);
+        final int NONE_EXIST = -1;
+        int currentVersionCode = 0;
+        boolean status = true;
+
+        try{
+            currentVersionCode = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences preferences = context.getSharedPreferences(
+                context.getString(R.string.pref_file),
+                MODE_PRIVATE);
+        int savedVersionCode = preferences.getInt(PREF_VERSION_CODE_KEY, NONE_EXIST);
+
+        if(currentVersionCode == savedVersionCode){
+            status = false;
+        }else if(currentVersionCode == NONE_EXIST){
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(PREF_VERSION_CODE_KEY, currentVersionCode);
+            editor.apply();
+            status = true;    //New install, first launch, user cleared app data
+        }else if(currentVersionCode > savedVersionCode){
+            //Place upgrade code here
+            status = true;
+        }
+
+        preferences.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode)
+                .commit();
+        return status;
     }
 }
