@@ -42,6 +42,33 @@
 
                 </android.support.design.widget.CollapsingToolbarLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                        <ImageView
+                            android:id="@+id/photo"
+                            android:layout_width="match_parent"
+                            android:scaleType="centerCrop"
+                            android:background="@color/photo_placeholder"
+                            android:minHeight="?actionBarSize"
+                            android:layout_weight="1"
+                            android:layout_height="212dp"/>
+
+                        <TextView
+                            android:id="@+id/beer_name_text_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:text="Beer name"
+                            android:layout_gravity="bottom"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:fontFamily="sans-serif"/>
+                </FrameLayout>
+
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.widget.NestedScrollView

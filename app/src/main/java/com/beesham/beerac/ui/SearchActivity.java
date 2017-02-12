@@ -30,29 +30,56 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEERS;
+import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
-public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class SearchActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener{ //implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+    private boolean mTwoPane;
+    private final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
+
+
+/*    @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.adView) AdView mAdView;
     //@BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
 
     private static final int BEERS_LOADER = 0;
 
+
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
     private Cursor mCursor;
 
-    private Tracker mTracker;
+
+    private Tracker mTracker;*/
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
+
+        if (findViewById(R.id.beer_detail_container) != null) {
+            mTwoPane = true;
+
+            DetailsActivityFragment fragment = new DetailsActivityFragment();
+            Bundle args = new Bundle();
+
+            args.putString(getString(R.string.beer_details_uri_key),
+                    buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
+            fragment.setArguments(args);
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.beer_detail_container, fragment, DETAIL_ACTIVITY_FRAG_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
+        }
+
+/*        ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -63,7 +90,6 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             launchBeerACIntentService(query);
-
         }
 
         mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(this, new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
@@ -84,6 +110,27 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
         getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
 
+        if(findViewById(R.id.beer_detail_container) != null){
+            mTwoPane = true;
+
+            DetailsActivityFragment fragment = new DetailsActivityFragment();
+            Bundle args = new Bundle();
+
+            args.putString(getString(R.string.beer_details_uri_key),
+                    buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
+            fragment.setArguments(args);
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.beer_detail_container, fragment, DETAIL_ACTIVITY_FRAG_TAG)
+                        .commit();
+            }
+
+        }else{
+            mTwoPane = false;
+        }
+
+        //TODO: remove testdevice before launch
         //MobileAds.initialize(getApplicationContext(), "ca-app-pub-9835470545063758~1394766028");
         AdRequest request = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
@@ -92,10 +139,15 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mAdView.loadAd(request);
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+        mTracker = application.getDefaultTracker();*/
     }
 
-    private void launchBeerACIntentService(String queryString){
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        
+    }
+
+/*    private void launchBeerACIntentService(String queryString){
         Log.v(LOG_TAG, "launching intent service");
         Intent intent = new Intent(this, BeerACIntentService.class);
         intent.setAction(ACTION_GET_BEERS);
@@ -109,9 +161,9 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
         mTracker.setScreenName("Search");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
+    }*/
 
-    @Override
+    /*@Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         final String[] projections = {
@@ -147,5 +199,5 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader loader) {
         mBeerRecyclerViewAdapter.swapCursor(null);
-    }
+    }*/
 }
