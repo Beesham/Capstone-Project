@@ -59,8 +59,8 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     private Beer beer;
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
-    @Nullable @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
-    @Nullable @BindView(R.id.photo) ImageView beerImageView;
+    @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
+    @BindView(R.id.photo) ImageView beerImageView;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
 
@@ -103,8 +103,9 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-        if(!HomeActivity.mTwoPane)
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(!HomeActivity.mTwoPane) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
 
 
