@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -94,6 +96,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -105,18 +113,26 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+
+        /*if(view.getRootView()).findViewById(R.id.activity_home) != null){
+            Log.v(LOG_TAG, "twoPAne");
+        }*/
+
         mBeerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
-                if(mBeerId != null) {
-                    args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
-                    Intent i = new Intent(getActivity(), DetailsActivity.class);
-                    i.putExtras(args);
-                    startActivity(i);
+                if (mBeerId != null) {
+                    if(!HomeActivity.mTwoPane) {
+                        args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
+                        Intent i = new Intent(getActivity(), DetailsActivity.class);
+                        i.putExtras(args);
+                        startActivity(i);
+                    }
                 }
             }
         });
+
 
         mIncrementBeerTextView.setOnClickListener(new View.OnClickListener() {
             @Override

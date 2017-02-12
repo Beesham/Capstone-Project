@@ -23,7 +23,7 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     private int launchCode;
 
-    private boolean mTwoPane;
+    public static boolean mTwoPane;
     private String mUri;
 
 
