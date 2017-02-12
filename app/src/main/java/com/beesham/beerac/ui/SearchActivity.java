@@ -36,7 +36,7 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
 
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
 
-    private boolean mTwoPane;
+    public static boolean mTwoPane;
     private final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
 
 
@@ -68,6 +68,7 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
 
             args.putString(getString(R.string.beer_details_uri_key),
                     buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
+            args.putString("act_started_frag", LOG_TAG);
             fragment.setArguments(args);
 
             if (savedInstanceState == null) {
