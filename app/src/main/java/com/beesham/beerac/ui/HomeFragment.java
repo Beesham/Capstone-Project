@@ -118,25 +118,30 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        if(prefs.contains(getString(R.string.preferred_beer_key))) {
-            mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
-            Log.v(LOG_TAG, mBeerId);
-        }
+        mBeerId = Utils.getBeerIdFromPrefs(getContext());
 
-        if(checkForFirstLaunch()){
-            mBeerId =getString(R.string.default_preferred_beer); //Naughty 90 Beer
-            prefs.edit().putString(getString(R.string.preferred_beer_key), mBeerId).apply();
+        if(Utils.checkForFirstLaunch(getActivity())){
+            Log.v(LOG_TAG, "First LAunch ");
+            mBeerId = getString(R.string.default_preferred_beer); //Naughty 90 Beer
+            getActivity().getSharedPreferences(getString(R.string.pref_file),
+                    MODE_PRIVATE)
+                    .edit()
+                    .putString(getString(R.string.preferred_beer_key), mBeerId)
+                    .apply();
 
             Intent intent = new Intent(getActivity(), BeerACIntentService.class);
             intent.setAction(ACTION_GET_BEER_DETAILS);
             intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
             BeerACIntentService.startBeerQueryService(getActivity(), intent);
-
+            setUriinHomeActivity(BeerACIntentService.buildBeerByIdUri(mBeerId));
             getActivity().getSupportLoaderManager().initLoader(LOADER_INIT_ID, null, this);
+
         }else{
-            if(mBeerId != null)
+            Log.v(LOG_TAG, "Concequent");
+            if(mBeerId != null) {
                 getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+                setUriinHomeActivity(BeerACIntentService.buildBeerByIdUri(mBeerId));
+            }
         }
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
@@ -184,7 +189,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onResume();
         SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
         if(prefs.contains(getString(R.string.preferred_beer_key))) {
-            if(mBeerId != null) {
+            if(mBeerId == null) {
                 mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
                 getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
             }
@@ -235,39 +240,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         Intent i = new Intent(getActivity(), SettingsActivity.class);
         startActivity(i);
     }
-
-    private boolean checkForFirstLaunch(){
-        final String PREF_VERSION_CODE_KEY = getString(R.string.pref_version_code_key);
-        final int NONE_EXIST = -1;
-        int currentVersionCode = 0;
-        boolean status = true;
-
-        try{
-            currentVersionCode = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        SharedPreferences preferences = getActivity().getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-        int savedVersionCode = preferences.getInt(PREF_VERSION_CODE_KEY, NONE_EXIST);
-
-        if(currentVersionCode == savedVersionCode){
-            status = false;
-        }else if(currentVersionCode == NONE_EXIST){
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(PREF_VERSION_CODE_KEY, currentVersionCode);
-            editor.apply();
-            status = true;    //New install, first launch, user cleared app data
-        }else if(currentVersionCode > savedVersionCode){
-            //Place upgrade code here
-            status = true;
-        }
-
-        preferences.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode)
-                .commit();
-        return status;
-    }
-
 
     public void increaseBeerCount(View v){
         mBeerCount++;
@@ -325,7 +297,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void setUriinHomeActivity(String uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
@@ -357,7 +329,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String uri);
     }
 
     @Override

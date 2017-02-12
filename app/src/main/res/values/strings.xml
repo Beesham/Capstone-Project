@@ -11,6 +11,8 @@
 
     <string name="pref_file">com.beesham.beerac.PREF_FILE</string>
 
+    <string name="launch_key">launch</string>
+
     <!-- Menu -->
     <string name="menu_settings">Settings</string>
     <string name="menu_mybeers">My Beers</string>
