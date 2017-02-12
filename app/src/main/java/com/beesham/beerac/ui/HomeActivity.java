@@ -10,7 +10,7 @@ import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
 public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener{
 
-    private static final String LOG_TAG = HomeActivity.class.getSimpleName();
+    public static final String LOG_TAG = HomeActivity.class.getSimpleName();
     public static boolean mTwoPane;
 
     private final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
@@ -28,6 +28,7 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
 
             args.putString(getString(R.string.beer_details_uri_key),
                     buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
+            args.putString("act_started_frag", LOG_TAG);
             fragment.setArguments(args);
 
             if (savedInstanceState == null) {
