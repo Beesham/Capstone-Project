@@ -118,6 +118,20 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
+        mIncrementBeerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                increaseBeerCount();
+            }
+        });
+
+        mDecrementBeerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                decreaseBeerCount();
+            }
+        });
+
         mBeerId = Utils.getBeerIdFromPrefs(getContext());
 
         if(Utils.checkForFirstLaunch(getActivity())){
@@ -241,13 +255,13 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         startActivity(i);
     }
 
-    public void increaseBeerCount(View v){
+    public void increaseBeerCount(){
         mBeerCount++;
         mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
         updateBAC();
     }
 
-    public void decreaseBeerCount(View v){
+    public void decreaseBeerCount(){
         if(mBeerCount != 0)
             mBeerCount--;
 
