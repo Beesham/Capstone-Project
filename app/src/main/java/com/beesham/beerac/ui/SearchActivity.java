@@ -144,7 +144,7 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        
+
     }
 
 /*    private void launchBeerACIntentService(String queryString){
