@@ -15,6 +15,8 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,6 +71,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         Log.v(LOG_TAG, "frag on create");
 
         Bundle bundle = getArguments();
@@ -96,6 +99,14 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
                              Bundle savedInstanceState) {
         final View view =  inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        if(!HomeActivity.mTwoPane)
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         if(mUri != null) {
             getLoaderManager().initLoader(0, null, this).forceLoad();

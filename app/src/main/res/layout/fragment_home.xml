@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/fragment_home"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="com.beesham.beerac.ui.HomeFragment"
-android:fitsSystemWindows="true">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.beesham.beerac.ui.HomeFragment"
+    android:fitsSystemWindows="true">
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+        <android.support.design.widget.AppBarLayout
             android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
+            <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true">
 
-            <TextView
+                <TextView
                     android:id="@+id/toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -34,13 +34,13 @@ android:fitsSystemWindows="true">
                     android:text="@string/title_activity_home"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
-        </android.support.v7.widget.Toolbar>
+            </android.support.v7.widget.Toolbar>
 
-        <FrameLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <ImageView
+                <ImageView
                     android:id="@+id/photo"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
@@ -49,7 +49,7 @@ android:fitsSystemWindows="true">
                     android:layout_weight="1"
                     android:layout_height="212dp"/>
 
-            <TextView
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:text="Beer name"
@@ -59,16 +59,16 @@ android:fitsSystemWindows="true">
                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:fontFamily="sans-serif"/>
-        </FrameLayout>
+            </FrameLayout>
 
-    </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <TextView
+            <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,13 +78,13 @@ android:fitsSystemWindows="true">
                 android:layout_gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center">
 
-            <EditText
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -94,13 +94,13 @@ android:fitsSystemWindows="true">
                     tools:text="355"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
-            <Spinner
+                <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/units_spinner"/>
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout
+            <LinearLayout
                 android:id="@+id/linear_layout"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -110,14 +110,14 @@ android:fitsSystemWindows="true">
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="16dp">
 
-            <Button
+                <Button
                     android:text="-"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/decrement_beers_button"
                     android:layout_weight="1"/>
 
-            <EditText
+                <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0 beers had"
@@ -127,15 +127,15 @@ android:fitsSystemWindows="true">
                     android:textAlignment="center"
                     android:inputType="number"/>
 
-            <Button
+                <Button
                     android:text="+"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/increment_beers_button"
                     android:layout_weight="1"/>
-        </LinearLayout>
+            </LinearLayout>
 
-        <TextView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/bac_text_view"
@@ -146,18 +146,18 @@ android:fitsSystemWindows="true">
                 android:layout_marginTop="24dp"
                 android:layout_weight="1"/>
 
-        <!--TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/drinking_time_start_text_view"
-                android:layout_toLeftOf="@+id/units_spinner"
-                android:layout_toStartOf="@+id/units_spinner"
-                android:id="@+id/end_drinking_time_text_view"
-                tools:text="now"/-->
+            <!--TextView
+                    android:text="TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/drinking_time_start_text_view"
+                    android:layout_toLeftOf="@+id/units_spinner"
+                    android:layout_toStartOf="@+id/units_spinner"
+                    android:id="@+id/end_drinking_time_text_view"
+                    tools:text="now"/-->
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
