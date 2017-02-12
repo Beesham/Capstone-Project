@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -62,20 +61,23 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
 
-
     public DetailsActivityFragment() {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle bundle = getActivity().getIntent().getExtras();
+        Log.v(LOG_TAG, "frag on create");
+
+        Bundle bundle = getArguments();
         if(bundle != null) {
             if (bundle.containsKey(getString(R.string.beer_details_uri_key))) {
                 mUri = Uri.parse(bundle.getString(getString(R.string.beer_details_uri_key)));
                 Log.v(LOG_TAG, mUri.toString());
             }
+        }else{
+            Log.v(LOG_TAG, "bun null");
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
