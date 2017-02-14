@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
@@ -55,6 +57,8 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
     private Tracker mTracker;*/
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +83,8 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
         } else {
             mTwoPane = false;
         }
+
+
 
 /*        ButterKnife.bind(this);
 
@@ -144,9 +150,19 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(Bundle bundle) {
+        Log.v(LOG_TAG, "itemCLicked");
 
+        DetailsActivityFragment fragment = new DetailsActivityFragment();
+        bundle.putString("act_started_frag", LOG_TAG);
+        fragment.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.beer_detail_container, fragment, DETAIL_ACTIVITY_FRAG_TAG)
+                .commit();
     }
+
+
 
 /*    private void launchBeerACIntentService(String queryString){
         Log.v(LOG_TAG, "launching intent service");
