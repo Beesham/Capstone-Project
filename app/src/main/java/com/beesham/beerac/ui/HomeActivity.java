@@ -13,7 +13,7 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
     public static final String LOG_TAG = HomeActivity.class.getSimpleName();
     public static boolean mTwoPane;
 
-    private final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
+    public static final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

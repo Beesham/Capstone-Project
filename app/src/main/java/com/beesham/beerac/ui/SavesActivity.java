@@ -48,13 +48,10 @@ public class SavesActivity extends AppCompatActivity  implements LoaderManager.L
 
         mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(this, new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
             @Override
-            public void onClick(BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
-                Uri uri = BeerProvider.SearchedBeers.withName(beerViewHolder.beer_name_textView.getText().toString());
+            public void onClick(Bundle bundle) {
 
-                Log.v(LOG_TAG, "I was clicked: " + uri.toString());
+                Log.v(LOG_TAG, "I was clicked: ");
 
-                Bundle args = new Bundle();
-                args.putString("uri", uri.toString());
             }
         });
         mRecyclerView = (RecyclerView) findViewById(R.id.beer_recycler_view);
