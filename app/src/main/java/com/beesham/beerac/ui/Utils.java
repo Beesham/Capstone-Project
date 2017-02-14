@@ -49,6 +49,9 @@ public class Utils {
     static final String KEY_IMAGEURL_MEDIUM = "medium";
     static final String KEY_IMAGEURL_LARGE = "large";
     static final String KEY_YEAR = "year";
+    static final String KEY_STATUS = "status";
+    static final String KEY_ERR_MSG = "errorMessage";
+
 
 
     public static String getCountryName(Context context, double latitude, double longitude) throws IOException {
@@ -68,6 +71,12 @@ public class Utils {
         int totalResults;
 
         JSONObject beerListJsonObj = new JSONObject(jsonResponse);
+
+        if(beerListJsonObj.has(KEY_STATUS)){
+            if(beerListJsonObj.getString(KEY_STATUS).equals("failure")){
+                throw new JSONException(beerListJsonObj.getString(KEY_ERR_MSG));
+            }
+        }
 
         currentPage = beerListJsonObj.getInt(KEY_CURRENTPAGE);
         numberOfPages = beerListJsonObj.getInt(KEY_NUMBEROFPAGES);
@@ -151,7 +160,13 @@ public class Utils {
 
         boolean hasImages = false;
 
-        if(!beerJsonObj.getString("status").equals("success")) return null;
+        //if(!beerJsonObj.getString("status").equals("success")) return null;
+
+        if(beerJsonObj.has(KEY_STATUS)){
+            if(beerJsonObj.getString(KEY_STATUS).equals("failure")){
+                throw new JSONException(beerJsonObj.getString(KEY_ERR_MSG));
+            }
+        }
 
         JSONObject dataJsonObj = beerJsonObj.getJSONObject(KEY_DATA);
 
