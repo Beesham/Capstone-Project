@@ -123,7 +123,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
         public void onClick(View view) {
             mCursor.moveToPosition(getAdapterPosition());
             Log.v(LOG_TAG, "item clikced");
-            if(SearchActivity.mTwoPane){
+            if(SearchActivity.mTwoPane || SavesActivity.mTwoPane){
                 Log.v(LOG_TAG, "mtowPane");
 
                 Bundle args = new Bundle();
