@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
@@ -60,6 +61,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private static final int BEERS_LOADER = 0;
 
     private final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
+    private static final String SELECTED_KEY = "selected_position";
 
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
@@ -68,6 +70,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private int mPosition = RecyclerView.NO_POSITION;
     private int mChoiceMode;
     private boolean mAutoSelectView;
+
 
     private Tracker mTracker;
 
@@ -117,7 +120,13 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
-        getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
+
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(SELECTED_KEY)){
+                mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            }
+            mBeerRecyclerViewAdapter.onRestoreInstanceState(savedInstanceState);
+        }
 
         //TODO: remove testdevice before launch
         //MobileAds.initialize(getApplicationContext(), "ca-app-pub-9835470545063758~1394766028");
@@ -141,6 +150,12 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mChoiceMode = a.getInt(R.styleable.SearchFragment_android_choiceMode, AbsListView.CHOICE_MODE_NONE);
         mAutoSelectView = a.getBoolean(R.styleable.SearchFragment_android_choiceMode, false);
         a.recycle();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
     }
 
     @Override
@@ -170,11 +185,23 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     private void launchBeerACIntentService(String queryString){
-        Log.v(LOG_TAG, "launching intent service");
         Intent intent = new Intent(getActivity(), BeerACIntentService.class);
         intent.setAction(ACTION_GET_BEERS);
         intent.putExtra(BeerACIntentService.EXTRA_QUERY, queryString);
         BeerACIntentService.startBeerQueryService(getActivity(), intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // When tablets rotate, the currently selected list item needs to be saved.
+        // When no item is selected, mPosition will be set to RecyclerView.NO_POSITION,
+        // so check for that before storing.
+        if (mPosition != RecyclerView.NO_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+
+        mBeerRecyclerViewAdapter.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -229,7 +256,9 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
         mBeerRecyclerViewAdapter.swapCursor(mCursor);
 
-        if(mPosition != ListView.INVALID_POSITION)  mRecyclerView.smoothScrollToPosition(mPosition);
+        if(mPosition != RecyclerView.NO_POSITION) {
+            mRecyclerView.smoothScrollToPosition(mPosition);
+        }
 
         if(data.getCount() > 0){
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -252,8 +281,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
             });
 
         }
-
-        Log.v(LOG_TAG, "size of cursor: " + mCursor.getCount());
     }
 
     @Override
