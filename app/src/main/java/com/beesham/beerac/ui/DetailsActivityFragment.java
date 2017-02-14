@@ -72,8 +72,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.v(LOG_TAG, "frag on create");
-
         Bundle bundle = getArguments();
         if(bundle != null) {
             if (bundle.containsKey(getString(R.string.beer_details_uri_key))) {
@@ -112,7 +110,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
                 if (bundle.getString("act_started_frag").equals(HomeActivity.LOG_TAG)) {
                     beerNameTextView.setVisibility(View.GONE);
                     beerImageView.setVisibility(View.GONE);
-                } else {
+                }else{
                     beerNameTextView.setVisibility(View.VISIBLE);
                     beerImageView.setVisibility(View.VISIBLE);
                 }

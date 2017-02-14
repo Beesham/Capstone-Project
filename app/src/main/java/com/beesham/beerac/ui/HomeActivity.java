@@ -20,6 +20,7 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Looks for the details container, if found, then a tablet layout is used
         if (findViewById(R.id.beer_detail_container) != null) {
             mTwoPane = true;
 

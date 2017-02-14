@@ -176,7 +176,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                Log.v(LOG_TAG, "going home");
                 NavUtils.navigateUpFromSameTask(getActivity());
                 return true;
         }

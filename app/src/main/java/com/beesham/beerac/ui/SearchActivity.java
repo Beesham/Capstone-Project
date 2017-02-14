@@ -69,8 +69,6 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
 
     @Override
     public void onFragmentInteraction(Bundle bundle) {
-        Log.v(LOG_TAG, "itemCLicked");
-
         DetailsActivityFragment fragment = new DetailsActivityFragment();
         bundle.putString("act_started_frag", LOG_TAG);
         fragment.setArguments(bundle);
