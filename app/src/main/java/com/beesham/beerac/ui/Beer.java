@@ -2,6 +2,8 @@ package com.beesham.beerac.ui;
 
 /**
  * Created by beesham on 24/01/17.
+ * Beer object
+ * Holds details about a given beer
  */
 
 public class Beer {

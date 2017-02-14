@@ -56,43 +56,20 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
             super(v);
             ButterKnife.bind(this, v);
             v.setOnClickListener(this);
-           /* v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mCursor.moveToPosition(getPosition());
-                    Log.v(LOG_TAG, "item clikced");
-                    if(SearchActivity.mTwoPane){
-                        Log.v(LOG_TAG, "mtowPane");
-
-                        Bundle args = new Bundle();
-                        args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
-                                mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
-                        mOnClickHandler.onClick(args, BeerViewHolder.this);
-                        mICM.onClick(BeerViewHolder.this);
-
-                    }else{
-                        Bundle args = new Bundle();
-                        args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
-                                mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
-                        ));
-
-                        mContext.startActivity(new Intent(mContext, DetailsActivity.class)
-                                .putExtras(args));
-                    }
-                }
-            });*/
 
             drinkBeer_icon_container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mCursor.moveToPosition(getPosition());
 
-                    final SharedPreferences prefs = mContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE); //PreferenceManager.getDefaultSharedPreferences(mContext);
+                    final SharedPreferences prefs =
+                            mContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("Drink this beer?");
-                    builder.setMessage("This beer will be saved under \"My beers\"");
-                    builder.setPositiveButton("0k", new DialogInterface.OnClickListener() {
+                    builder.setTitle(mContext.getString(R.string.dialog_title));
+                    builder.setMessage(mContext.getString(R.string.dialog_confirmation_message));
+                    builder.setPositiveButton(mContext.getString(android.R.string.ok),
+                            new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             String beerId =  mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID));
                             prefs.edit()
@@ -105,7 +82,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                             BeerACIntentService.startBeerQueryService(mContext, intent);
                         }
                     });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(mContext.getString(android.R.string.cancel),
+                            new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // User cancelled the dialog
                         }
@@ -113,8 +91,6 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
                     AlertDialog dialog = builder.create();
                     dialog.show();
-
-                    Log.v(LOG_TAG, "I want to drink this beer: " + mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID)));
                 }
             });
         }
@@ -122,21 +98,21 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
         @Override
         public void onClick(View view) {
             mCursor.moveToPosition(getAdapterPosition());
-            Log.v(LOG_TAG, "item clikced");
-            if(SearchActivity.mTwoPane || SavesActivity.mTwoPane){
-                Log.v(LOG_TAG, "mtowPane");
+            Bundle args = new Bundle();
 
-                Bundle args = new Bundle();
+            //If we are in twoPane mode return a bundle with the beer uri else start details activity
+            //with a beer uri
+            if(SearchActivity.mTwoPane || SavesActivity.mTwoPane){
                 args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
-                        mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
+                        mCursor.getString(
+                                mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
                 mOnClickHandler.onClick(args, BeerViewHolder.this);
                 mICM.onClick(BeerViewHolder.this);
-
             }else{
-                Bundle args = new Bundle();
-                args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
-                        mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
-                ));
+                args.putString(mContext.getString(R.string.beer_details_uri_key),
+                        BeerACIntentService.buildBeerByIdUri(
+                                mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
+                        ));
 
                 mContext.startActivity(new Intent(mContext, DetailsActivity.class)
                         .putExtras(args));

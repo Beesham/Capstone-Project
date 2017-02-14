@@ -160,8 +160,6 @@ public class Utils {
 
         boolean hasImages = false;
 
-        //if(!beerJsonObj.getString("status").equals("success")) return null;
-
         if(beerJsonObj.has(KEY_STATUS)){
             if(beerJsonObj.getString(KEY_STATUS).equals("failure")){
                 throw new JSONException(beerJsonObj.getString(KEY_ERR_MSG));
