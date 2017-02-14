@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
+import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
 /**
  * Created by beesham on 24/01/17.
@@ -41,8 +42,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
     private static String PREF_FILE;
 
 
-    public static interface BeerRecyclerViewAdapterOnClickHandler{
-        void onClick(BeerViewHolder beerViewHolder);
+    public interface BeerRecyclerViewAdapterOnClickHandler{
+        void onClick(Bundle bundle);
     }
 
     public class BeerViewHolder extends RecyclerView.ViewHolder{
@@ -57,14 +58,23 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                 @Override
                 public void onClick(View view) {
                     mCursor.moveToPosition(getPosition());
+                    Log.v(LOG_TAG, "item clikced");
+                    if(SearchActivity.mTwoPane){
+                        Log.v(LOG_TAG, "mtowPane");
 
-                    Bundle args = new Bundle();
-                    args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
-                            mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
-                    ));
+                        Bundle args = new Bundle();
+                        args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
+                                mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
+                        mOnClickHandler.onClick(args);
+                    }else{
+                        Bundle args = new Bundle();
+                        args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
+                                mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
+                        ));
 
-                    mContext.startActivity(new Intent(mContext, DetailsActivity.class)
-                            .putExtras(args));
+                        mContext.startActivity(new Intent(mContext, DetailsActivity.class)
+                                .putExtras(args));
+                    }
                 }
             });
 

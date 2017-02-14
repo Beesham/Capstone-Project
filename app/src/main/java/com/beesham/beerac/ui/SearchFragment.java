@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,8 +47,7 @@ import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
  */
 public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    //@BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.adView)
     AdView mAdView;
     //@BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
@@ -58,8 +61,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private RecyclerView mRecyclerView;
     private Cursor mCursor;
 
-    private boolean mTwoPane;
-
     private Tracker mTracker;
 
     private OnFragmentInteractionListener mListener;
@@ -68,15 +69,20 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-
         ButterKnife.bind(this, view);
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Get the intent, verify the action and get the query
@@ -89,13 +95,8 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
         mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(getActivity(), new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
             @Override
-            public void onClick(BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
-                Uri uri = BeerProvider.SearchedBeers.withName(beerViewHolder.beer_name_textView.getText().toString());
-
-                Log.v(LOG_TAG, "I was clicked: " + uri.toString());
-
-                Bundle args = new Bundle();
-                args.putString("uri", uri.toString());
+            public void onClick(Bundle bundle) {
+                mListener.onFragmentInteraction(bundle);
             }
         });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.beer_recycler_view);
@@ -104,26 +105,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
         getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
-
-        if(view.findViewById(R.id.beer_detail_container) != null){
-            mTwoPane = true;
-
-            DetailsActivityFragment fragment = new DetailsActivityFragment();
-            Bundle args = new Bundle();
-
-            args.putString(getString(R.string.beer_details_uri_key),
-                    buildBeerByIdUri(Utils.getBeerIdFromPrefs(getActivity())));
-            fragment.setArguments(args);
-
-            if (savedInstanceState == null) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.beer_detail_container, fragment, DETAIL_ACTIVITY_FRAG_TAG)
-                        .commit();
-            }
-
-        }else{
-            mTwoPane = false;
-        }
 
         //TODO: remove testdevice before launch
         //MobileAds.initialize(getApplicationContext(), "ca-app-pub-9835470545063758~1394766028");
@@ -147,19 +128,30 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Log.v(LOG_TAG, "going home");
+                NavUtils.navigateUpFromSameTask(getActivity());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     private void launchBeerACIntentService(String queryString){
         Log.v(LOG_TAG, "launching intent service");
         Intent intent = new Intent(getActivity(), BeerACIntentService.class);
         intent.setAction(ACTION_GET_BEERS);
         intent.putExtra(BeerACIntentService.EXTRA_QUERY, queryString);
         BeerACIntentService.startBeerQueryService(getActivity(), intent);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -181,8 +173,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Bundle bundle);
     }
 
     @Override
