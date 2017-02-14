@@ -33,19 +33,7 @@ public class SavesActivity extends AppCompatActivity implements SavesFragment.On
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
-    private static final int BEERS_LOADER = 0;
-
-    private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
-    private RecyclerView mRecyclerView;
-    private Cursor mCursor;
-
-    private int mPosition = RecyclerView.NO_POSITION;
-    private int mChoiceMode;
-    private boolean mAutoSelectView;
-
-    private boolean mTwoPane;
-
-    private Tracker mTracker;
+    public static boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,101 +60,17 @@ public class SavesActivity extends AppCompatActivity implements SavesFragment.On
             mTwoPane = false;
         }
 
-        /*ButterKnife.bind(this);
-
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(this, new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
-            @Override
-            public void onClick(Bundle bundle, BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
-
-                Log.v(LOG_TAG, "I was clicked: ");
-
-            }
-        }, mChoiceMode);
-        mRecyclerView = (RecyclerView) findViewById(R.id.beer_recycler_view);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
-        getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
-
-        AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker = application.getDefaultTracker();*/
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(Bundle bundle) {
+        DetailsActivityFragment fragment = new DetailsActivityFragment();
+        bundle.putString("act_started_frag", LOG_TAG);
+        fragment.setArguments(bundle);
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.beer_detail_container, fragment, HomeActivity.DETAIL_ACTIVITY_FRAG_TAG)
+                .commit();
     }
 
-  /*  @Override
-    protected void onResume() {
-        super.onResume();
-
-        mTracker.setScreenName("Home");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }*/
-
-   /* @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        final String[] projections = {
-                Columns.SavedBeerColumns.BEERID,
-                Columns.SavedBeerColumns.NAME,
-                Columns.SavedBeerColumns.DESCRIPTION,
-                Columns.SavedBeerColumns.LABELS,
-                Columns.SavedBeerColumns.IMAGEURLICON,
-                Columns.SavedBeerColumns.IMAGEURLLARGE,
-                Columns.SavedBeerColumns.IMAGEURLMEDIUM
-        };
-
-        return new CursorLoader(
-                this,
-                BeerProvider.SavedBeers.CONTENT_URI,
-                projections,
-                null,
-                null,
-                null
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursor = data;
-        if(!mCursor.moveToFirst()) {return;}
-
-        mBeerRecyclerViewAdapter.swapCursor(mCursor);
-        if(mPosition != ListView.INVALID_POSITION)  mRecyclerView.smoothScrollToPosition(mPosition);
-
-        if(data.getCount() > 0){
-            mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    // Since we know we're going to get items, we keep the listener around until
-                    // we see Children.
-                    if (mRecyclerView.getChildCount() > 0) {
-                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        int itemPosition = mBeerRecyclerViewAdapter.getSelectedItemPosition();
-                        if ( RecyclerView.NO_POSITION == itemPosition ) itemPosition = 0;
-                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(itemPosition);
-                        if ( null != vh && mAutoSelectView ) {
-                            mBeerRecyclerViewAdapter.selectView( vh );
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            });
-
-        }
-
-        Log.v(LOG_TAG, "size of cursor: " + mCursor.getCount());
-    }
-
-    @Override
-    public void onLoaderReset(Loader loader) {
-        mBeerRecyclerViewAdapter.swapCursor(null);
-    }*/
 }

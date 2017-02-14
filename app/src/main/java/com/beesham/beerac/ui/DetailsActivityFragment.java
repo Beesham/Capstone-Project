@@ -214,6 +214,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Beer> loader, Beer data) {
         beer = data;
+        if(beer == null) return;
 
         if(checkIfBeerExists())
             mFab.setImageResource(R.drawable.ic_favourite_fill);
