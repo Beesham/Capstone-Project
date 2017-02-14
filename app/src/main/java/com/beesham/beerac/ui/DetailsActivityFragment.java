@@ -99,20 +99,23 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
                              Bundle savedInstanceState) {
         final View view =  inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
-        
+
         if(!HomeActivity.mTwoPane) {
             Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
             ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if(getArguments() != null){
-            if(getArguments().getString("act_started_frag").equals(HomeActivity.LOG_TAG)){
-                beerNameTextView.setVisibility(View.GONE);
-                beerImageView.setVisibility(View.GONE);
-            }else{
-                beerNameTextView.setVisibility(View.VISIBLE);
-                beerImageView.setVisibility(View.VISIBLE);
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            if(bundle.containsKey("act_started_frag")) {
+                if (bundle.getString("act_started_frag").equals(HomeActivity.LOG_TAG)) {
+                    beerNameTextView.setVisibility(View.GONE);
+                    beerImageView.setVisibility(View.GONE);
+                } else {
+                    beerNameTextView.setVisibility(View.VISIBLE);
+                    beerImageView.setVisibility(View.VISIBLE);
+                }
             }
         }
 
