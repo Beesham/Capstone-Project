@@ -3,6 +3,7 @@ package com.beesham.beerac.ui;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
+import android.widget.ListView;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
@@ -48,8 +53,7 @@ import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     //@BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.adView)
-    AdView mAdView;
+    @BindView(R.id.adView) AdView mAdView;
     //@BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
 
     private static final String LOG_TAG = SearchFragment.class.getSimpleName();
@@ -60,6 +64,10 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
     private Cursor mCursor;
+
+    private int mPosition = RecyclerView.NO_POSITION;
+    private int mChoiceMode;
+    private boolean mAutoSelectView;
 
     private Tracker mTracker;
 
@@ -93,12 +101,17 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
             launchBeerACIntentService(query);
         }
 
-        mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(getActivity(), new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
-            @Override
-            public void onClick(Bundle bundle) {
-                mListener.onFragmentInteraction(bundle);
-            }
-        });
+        mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(getActivity(),
+                new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
+                    @Override
+                    public void onClick(Bundle bundle, BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
+                        mListener.onFragmentInteraction(bundle);
+
+                        mPosition = beerViewHolder.getAdapterPosition();
+                    }
+                },
+                mChoiceMode);
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.beer_recycler_view);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -118,6 +131,16 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mTracker = application.getDefaultTracker();
 
         return view;
+    }
+
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SearchFragment,
+                0, 0);
+        mChoiceMode = a.getInt(R.styleable.SearchFragment_android_choiceMode, AbsListView.CHOICE_MODE_NONE);
+        mAutoSelectView = a.getBoolean(R.styleable.SearchFragment_android_choiceMode, false);
+        a.recycle();
     }
 
     @Override
@@ -205,6 +228,30 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         if(!mCursor.moveToFirst()) {return;}
 
         mBeerRecyclerViewAdapter.swapCursor(mCursor);
+
+        if(mPosition != ListView.INVALID_POSITION)  mRecyclerView.smoothScrollToPosition(mPosition);
+
+        if(data.getCount() > 0){
+            mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    // Since we know we're going to get items, we keep the listener around until
+                    // we see Children.
+                    if (mRecyclerView.getChildCount() > 0) {
+                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        int itemPosition = mBeerRecyclerViewAdapter.getSelectedItemPosition();
+                        if ( RecyclerView.NO_POSITION == itemPosition ) itemPosition = 0;
+                        RecyclerView.ViewHolder vh = mRecyclerView.findViewHolderForAdapterPosition(itemPosition);
+                        if ( null != vh && mAutoSelectView ) {
+                            mBeerRecyclerViewAdapter.selectView( vh );
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+        }
 
         Log.v(LOG_TAG, "size of cursor: " + mCursor.getCount());
     }
