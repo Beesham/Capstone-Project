@@ -7,9 +7,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -28,10 +26,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -73,7 +71,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private static String PREF_FILE;
     private static final String TIME_PICKER_FRAG_TAG = "com.beesham.beerac.TIMEPICKER";
 
-    private int LOADER_INIT_ID = 0;
+    private int LOADER_FIRST_LAUNCH_ID = 0;
     private int LOADER_ID = 1;
 
     private String mBeerId;
@@ -82,7 +80,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private double mBAC = 0;
     private int start_end_time_selector = 0;
     private long mStartTime;
-    private int mEndTime;
 
     private SharedPreferences mPreferences;
 
@@ -98,7 +95,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -114,102 +110,24 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
 
-        /*if(view.getRootView()).findViewById(R.id.activity_home) != null){
-            Log.v(LOG_TAG, "twoPAne");
-        }*/
-
-        mBeerImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle args = new Bundle();
-                if (mBeerId != null) {
-                    if(!HomeActivity.mTwoPane) {
-                        args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
-                        Intent i = new Intent(getActivity(), DetailsActivity.class);
-                        i.putExtras(args);
-                        startActivity(i);
-                    }
-                }
-            }
-        });
-
-
-        mIncrementBeerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                increaseBeerCount();
-            }
-        });
-
-        mDecrementBeerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                decreaseBeerCount();
-            }
-        });
-
         mBeerId = Utils.getBeerIdFromPrefs(getContext());
 
+        setupViews();
+
         if(Utils.checkForFirstLaunch(getActivity())){
-            Log.v(LOG_TAG, "First LAunch ");
-            mBeerId = getString(R.string.default_preferred_beer); //Naughty 90 Beer
-            getActivity().getSharedPreferences(getString(R.string.pref_file),
-                    MODE_PRIVATE)
-                    .edit()
-                    .putString(getString(R.string.preferred_beer_key), mBeerId)
-                    .apply();
-
-            Intent intent = new Intent(getActivity(), BeerACIntentService.class);
-            intent.setAction(ACTION_GET_BEER_DETAILS);
-            intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
-            BeerACIntentService.startBeerQueryService(getActivity(), intent);
-            setUriinHomeActivity(BeerACIntentService.buildBeerByIdUri(mBeerId));
-            getActivity().getSupportLoaderManager().initLoader(LOADER_INIT_ID, null, this);
-
+            initializeFirstLaunchVariables();
+            getActivity().getSupportLoaderManager().initLoader(LOADER_FIRST_LAUNCH_ID, null, this);
         }else{
-            Log.v(LOG_TAG, "Concequent");
             if(mBeerId != null) {
                 getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-                setUriinHomeActivity(BeerACIntentService.buildBeerByIdUri(mBeerId));
             }
         }
 
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.units, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mUnitsSpinner.setAdapter(spinnerAdapter);
-        mUnitsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
-                mPreferences.edit()
-                        .putString(getString(R.string.pref_units_key), parent.getItemAtPosition(position).toString())
-                        .commit();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mStartDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.show(getActivity().getSupportFragmentManager(), TIME_PICKER_FRAG_TAG);
-                start_end_time_selector = 0;
-            }
-        });
-
-
-        Calendar calendar = Calendar.getInstance();
-        setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-
-        mVolumeEditText.setText(getString(R.string.default_volume));
-
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
         mTracker = application.getDefaultTracker();
+
+        //set soft keyboard hidden when app launches
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         return view;
     }
@@ -259,6 +177,88 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void initializeFirstLaunchVariables(){
+        mBeerId = getString(R.string.default_preferred_beer); //Naughty 90 Beer
+        getActivity().getSharedPreferences(getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .edit()
+                .putString(getString(R.string.preferred_beer_key), mBeerId)
+                .apply();
+
+        Intent intent = new Intent(getActivity(), BeerACIntentService.class);
+        intent.setAction(ACTION_GET_BEER_DETAILS);
+        intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
+        BeerACIntentService.startBeerQueryService(getActivity(), intent);
+    }
+
+    private void setupViews(){
+
+        setupVolumeUnitsSpinner();
+
+        mBeerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle args = (new Bundle());
+                if (mBeerId != null) {
+                    if(!HomeActivity.mTwoPane) {
+                        args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
+                        startActivity((new Intent(getActivity(), DetailsActivity.class))
+                                .putExtras(args));
+                    }
+                }
+            }
+        });
+
+        mIncrementBeerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                increaseBeerCount();
+            }
+        });
+
+        mDecrementBeerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                decreaseBeerCount();
+            }
+        });
+
+        mStartDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getActivity().getSupportFragmentManager(), TIME_PICKER_FRAG_TAG);
+                start_end_time_selector = 0;
+            }
+        });
+
+        mVolumeEditText.setText(getString(R.string.default_volume));
+
+        Calendar calendar = Calendar.getInstance();
+        setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+    }
+
+    private void setupVolumeUnitsSpinner(){
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.units, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mUnitsSpinner.setAdapter(spinnerAdapter);
+        mUnitsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+                mPreferences.edit()
+                        .putString(getString(R.string.pref_units_key), parent.getItemAtPosition(position).toString())
+                        .commit();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void launchMyBeersActivity(){
@@ -319,15 +319,10 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if(start_end_time_selector == 0) {
             mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
             mStartTime = (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
-        }else{
-            //mEndDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
         }
     }
 
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void setUriinHomeActivity(String uri) {
+    public void setUriInHomeActivity(String uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
@@ -350,15 +345,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this fragment to allow an
-     * interaction in this fragment to be communicated to the activity and potentially other
-     * fragments contained in that activity. <p> See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html" >Communicating
-     * with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(String uri);
     }
 

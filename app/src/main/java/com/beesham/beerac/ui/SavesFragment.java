@@ -30,10 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SavesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
+ *
  */
 public class SavesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String LOG_TAG = SavesFragment.class.getSimpleName();
@@ -112,7 +109,7 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onResume() {
         super.onResume();
 
-        mTracker.setScreenName("Home");
+        mTracker.setScreenName(getString(R.string.title_activity_saves));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
