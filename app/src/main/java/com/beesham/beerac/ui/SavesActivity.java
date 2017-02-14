@@ -25,7 +25,9 @@ import com.beesham.beerac.data.Columns;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SavesActivity extends AppCompatActivity  implements LoaderManager.LoaderCallbacks<Cursor> {
+import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
+
+public class SavesActivity extends AppCompatActivity implements SavesFragment.OnFragmentInteractionListener{//  implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = SavesActivity.class.getSimpleName();
 
@@ -41,13 +43,36 @@ public class SavesActivity extends AppCompatActivity  implements LoaderManager.L
     private int mChoiceMode;
     private boolean mAutoSelectView;
 
+    private boolean mTwoPane;
+
     private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saves);
-        ButterKnife.bind(this);
+
+        if (findViewById(R.id.beer_detail_container) != null) {
+            mTwoPane = true;
+
+            DetailsActivityFragment fragment = new DetailsActivityFragment();
+            Bundle args = new Bundle();
+
+            args.putString(getString(R.string.beer_details_uri_key),
+                    buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
+            args.putString("act_started_frag", LOG_TAG);
+            fragment.setArguments(args);
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.beer_detail_container, fragment, HomeActivity.DETAIL_ACTIVITY_FRAG_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
+        }
+
+        /*ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,18 +93,23 @@ public class SavesActivity extends AppCompatActivity  implements LoaderManager.L
         getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker = application.getDefaultTracker();
+        mTracker = application.getDefaultTracker();*/
     }
 
     @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+  /*  @Override
     protected void onResume() {
         super.onResume();
 
         mTracker.setScreenName("Home");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         final String[] projections = {
@@ -138,5 +168,5 @@ public class SavesActivity extends AppCompatActivity  implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader loader) {
         mBeerRecyclerViewAdapter.swapCursor(null);
-    }
+    }*/
 }
