@@ -37,16 +37,17 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
     private final Context mContext;
     private final BeerRecyclerViewAdapterOnClickHandler mOnClickHandler;
+    private final ItemChoiceManager mICM;
 
     private Cursor mCursor;
     private static String PREF_FILE;
 
 
     public interface BeerRecyclerViewAdapterOnClickHandler{
-        void onClick(Bundle bundle);
+        void onClick(Bundle bundle, BeerViewHolder beerViewHolder);
     }
 
-    public class BeerViewHolder extends RecyclerView.ViewHolder{
+    public class BeerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.beer_image_image_view) ImageView beer_icon_imageView;
         @BindView(R.id.drink_beer_image_container) FrameLayout drinkBeer_icon_container;
         @BindView(R.id.beer_name_text_view) TextView beer_name_textView;
@@ -54,7 +55,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
         public BeerViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
-            v.setOnClickListener(new View.OnClickListener() {
+            v.setOnClickListener(this);
+           /* v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mCursor.moveToPosition(getPosition());
@@ -65,7 +67,9 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                         Bundle args = new Bundle();
                         args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
                                 mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
-                        mOnClickHandler.onClick(args);
+                        mOnClickHandler.onClick(args, BeerViewHolder.this);
+                        mICM.onClick(BeerViewHolder.this);
+
                     }else{
                         Bundle args = new Bundle();
                         args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
@@ -76,7 +80,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                                 .putExtras(args));
                     }
                 }
-            });
+            });*/
 
             drinkBeer_icon_container.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -115,37 +119,53 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
             });
         }
 
-        /*@Override
+        @Override
         public void onClick(View view) {
-            Log.v(LOG_TAG, "I was clicked " + beer_name_textView.getText());
-            mOnClickHandler.onClick(this);
+            mCursor.moveToPosition(getAdapterPosition());
+            Log.v(LOG_TAG, "item clikced");
+            if(SearchActivity.mTwoPane){
+                Log.v(LOG_TAG, "mtowPane");
 
-            mCursor.moveToPosition(getPosition());
+                Bundle args = new Bundle();
+                args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
+                        mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
+                mOnClickHandler.onClick(args, BeerViewHolder.this);
+                mICM.onClick(BeerViewHolder.this);
 
-            Bundle args = new Bundle();
-            args.putString("uri", BeerACIntentService.buildBeerByIdUri(
-                    mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
-            ));
+            }else{
+                Bundle args = new Bundle();
+                args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
+                        mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
+                ));
 
-            mContext.startActivity(new Intent(mContext, DetailsActivity.class)
-                    .putExtras(args));
-        }*/
+                mContext.startActivity(new Intent(mContext, DetailsActivity.class)
+                        .putExtras(args));
+            }
+        }
     }
 
     public BeerRecyclerViewAdapter(Context context,
-                                   BeerRecyclerViewAdapterOnClickHandler handler) {
+                                   BeerRecyclerViewAdapterOnClickHandler handler,
+                                   int choiceMode) {
         mContext = context;
         mOnClickHandler = handler;
         PREF_FILE = mContext.getString(R.string.pref_file);
+
+        mICM = new ItemChoiceManager(this);
+        mICM.setChoiceMode(choiceMode);
     }
 
     @Override
     public BeerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.beer_list_item, parent, false);
+        if(parent instanceof RecyclerView) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.beer_list_item, parent, false);
+            view.setFocusable(true);
 
-        BeerViewHolder beerViewHolder = new BeerViewHolder(view);
-        return beerViewHolder;
+            return new BeerViewHolder(view);
+        }else{
+            throw new RuntimeException("Not bound to RecyclerViewSelection");
+        }
     }
 
     @Override
@@ -163,14 +183,27 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
             Picasso.with(mContext)
                     .load(imagePath)
-                    .resize(150, 150)
+                    .resize(50, 50)
                     .placeholder(R.mipmap.ic_launcher)
                     .into(holder.beer_icon_imageView);
         }
+
         holder.beer_name_textView.setText(mCursor.getString(
                 mCursor.getColumnIndex(Columns.SearchedBeerColumns.NAME)));
 
+        mICM.onBindViewHolder(holder, position);
+    }
 
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        mICM.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        mICM.onSaveInstanceState(outState);
+    }
+
+    public int getSelectedItemPosition() {
+        return mICM.getSelectedItemPosition();
     }
 
     @Override
@@ -182,6 +215,17 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
+    }
+
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
+    public void selectView(RecyclerView.ViewHolder viewHolder) {
+        if ( viewHolder instanceof BeerViewHolder ) {
+            BeerViewHolder beerViewHolder = (BeerViewHolder) viewHolder;
+            beerViewHolder.onClick(beerViewHolder.itemView);
+        }
     }
 
 }
