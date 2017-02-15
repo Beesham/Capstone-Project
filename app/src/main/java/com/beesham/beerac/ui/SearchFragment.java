@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
@@ -43,7 +43,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEERS;
-import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,7 +54,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
     //@BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.adView) AdView mAdView;
-    //@BindView(R.id.beers_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.empty_view) TextView mEmptyView;
 
     private static final String LOG_TAG = SearchFragment.class.getSimpleName();
     private static final int BEERS_LOADER = 0;
@@ -109,7 +108,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
                     @Override
                     public void onClick(Bundle bundle, BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
                         mListener.onFragmentInteraction(bundle);
-
                         mPosition = beerViewHolder.getAdapterPosition();
                     }
                 },
@@ -181,7 +179,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void launchBeerACIntentService(String queryString){
         Intent intent = new Intent(getActivity(), BeerACIntentService.class);
@@ -257,6 +254,12 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
         if(mPosition != RecyclerView.NO_POSITION) {
             mRecyclerView.smoothScrollToPosition(mPosition);
+        }
+
+        if(mBeerRecyclerViewAdapter.getItemCount() == 0){
+            if(!Utils.isOnline(getActivity())){
+                mEmptyView.setText(getString(R.string.empty_beer_list) + "\n" + getString(R.string.no_connectivity));
+            }
         }
 
         if(data.getCount() > 0){

@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.beesham.beerac.R;
@@ -300,6 +302,12 @@ public class Utils {
         return Integer.toString(i);
     }
 
+    /**
+     * checks if app is launched for first time or a consequent
+     * launch
+     * @param context
+     * @return
+     */
     public static boolean checkForFirstLaunch(Context context){
         final String PREF_VERSION_CODE_KEY = context.getString(R.string.pref_version_code_key);
         final int NONE_EXIST = -1;
@@ -333,5 +341,17 @@ public class Utils {
         preferences.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode)
                 .commit();
         return status;
+    }
+
+    /**
+     * Checks for network availability
+     * @param context to get ConnectivityManager
+     * @returns true is network is available
+     */
+    public static boolean isOnline(Context context) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }
