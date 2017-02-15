@@ -41,6 +41,13 @@
                 android:divider="@null"
                 android:layout_above="@+id/adView"/>
 
+            <TextView
+                android:id="@+id/empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                tools:text="No data"/>
+
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 android:layout_width="wrap_content"

@@ -146,8 +146,11 @@
 
     <!-- Ads -->
     <string name="banner_ad_unit_id">ca-app-pub-9835470545063758/2871499220</string>
+    
+    <!-- No connectivity error messages -->
+    <string name="no_connectivity">The network is not available to fetch beer data</string>
+    <string name="empty_beer_list">No Beer Information Available</string>
+    <string name="empty_beer_list_server_down">No beer information available. There seems to be a problem on our end.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
