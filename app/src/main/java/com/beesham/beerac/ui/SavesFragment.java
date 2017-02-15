@@ -1,9 +1,11 @@
 package com.beesham.beerac.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -12,11 +14,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.beesham.beerac.R;
@@ -38,6 +42,8 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private static final int BEERS_LOADER = 0;
+    private static final String SELECTED_KEY = "selected_position";
+
 
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
     private RecyclerView mRecyclerView;
@@ -69,7 +75,8 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
         mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(getActivity(), new BeerRecyclerViewAdapter.BeerRecyclerViewAdapterOnClickHandler() {
             @Override
             public void onClick(Bundle bundle, BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
-
+                mListener.onFragmentInteraction(bundle);
+                mPosition = beerViewHolder.getAdapterPosition();
                 Log.v(LOG_TAG, "I was clicked: ");
 
             }
@@ -79,12 +86,48 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
-        getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
+       // getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
+
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(SELECTED_KEY)){
+                mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            }
+            mBeerRecyclerViewAdapter.onRestoreInstanceState(savedInstanceState);
+        }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
         mTracker = application.getDefaultTracker();
 
         return view;
+    }
+
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SearchFragment,
+                0, 0);
+        mChoiceMode = a.getInt(R.styleable.SearchFragment_android_choiceMode, AbsListView.CHOICE_MODE_NONE);
+        mAutoSelectView = a.getBoolean(R.styleable.SearchFragment_android_choiceMode, false);
+        a.recycle();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // When tablets rotate, the currently selected list item needs to be saved.
+        // When no item is selected, mPosition will be set to RecyclerView.NO_POSITION,
+        // so check for that before storing.
+        if (mPosition != RecyclerView.NO_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+
+        mBeerRecyclerViewAdapter.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
