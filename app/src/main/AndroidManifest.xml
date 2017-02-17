@@ -75,7 +75,7 @@
             android:authorities="com.beesham.beerac.data.BeerProvider"
             android:exported="false" />
 
-        <receiver android:name=".widget.BeerACWidget">
+        <receiver android:name=".widget.BeerACWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
