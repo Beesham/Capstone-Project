@@ -4,13 +4,14 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import android.app.SearchManager;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -38,6 +39,7 @@ import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
+import com.beesham.beerac.widget.BeerACWidgetProvider;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -47,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.beesham.beerac.R.layout.beer_acwidget;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 /**
@@ -93,7 +96,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -121,6 +124,13 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             if(mBeerId != null) {
                 getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
             }
+        }
+
+        if(savedInstanceState == null){
+            mBeerCount = getActivity().getSharedPreferences(getString(R.string.pref_file),
+                    MODE_PRIVATE)
+                    .getInt(getString(R.string.beer_count_key), mBeerCount);
+            mTotalBeersTextView.setText(Integer.toString(mBeerCount));
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
@@ -185,6 +195,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 MODE_PRIVATE)
                 .edit()
                 .putString(getString(R.string.preferred_beer_key), mBeerId)
+                .putLong(getString(R.string.start_drinking_time_key), mStartTime)
+                .putInt(getString(R.string.beer_count_key), mBeerCount)
                 .apply();
 
         Intent intent = new Intent(getActivity(), BeerACIntentService.class);
@@ -274,6 +286,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     public void increaseBeerCount(){
         mBeerCount++;
         mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
+        storeBeerCount();
         updateBAC();
     }
 
@@ -282,7 +295,30 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mBeerCount--;
 
         mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
+        storeBeerCount();
         updateBAC();
+    }
+
+    private void storeBeerCount(){
+        getActivity().getSharedPreferences(getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .edit()
+                .putInt(getString(R.string.beer_count_key), mBeerCount)
+                .apply();
+
+       updateWidget();
+    }
+
+    private void updateWidget(){
+        int widgetIds[] = AppWidgetManager.getInstance(getActivity())
+                .getAppWidgetIds(new ComponentName(getActivity(), BeerACWidgetProvider.class));
+
+        Intent intent = new Intent(getActivity(), BeerACWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+        // since it seems the onUpdate() is only fired on that:
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        getActivity().sendBroadcast(intent);
     }
 
     private void updateBAC(){
