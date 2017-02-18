@@ -22,18 +22,6 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
     public static final String DEC_BEER_COUNT_ACTION = "com.beesham.beerac.beerac_widget.DEC_BEER_COUNT_ACTION";
 
     private RemoteViews mRemoteViews;
-    private int mBeerCount;
-
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.beer_acwidget);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -43,15 +31,15 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
 
             mRemoteViews.setTextViewText(R.id.total_beers_text_view,
-                    Integer.toString(context.getSharedPreferences(
-                            context.getString(R.string.pref_file),
-                            Context.MODE_PRIVATE)
+                    context.getString(R.string.beers_had,
+                    context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
                             .getInt(context.getString(R.string.beer_count_key), 0)));
 
             mRemoteViews.setTextViewText(R.id.bac_text_view,
-                    Double.toString(Double.longBitsToDouble(context.getSharedPreferences(
-                            context.getString(R.string.pref_file),
-                            Context.MODE_PRIVATE)
+                    context.getString(R.string.bac_format,
+                    Double.longBitsToDouble(
+                            context.getSharedPreferences(context.getString(R.string.pref_file),
+                                    Context.MODE_PRIVATE)
                             .getLong(context.getString(R.string.bac_key), 0))));
 
             // Create an Intent to launch ExampleActivity
