@@ -5,12 +5,11 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.ui.HomeActivity;
+import com.beesham.beerac.ui.HomeFragment;
 import com.beesham.beerac.ui.Utils;
 
 /**
@@ -79,11 +78,19 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
 
         switch (intent.getAction()){
             case INC_BEER_COUNT_ACTION:
+                Utils.adjustBeerCount(context, HomeFragment.INC_BEER,
+                        context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
+                        .getInt(context.getString(R.string.beer_count_key), 0));
 
+                Utils.updateWidget(context);
                 break;
 
             case DEC_BEER_COUNT_ACTION:
+                Utils.adjustBeerCount(context, HomeFragment.DEC_BEER,
+                        context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
+                                .getInt(context.getString(R.string.beer_count_key), 0));
 
+                Utils.updateWidget(context);
                 break;
         }
         super.onReceive(context, intent);
