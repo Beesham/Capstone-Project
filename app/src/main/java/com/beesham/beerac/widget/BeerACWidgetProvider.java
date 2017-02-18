@@ -22,6 +22,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
     public static final String DEC_BEER_COUNT_ACTION = "com.beesham.beerac.beerac_widget.DEC_BEER_COUNT_ACTION";
 
     private RemoteViews mRemoteViews;
+    private int mBeerCount;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -46,6 +47,12 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                             context.getString(R.string.pref_file),
                             Context.MODE_PRIVATE)
                             .getInt(context.getString(R.string.beer_count_key), 0)));
+
+            mRemoteViews.setTextViewText(R.id.bac_text_view,
+                    Double.toString(Double.longBitsToDouble(context.getSharedPreferences(
+                            context.getString(R.string.pref_file),
+                            Context.MODE_PRIVATE)
+                            .getLong(context.getString(R.string.bac_key), 0))));
 
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, HomeActivity.class);
@@ -81,7 +88,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-        
+
         switch (intent.getAction()){
             case INC_BEER_COUNT_ACTION:
 
