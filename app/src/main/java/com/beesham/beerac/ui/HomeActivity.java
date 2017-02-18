@@ -8,7 +8,8 @@ import com.beesham.beerac.R;
 
 import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
-public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener{
+public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
+        TimePickerFragment.TimeSetter{
 
     public static final String LOG_TAG = HomeActivity.class.getSimpleName();
     public static boolean mTwoPane;
@@ -50,4 +51,9 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
     }
 
 
+    @Override
+    public void setTime(int hourOfDay, int minute) {
+        ((HomeFragment ) getSupportFragmentManager().findFragmentById(R.id.fragment_home))
+        .setTime(hourOfDay, minute);
+    }
 }
