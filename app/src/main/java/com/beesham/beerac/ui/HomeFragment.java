@@ -136,8 +136,9 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     MODE_PRIVATE)
                     .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
 
-            mTotalBeersTextView.setText(Integer.toString(mBeerCount));
-            mBACTextView.setText(Double.toString(mBAC));
+            mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
+            mBACTextView.setText(getString(R.string.bac_format, mBAC));
+
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
