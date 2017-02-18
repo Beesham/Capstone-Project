@@ -11,6 +11,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.beesham.beerac.R;
@@ -304,6 +305,31 @@ public class Utils {
 
     public static String integerToString(int i){
         return Integer.toString(i);
+    }
+
+   /* public static double getBac(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context));
+
+        String gender = preferences.getString(context.getString(R.string.pref_gender_key),
+                context.getString(R.string.pref_gender_default));
+
+        double bodyWeight = Double.parseDouble(preferences.getString(context.getString(R.string.pref_body_weight_key),
+                context.getString(R.string.pref_default_body_weight)));
+
+        double timePassed = getTimePassed(mStartTime);
+        double drinkSize;
+
+        if(preferences.getString(context.getString(R.string.pref_units_key), null).equals("mL")){
+            drinkSize = Utils.mLToOz(Integer.parseInt(mVolumeEditText.getText().toString()));
+        }else{
+            drinkSize = Double.parseDouble(mVolumeEditText.getText().toString());
+        }
+
+        return 0;
+    }*/
+
+    public static long timeInMillis(int hourOfDay, int minute){
+        return (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
     }
 
     public static int adjustBeerCount(Context context, int incDecFlag, int beerCount){
