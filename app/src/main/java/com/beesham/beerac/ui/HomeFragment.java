@@ -4,8 +4,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import android.app.SearchManager;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +18,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +36,6 @@ import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
-import com.beesham.beerac.widget.BeerACWidgetProvider;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -48,9 +44,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.defaultValue;
 import static android.content.Context.MODE_PRIVATE;
-import static com.beesham.beerac.R.layout.beer_acwidget;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 
 /**
@@ -71,9 +65,14 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
     @BindView(R.id.volume_edit_text) TextView mVolumeEditText;
 
+    public static final int INC_BEER = 1;
+    public static final int DEC_BEER = 0;
+
+
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
-    private static String PREF_FILE;
     private static final String TIME_PICKER_FRAG_TAG = "com.beesham.beerac.TIMEPICKER";
+    private static String PREF_FILE;
+
 
     private int LOADER_FIRST_LAUNCH_ID = 0;
     private int LOADER_ID = 1;
@@ -136,9 +135,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     MODE_PRIVATE)
                     .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
 
-            mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
+            updateBeerCountTextView();
             mBACTextView.setText(getString(R.string.bac_format, mBAC));
-
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
@@ -153,12 +151,19 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onResume() {
         super.onResume();
+
         SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
         if(prefs.contains(getString(R.string.preferred_beer_key))) {
             if(mBeerId == null) {
                 mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
                 getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
             }
+        }
+
+        if(prefs.contains(getString(R.string.beer_count_key))) {
+            mBeerCount = prefs .getInt(getString(R.string.beer_count_key), mBeerCount);
+            updateBeerCountTextView();
+
         }
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
@@ -235,6 +240,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onClick(View view) {
                 increaseBeerCount();
+                updateBAC();
             }
         });
 
@@ -242,6 +248,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             public void onClick(View view) {
                 decreaseBeerCount();
+                updateBAC();
             }
         });
 
@@ -281,6 +288,10 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         });
     }
 
+    private void updateBeerCountTextView(){
+        mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
+    }
+
     private void launchMyBeersActivity(){
         Intent i = new Intent(getActivity(), SavesActivity.class);
         startActivity(i);
@@ -292,20 +303,21 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public void increaseBeerCount(){
-        mBeerCount++;
-        mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
-        storeBeerCount();
-        updateBAC();
+        mBeerCount = Utils.adjustBeerCount(getActivity(), INC_BEER, mBeerCount);
+        updateBeerCountTextView();
+        //storeBeerCount();
+        Utils.updateWidget(getActivity());
     }
 
     public void decreaseBeerCount(){
         if(mBeerCount != 0)
-            mBeerCount--;
+            mBeerCount = Utils.adjustBeerCount(getActivity(), DEC_BEER, mBeerCount);
 
-        mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
-        storeBeerCount();
-        updateBAC();
+        updateBeerCountTextView();
+        //storeBeerCount();
+        Utils.updateWidget(getActivity());
     }
+/*
 
     private void storeBeerCount(){
         getActivity().getSharedPreferences(getString(R.string.pref_file),
@@ -314,10 +326,11 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .putInt(getString(R.string.beer_count_key), mBeerCount)
                 .apply();
 
-       updateWidget();
+       Utils.updateWidget(getActivity());
     }
+*/
 
-    private void updateWidget(){
+   /* private void updateWidget(){
         int widgetIds[] = AppWidgetManager.getInstance(getActivity())
                 .getAppWidgetIds(new ComponentName(getActivity(), BeerACWidgetProvider.class));
 
@@ -327,7 +340,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         // since it seems the onUpdate() is only fired on that:
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
         getActivity().sendBroadcast(intent);
-    }
+    }*/
 
     private void updateBAC(){
         getBAC();

@@ -1,7 +1,10 @@
 package com.beesham.beerac.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -12,6 +15,7 @@ import android.util.Log;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.Columns;
+import com.beesham.beerac.widget.BeerACWidgetProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -300,6 +304,39 @@ public class Utils {
 
     public static String integerToString(int i){
         return Integer.toString(i);
+    }
+
+    public static int adjustBeerCount(Context context, int incDecFlag, int beerCount){
+
+        switch (incDecFlag){
+            case HomeFragment.INC_BEER:
+                beerCount++;
+                break;
+
+            case HomeFragment.DEC_BEER:
+                beerCount--;
+                break;
+        }
+
+        context.getSharedPreferences(context.getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .edit()
+                .putInt(context.getString(R.string.beer_count_key), beerCount)
+                .apply();
+
+        return beerCount;
+    }
+
+    public static void updateWidget(Context context){
+        int widgetIds[] = AppWidgetManager.getInstance(context)
+                .getAppWidgetIds(new ComponentName(context, BeerACWidgetProvider.class));
+
+        Intent intent = new Intent(context, BeerACWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+        // since it seems the onUpdate() is only fired on that:
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        context.sendBroadcast(intent);
     }
 
     /**
