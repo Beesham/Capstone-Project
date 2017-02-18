@@ -51,8 +51,8 @@ import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DET
  * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
  * {@link HomeFragment.OnFragmentInteractionListener} interface to handle interaction events.
  */
-public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
-        TimePickerFragment.TimeSetter{
+public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{//,
+        //TimePickerFragment.TimeSetter{
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
@@ -134,6 +134,13 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mBAC = Double.longBitsToDouble(getActivity().getSharedPreferences(getString(R.string.pref_file),
                     MODE_PRIVATE)
                     .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
+
+            Calendar calendar = Calendar.getInstance();
+            setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+            mStartTime = getActivity().getSharedPreferences(getString(R.string.pref_file),
+                    MODE_PRIVATE)
+                    .getLong(getString(R.string.start_drinking_time_key),
+                            Utils.timeInMillis(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
 
             updateBeerCountTextView();
             mBACTextView.setText(getString(R.string.bac_format, mBAC));
@@ -317,30 +324,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         //storeBeerCount();
         Utils.updateWidget(getActivity());
     }
-/*
-
-    private void storeBeerCount(){
-        getActivity().getSharedPreferences(getString(R.string.pref_file),
-                MODE_PRIVATE)
-                .edit()
-                .putInt(getString(R.string.beer_count_key), mBeerCount)
-                .apply();
-
-       Utils.updateWidget(getActivity());
-    }
-*/
-
-   /* private void updateWidget(){
-        int widgetIds[] = AppWidgetManager.getInstance(getActivity())
-                .getAppWidgetIds(new ComponentName(getActivity(), BeerACWidgetProvider.class));
-
-        Intent intent = new Intent(getActivity(), BeerACWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
-        // since it seems the onUpdate() is only fired on that:
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
-        getActivity().sendBroadcast(intent);
-    }*/
 
     private void updateBAC(){
         getBAC();
@@ -381,12 +364,16 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .apply();
     }
 
-    @Override
+    //@Override
     public void setTime(int hourOfDay, int minute) {
-        if(start_end_time_selector == 0) {
-            mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
-            mStartTime = (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
-        }
+        mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
+        mStartTime = Utils.timeInMillis(hourOfDay, minute);
+
+        getActivity().getSharedPreferences( getActivity().getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .edit()
+                .putLong( getActivity().getString(R.string.start_drinking_time_key), mStartTime)
+                .apply();
     }
 
     public void setUriInHomeActivity(String uri) {
