@@ -48,6 +48,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.R.attr.defaultValue;
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.R.layout.beer_acwidget;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
@@ -130,7 +131,13 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mBeerCount = getActivity().getSharedPreferences(getString(R.string.pref_file),
                     MODE_PRIVATE)
                     .getInt(getString(R.string.beer_count_key), mBeerCount);
+
+            mBAC = Double.longBitsToDouble(getActivity().getSharedPreferences(getString(R.string.pref_file),
+                    MODE_PRIVATE)
+                    .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
+
             mTotalBeersTextView.setText(Integer.toString(mBeerCount));
+            mBACTextView.setText(Double.toString(mBAC));
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
@@ -348,6 +355,16 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 gender,
                 bodyWeight,
                 timePassed);
+
+        storeBAC();
+    }
+
+    private void storeBAC(){
+        getActivity().getSharedPreferences(getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .edit()
+                .putLong(getString(R.string.bac_key), Double.doubleToLongBits(mBAC))
+                .apply();
     }
 
     @Override
