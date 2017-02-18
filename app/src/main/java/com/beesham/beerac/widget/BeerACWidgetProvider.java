@@ -21,13 +21,14 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
     public static final String INC_BEER_COUNT_ACTION = "com.beesham.beerac.beerac_widget.INC_BEER_COUNT_ACTION";
     public static final String DEC_BEER_COUNT_ACTION = "com.beesham.beerac.beerac_widget.DEC_BEER_COUNT_ACTION";
 
+    private RemoteViews mRemoteViews;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
         CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.beer_acwidget);
-        //views.setTextViewText(R.id.appwidget_text, widgetText);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -36,7 +37,15 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
+        mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.beer_acwidget);
+
         for (int appWidgetId : appWidgetIds) {
+
+            mRemoteViews.setTextViewText(R.id.total_beers_text_view,
+                    Integer.toString(context.getSharedPreferences(
+                            context.getString(R.string.pref_file),
+                            Context.MODE_PRIVATE)
+                            .getInt(context.getString(R.string.beer_count_key), 0)));
 
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, HomeActivity.class);
@@ -44,8 +53,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
 
             // Get the layout for the App Widget and attach an on-click listener
             // to the button
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.beer_acwidget);
-            views.setOnClickPendingIntent(R.id.photo, pendingIntent);
+            mRemoteViews.setOnClickPendingIntent(R.id.photo, pendingIntent);
 
             //Inc beer count button
             Intent incBeerCountIntent = new Intent(context, BeerACWidgetProvider.class);
@@ -54,7 +62,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
             PendingIntent incBeerPendingIntent = PendingIntent.getBroadcast(context, 0, incBeerCountIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            views.setOnClickPendingIntent(R.id.increment_beers_button, incBeerPendingIntent);
+            mRemoteViews.setOnClickPendingIntent(R.id.increment_beers_button, incBeerPendingIntent);
 
             //Dec beer count button
             Intent decBeerCountIntent = new Intent(context, BeerACWidgetProvider.class);
@@ -63,25 +71,25 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
             PendingIntent decBeerPendingIntent = PendingIntent.getBroadcast(context, 0, decBeerCountIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            views.setOnClickPendingIntent(R.id.decrement_beers_button, decBeerPendingIntent);
+            mRemoteViews.setOnClickPendingIntent(R.id.decrement_beers_button, decBeerPendingIntent);
 
             // Tell the AppWidgetManager to perform an update on the current app widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.updateAppWidget(appWidgetId, mRemoteViews);
         }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-
+        
         switch (intent.getAction()){
             case INC_BEER_COUNT_ACTION:
 
                 break;
 
             case DEC_BEER_COUNT_ACTION:
-                break;
 
+                break;
         }
         super.onReceive(context, intent);
     }
