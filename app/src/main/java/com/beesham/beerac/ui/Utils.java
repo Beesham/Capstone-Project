@@ -51,6 +51,10 @@ public class Utils {
     static final String KEY_NAME = "name";
     static final String KEY_BEERID = "id";
     static final String KEY_DESCRIPTION = "description";
+    static final String KEY_STYLE = "style";
+    static final String KEY_STYLE_NAME = "name";
+    static final String KEY_STYLE_DESCRIPTION = "description";
+
     static final String KEY_FOOD_PAIRINGS = "foodPairings";
     static final String KEY_ABV = "abv";
     static final String KEY_IS_ORGANIC = "isOrganic";
@@ -160,6 +164,8 @@ public class Utils {
         String name;
         String id;
         String description = "";
+        String styleName = "";
+        String styleDescription = "";
         String isOrganic;
         String foodPairings = "";
         String abv = null;
@@ -181,6 +187,10 @@ public class Utils {
         name = dataJsonObj.getString(KEY_NAME);
         id = dataJsonObj.getString(KEY_BEERID);
         isOrganic = dataJsonObj.getString(KEY_IS_ORGANIC);
+
+        JSONObject styleJSONObj = dataJsonObj.getJSONObject(KEY_STYLE);
+        styleName = styleJSONObj.getString(KEY_STYLE_NAME);
+        styleDescription = styleJSONObj.getString(KEY_STYLE_DESCRIPTION);
 
         try {
             abv = dataJsonObj.getString(KEY_ABV);
@@ -212,8 +222,11 @@ public class Utils {
         }
 
         Beer beer = new Beer(name, id, description, abv, hasImages, year);
+
         beer.setIsOrganic(isOrganic);
         beer.setFoodPairings(foodPairings);
+        beer.setStyleName(styleName);
+        beer.setStyleDescription(styleDescription);
         if(hasImages) {
             beer.setUrl_icon(imageUrlIcon);
             beer.setUrl_medium(imageUrlMedium);

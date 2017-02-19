@@ -28,6 +28,10 @@ public class Columns {
         @DataType(DataType.Type.TEXT)
         public static final String DESCRIPTION = "description";
         @DataType(DataType.Type.TEXT)
+        public static final String STYLE_NAME = "style_name";
+        @DataType(DataType.Type.TEXT)
+        public static final String STYLE_DESCRIPTION = "style_description";
+        @DataType(DataType.Type.TEXT)
         @NotNull
         public static final String ABV = "abv";
         @DataType(DataType.Type.TEXT)

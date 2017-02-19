@@ -10,6 +10,8 @@ public class Beer {
     private String name;
     private String id;
     private String description;
+    private String styleName;
+    private String styleDescription;
     private String abv;
     private String foodParings;
     private String isOrganic;
@@ -45,6 +47,22 @@ public class Beer {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getStyleDescription() {
+        return styleDescription;
+    }
+
+    public void setStyleDescription(String styleDescription) {
+        this.styleDescription = styleDescription;
+    }
+
+    public String getStyleName() {
+        return styleName;
+    }
+
+    public void setStyleName(String styleName) {
+        this.styleName = styleName;
     }
 
     public String getAbv() {
