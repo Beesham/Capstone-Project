@@ -5,12 +5,16 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.widget.RemoteViews;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.data.BeerProvider;
+import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.ui.HomeActivity;
 import com.beesham.beerac.ui.HomeFragment;
 import com.beesham.beerac.ui.Utils;
+import com.squareup.picasso.Picasso;
 
 /**
  * Implementation of App Widget functionality.
@@ -41,6 +45,8 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                                     Context.MODE_PRIVATE)
                             .getLong(context.getString(R.string.bac_key), 0))));
 
+
+
             // Create an Intent to launch ExampleActivity
             Intent intent = new Intent(context, HomeActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -69,6 +75,39 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
 
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, mRemoteViews);
+        }
+
+        loadImage(context, R.id.photo, appWidgetIds);
+    }
+
+    private void loadImage(Context context, int imageId, int[] appWidgetIds){
+
+        final String[] projections = {
+                Columns.SavedBeerColumns.BEERID,
+                Columns.SavedBeerColumns.LABELS,
+                Columns.SavedBeerColumns.IMAGEURLMEDIUM
+        };
+
+        Cursor c = context.getContentResolver().query(
+                BeerProvider.SavedBeers.CONTENT_URI,
+                projections,
+                Columns.SavedBeerColumns.BEERID + "=?",
+                new String[]{context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
+                .getString(context.getString(R.string.preferred_beer_key),
+                        context.getString(R.string.default_preferred_beer))},
+                null);
+
+        if(c.moveToFirst()) {
+            if (c.getString(c.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals("Y")) {
+                Picasso.with(context)
+                        .load(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLMEDIUM)))
+                        .into(mRemoteViews, imageId, appWidgetIds);
+            }
+        }
+        else{
+            Picasso.with(context)
+                    .load(R.mipmap.ic_launcher)
+                    .into(mRemoteViews, imageId, appWidgetIds);
         }
     }
 
