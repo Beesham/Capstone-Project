@@ -40,7 +40,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="0 beers had"
+                    tools:text="0 beers had"
                     android:ems="10"
                     android:id="@+id/total_beers_text_view"
                     android:layout_weight="1"
