@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#09C"
     android:padding="@dimen/widget_margin">
 
@@ -11,11 +12,11 @@
 
         <ImageView
             android:id="@+id/photo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:src="@mipmap/ic_launcher"
             android:scaleType="centerCrop"
-            android:layout_weight="1"/>
+            android:layout_weight="2"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -27,8 +28,7 @@
                 android:id="@+id/linear_layout"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:text="-"
@@ -56,12 +56,12 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/bac_text_view"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold"
                 android:textAlignment="center"
-                android:text="BAC: 0.00%"
-                android:layout_marginBottom="16dp"/>
+                tools:text="BAC: 0.00%"/>
 
         </LinearLayout>
     </LinearLayout>
