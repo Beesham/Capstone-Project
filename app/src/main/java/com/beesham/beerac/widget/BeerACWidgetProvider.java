@@ -121,6 +121,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                         context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
                         .getInt(context.getString(R.string.beer_count_key), 0));
 
+                Utils.storeBAC(context, Utils.getBac(context));
                 Utils.updateWidget(context);
                 break;
 
@@ -129,6 +130,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                         context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
                                 .getInt(context.getString(R.string.beer_count_key), 0));
 
+                Utils.storeBAC(context, Utils.getBac(context));
                 Utils.updateWidget(context);
                 break;
         }
