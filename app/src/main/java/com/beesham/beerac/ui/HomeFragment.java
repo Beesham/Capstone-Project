@@ -56,8 +56,7 @@ import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DET
  * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
  * {@link HomeFragment.OnFragmentInteractionListener} interface to handle interaction events.
  */
-public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{//,
-        //TimePickerFragment.TimeSetter{
+public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
@@ -371,24 +370,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void getBAC(){
-        /*String gender = mPreferences.getString(getString(R.string.pref_gender_key),
-                getString(R.string.pref_gender_default));
-
-        double bodyWeight = Double.parseDouble(mPreferences.getString(getString(R.string.pref_body_weight_key),
-                getString(R.string.pref_default_body_weight)));
-
-        double timePassed = Utils.getTimePassed(getContext());
-        double drinkSize;
-
-        SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-
-        if(prefs.getString(getString(R.string.pref_units_key), null).equals("mL")){
-            drinkSize = Utils.mLToOz(Integer.parseInt(mVolumeEditText.getText().toString()));
-        }else{
-            drinkSize = Double.parseDouble(mVolumeEditText.getText().toString());
-        }*/
-
-
         mBAC = Utils.getBac(getActivity());
         Utils.storeBAC(getContext(), mBAC);
     }

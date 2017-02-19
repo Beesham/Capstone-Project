@@ -49,7 +49,7 @@ public class BeerACIntentService extends IntentService {
     //private final String PARMA_BEER_SINGLE = "beer";
     private final String PARAM_QUERY = "q";
     private final String PARAM_TYPE = "type";
-
+    private final static String PARAM_WITH_BREWERIES = "withBreweries";
 
     String type = "beer";
 
@@ -106,6 +106,8 @@ public class BeerACIntentService extends IntentService {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Columns.SavedBeerColumns.BEERID, beer.getId());
         contentValues.put(Columns.SavedBeerColumns.DESCRIPTION, beer.getDescription());
+        contentValues.put(Columns.SavedBeerColumns.STYLE_NAME, beer.getStyleName());
+        contentValues.put(Columns.SavedBeerColumns.STYLE_DESCRIPTION, beer.getStyleDescription());
         contentValues.put(Columns.SavedBeerColumns.NAME, beer.getName());
         contentValues.put(Columns.SavedBeerColumns.ISORGANIC, beer.getIsOrganic());
         contentValues.put(Columns.SavedBeerColumns.ABV, beer.getAbv());
@@ -127,6 +129,7 @@ public class BeerACIntentService extends IntentService {
         Uri.Builder builder = Uri.parse(BREWERY_BASE_URL).buildUpon()
                 .appendPath(PATH_BEER)
                 .appendPath(queryString)
+                //.appendQueryParameter(PARAM_WITH_BREWERIES, "Y")
                 .appendQueryParameter(PARAM_KEY, KEY);
 
         return builder.build().toString();
