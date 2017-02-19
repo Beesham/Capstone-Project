@@ -49,6 +49,7 @@
 
     <!-- Details -->
     <string name="details_screen_title">Details</string>
+    <string name="abv_format"><xliff:g id="abv_format">%s</xliff:g>%% alcohol</string>
     <string name="ally_toolbar_titile"></string>
     <string name="title_activity_settings">Settings</string>
 

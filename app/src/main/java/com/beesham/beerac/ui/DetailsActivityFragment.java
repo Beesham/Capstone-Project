@@ -61,6 +61,10 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
     @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
+    @BindView(R.id.abv_text_view) TextView mAbvTextView;
+    @BindView(R.id.style_name_text_view) TextView mBeerStyleNameTextView;
+    @BindView(R.id.style_description_text_view) TextView mBeerStyleDescriptionTextView;
+    @BindView(R.id.food_pairings_text_view) TextView mFoodPairingsTextView;
     @BindView(R.id.photo) ImageView beerImageView;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
@@ -220,6 +224,10 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         progressBar.setVisibility(View.GONE);
         if(beerNameTextView != null) beerNameTextView.setText(beer.getName());
         descriptionTextView.setText(beer.getDescription());
+        mBeerStyleNameTextView.setText(beer.getStyleName());
+        mAbvTextView.setText(getString(R.string.abv_format, beer.getAbv()));
+        mBeerStyleDescriptionTextView.setText(beer.getStyleDescription());
+        mFoodPairingsTextView.setText(beer.getFoodParings());
 
         if(beerImageView != null) {
             if (!TextUtils.isEmpty(beer.getUrl_large())) {
