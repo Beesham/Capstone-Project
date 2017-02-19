@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -15,8 +16,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.widget.BeerACWidgetProvider;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -259,8 +262,13 @@ public class Utils {
         return Double.valueOf(threeDForm.format(bac));
     }
 
-    public static double getTimePassed(long startedDrinkingTime){
+    public static double getTimePassed(Context context){
         Calendar calendar = Calendar.getInstance();
+
+        long startedDrinkingTime = context.getSharedPreferences(context.getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .getLong(context.getString(R.string.start_drinking_time_key),
+                        Utils.timeInMillis(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
 
         long curHourInMillis = TimeUnit.HOURS.toMillis(calendar.get(Calendar.HOUR_OF_DAY));
         long curMinInMillis =  TimeUnit.MINUTES.toMillis(calendar.get(Calendar.MINUTE));
@@ -307,8 +315,10 @@ public class Utils {
         return Integer.toString(i);
     }
 
-   /* public static double getBac(Context context){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context));
+    public static double getBac(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
+
 
         String gender = preferences.getString(context.getString(R.string.pref_gender_key),
                 context.getString(R.string.pref_gender_default));
@@ -316,17 +326,56 @@ public class Utils {
         double bodyWeight = Double.parseDouble(preferences.getString(context.getString(R.string.pref_body_weight_key),
                 context.getString(R.string.pref_default_body_weight)));
 
-        double timePassed = getTimePassed(mStartTime);
+        double timePassed = getTimePassed(context);
         double drinkSize;
+        double abv = 0;
 
-        if(preferences.getString(context.getString(R.string.pref_units_key), null).equals("mL")){
-            drinkSize = Utils.mLToOz(Integer.parseInt(mVolumeEditText.getText().toString()));
-        }else{
-            drinkSize = Double.parseDouble(mVolumeEditText.getText().toString());
+        int numOfBeers = context.getSharedPreferences(context.getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .getInt(context.getString(R.string.beer_count_key),
+                        0);
+
+        final String[] projections = {
+                Columns.SavedBeerColumns.BEERID,
+                Columns.SavedBeerColumns.ABV
+        };
+
+        Cursor c = context.getContentResolver().query(
+                BeerProvider.SavedBeers.CONTENT_URI,
+                projections,
+                Columns.SavedBeerColumns.BEERID + "=?",
+                new String[]{context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
+                        .getString(context.getString(R.string.preferred_beer_key),
+                        context.getString(R.string.default_preferred_beer))},
+                null);
+
+        if(c.moveToFirst()) {
+            abv = Double.parseDouble(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.ABV)));
         }
 
-        return 0;
-    }*/
+        if(prefs.getString(context.getString(R.string.pref_units_key), null).equals("mL")){
+            drinkSize = Utils.mLToOz(context.getSharedPreferences(context.getString(R.string.pref_file),
+                    MODE_PRIVATE)
+                    .getInt(context.getString(R.string.beer_volume_key),
+                            Integer.parseInt(context.getString(R.string.default_volume))));
+        }else{
+            drinkSize = (context.getSharedPreferences(context.getString(R.string.pref_file),
+                    MODE_PRIVATE)
+                    .getInt(context.getString(R.string.beer_volume_key),
+                            Integer.parseInt(context.getString(R.string.default_volume))));
+        }
+
+        return calculateBAC(numOfBeers, abv, drinkSize, gender, bodyWeight, timePassed);
+
+    }
+
+    public static void storeBAC(Context context, double bac){
+        context.getSharedPreferences(context.getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .edit()
+                .putLong(context.getString(R.string.bac_key), Double.doubleToLongBits(bac))
+                .apply();
+    }
 
     public static long timeInMillis(int hourOfDay, int minute){
         return (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
