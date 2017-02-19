@@ -364,7 +364,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .apply();
     }
 
-    //@Override
     public void setTime(int hourOfDay, int minute) {
         mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
         mStartTime = Utils.timeInMillis(hourOfDay, minute);

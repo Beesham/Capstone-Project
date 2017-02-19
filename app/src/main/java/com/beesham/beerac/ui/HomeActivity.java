@@ -50,7 +50,6 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     }
 
-
     @Override
     public void setTime(int hourOfDay, int minute) {
         ((HomeFragment ) getSupportFragmentManager().findFragmentById(R.id.fragment_home))
