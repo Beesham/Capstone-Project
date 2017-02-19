@@ -80,6 +80,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                             intent.setAction(ACTION_GET_BEER_DETAILS);
                             intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
                             BeerACIntentService.startBeerQueryService(mContext, intent);
+
+                            Utils.updateWidget(mContext);
                         }
                     });
                     builder.setNegativeButton(mContext.getString(android.R.string.cancel),
