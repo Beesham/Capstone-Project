@@ -2,8 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/beer_acwidget"
     android:initialLayout="@layout/beer_acwidget"
-    android:minHeight="110dp"
+    android:minHeight="40dp"
     android:minWidth="250dp"
-    android:previewImage="@drawable/example_appwidget_preview"
-    android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen"/>
+    android:previewImage="@drawable/appwidget_preview"
+    android:updatePeriodMillis="0"/>
