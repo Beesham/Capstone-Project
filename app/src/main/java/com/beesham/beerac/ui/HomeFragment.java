@@ -15,9 +15,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -170,12 +175,18 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if(prefs.contains(getString(R.string.beer_count_key))) {
             mBeerCount = prefs .getInt(getString(R.string.beer_count_key), mBeerCount);
             updateBeerCountTextView();
-
         }
+
+        mBAC = Double.longBitsToDouble(getActivity().getSharedPreferences(getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
+        mBACTextView.setText(getString(R.string.bac_format, mBAC));
+
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -211,6 +222,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void initializeFirstLaunchVariables(){
         mBeerId = getString(R.string.default_preferred_beer); //Naughty 90 Beer
+        mVolumeEditText.setText(getString(R.string.default_volume));
         getActivity().getSharedPreferences(getString(R.string.pref_file),
                 MODE_PRIVATE)
                 .edit()
@@ -268,7 +280,34 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        mVolumeEditText.setText(getString(R.string.default_volume));
+        SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+        int volInt = prefs.getInt(getString(R.string.beer_volume_key),
+                0);
+        String vol =  Integer.toString(volInt);
+
+        mVolumeEditText.setText(vol);
+
+        mVolumeEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!TextUtils.isEmpty(mVolumeEditText.getText())) {
+                    SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+                    prefs.edit()
+                            .putInt(getString(R.string.beer_volume_key), Integer.parseInt(mVolumeEditText.getText().toString()))
+                            .commit();
+                }
+            }
+        });
 
         Calendar calendar = Calendar.getInstance();
         setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
@@ -283,7 +322,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mUnitsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
-                mPreferences.edit()
+                SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+                prefs.edit()
                         .putString(getString(R.string.pref_units_key), parent.getItemAtPosition(position).toString())
                         .commit();
             }
@@ -331,37 +371,26 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void getBAC(){
-        String gender = mPreferences.getString(getString(R.string.pref_gender_key),
+        /*String gender = mPreferences.getString(getString(R.string.pref_gender_key),
                 getString(R.string.pref_gender_default));
 
         double bodyWeight = Double.parseDouble(mPreferences.getString(getString(R.string.pref_body_weight_key),
                 getString(R.string.pref_default_body_weight)));
 
-        double timePassed = Utils.getTimePassed(mStartTime);
+        double timePassed = Utils.getTimePassed(getContext());
         double drinkSize;
 
-        if(mPreferences.getString(getString(R.string.pref_units_key), null).equals("mL")){
+        SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
+
+        if(prefs.getString(getString(R.string.pref_units_key), null).equals("mL")){
             drinkSize = Utils.mLToOz(Integer.parseInt(mVolumeEditText.getText().toString()));
         }else{
             drinkSize = Double.parseDouble(mVolumeEditText.getText().toString());
-        }
+        }*/
 
-        mBAC = Utils.calculateBAC(mBeerCount,
-                mABV,
-                drinkSize,
-                gender,
-                bodyWeight,
-                timePassed);
 
-        storeBAC();
-    }
-
-    private void storeBAC(){
-        getActivity().getSharedPreferences(getString(R.string.pref_file),
-                MODE_PRIVATE)
-                .edit()
-                .putLong(getString(R.string.bac_key), Double.doubleToLongBits(mBAC))
-                .apply();
+        mBAC = Utils.getBac(getActivity());
+        Utils.storeBAC(getContext(), mBAC);
     }
 
     public void setTime(int hourOfDay, int minute) {
