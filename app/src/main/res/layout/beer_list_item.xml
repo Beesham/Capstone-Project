@@ -30,10 +30,11 @@
             android:layout_marginStart="16dp">
 
         <ImageView
+                android:id="@+id/drink_beer_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/a11y_drink_beer"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_drink_24dp"
-                android:id="@+id/drink_beer_image_view"/>
+                app:srcCompat="@drawable/ic_drink_24dp"/>
     </FrameLayout>
 </LinearLayout>

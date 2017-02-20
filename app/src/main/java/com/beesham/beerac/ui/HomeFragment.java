@@ -61,6 +61,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
+    @BindView(R.id.beer_name_text_view) TextView mBeerNameTextView;
     @BindView(R.id.toolbar_title) TextView mToolbarTitle;
     @BindView(R.id.bac_text_view) TextView mBACTextView;
     @BindView(R.id.total_beers_text_view) TextView mTotalBeersTextView;
@@ -463,6 +464,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     .load(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)))
                     .into(mBeerImage);
         }
+
+        mBeerNameTextView.setText(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.NAME)));
+        mBeerNameTextView.setContentDescription(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.NAME)));
+
+        mBeerImage.setContentDescription(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.NAME)) + getString(R.string.image_content_description));
+
 
         mABV = Double.parseDouble(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.ABV)));
     }
