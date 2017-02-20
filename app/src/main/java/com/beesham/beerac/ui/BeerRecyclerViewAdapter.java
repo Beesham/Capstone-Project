@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
+import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
 import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
 /**
@@ -152,7 +153,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
         if(mCursor.getString(
                 mCursor.getColumnIndex(Columns.SearchedBeerColumns.LABELS))
-                .equals("Y")) {
+                .equals(RESPONSE_HAS_LABELS)) {
 
             String imagePath = mCursor.getString(
                     mCursor.getColumnIndex(

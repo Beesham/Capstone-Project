@@ -65,6 +65,8 @@
     <string name="pref_gender_label">Gender</string>
     <string name="pref_gender_key">gender</string>
     <string name="pref_gender_default">Male</string>
+    <string name="gender_male" translatable="true">Male</string>
+    <string name="gender_female" translatable="true">Female</string>
     <string-array name="pref_gender_list_titles">
         <item>Male</item>
         <item>Female</item>
