@@ -41,7 +41,7 @@ public class BeerACIntentService extends IntentService {
     public static final String RESPONSE_NO_LABELS = "N";
 
     private static final String BREWERY_BASE_URL = "http://api.brewerydb.com/v2";
-    private static final String KEY = "xxxxxxxxxxxxxxxxxx"; //TODO: place API key here
+    private static final String KEY = "b0c0eceef49f7ecd827331cde0912036 "; //TODO: place API key here
     private final String PATH_SEARCH = "search";
     private static final String PATH_BEER = "beer";
 
@@ -88,6 +88,7 @@ public class BeerACIntentService extends IntentService {
 
         String response = run(builder.build().toString());
         try {
+            getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
             logBeers(Utils.extractBeers(response));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -121,7 +122,6 @@ public class BeerACIntentService extends IntentService {
         }else{
             contentValues.put(Columns.SavedBeerColumns.LABELS, RESPONSE_NO_LABELS);
         }
-
         logBeers(contentValues);
     }
 
@@ -139,7 +139,7 @@ public class BeerACIntentService extends IntentService {
         String responseStr = null;
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        OkHttpClient client = builder.connectTimeout(5, TimeUnit.MINUTES)   //Set 5 min timeouts because of API latency, ny lower and err
+        OkHttpClient client = builder.connectTimeout(5, TimeUnit.MINUTES)   //Set 5 min timeouts because of API latency, any lower and err
                 .readTimeout(5, TimeUnit.MINUTES)
                 .writeTimeout(5, TimeUnit.MINUTES)
                 .build();
@@ -161,12 +161,12 @@ public class BeerACIntentService extends IntentService {
 
     private void logBeers(Vector<ContentValues> contentValuesVector){
         int inserted = 0;
+
+        getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
+
         if(contentValuesVector.size() > 0){
             ContentValues[] contentValuesArray = new ContentValues[contentValuesVector.size()];
             contentValuesVector.toArray(contentValuesArray);
-
-            getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
-
             inserted = getContentResolver().bulkInsert(BeerProvider.SearchedBeers.CONTENT_URI, contentValuesArray);
         }
     }

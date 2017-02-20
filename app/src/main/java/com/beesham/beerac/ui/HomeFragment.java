@@ -35,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
@@ -235,7 +236,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         Intent intent = new Intent(getActivity(), BeerACIntentService.class);
         intent.setAction(ACTION_GET_BEER_DETAILS);
         intent.putExtra(BeerACIntentService.EXTRA_QUERY, mBeerId);
-        BeerACIntentService.startBeerQueryService(getActivity(), intent);
+
+        if(Utils.isOnline(getActivity())) {
+            BeerACIntentService.startBeerQueryService(getActivity(), intent);
+        }else{
+            Toast.makeText(getActivity(), R.string.no_connectivity, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setupViews(){
@@ -462,6 +468,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals(RESPONSE_HAS_LABELS)){
             Picasso.with(getActivity())
                     .load(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)))
+                    .error(R.mipmap.ic_launcher)
                     .into(mBeerImage);
         }
 
