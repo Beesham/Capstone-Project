@@ -7,7 +7,6 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
@@ -98,8 +97,8 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         Intent intent = getActivity().getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-            launchBeerACIntentService(query);
+            if(Utils.isOnline(getActivity()))
+                launchBeerACIntentService(query);
         }
 
         mBeerRecyclerViewAdapter = new BeerRecyclerViewAdapter(getActivity(),
@@ -150,7 +149,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
     }
@@ -247,7 +246,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursor = data;
-        if(!mCursor.moveToFirst()) {return;}
 
         mBeerRecyclerViewAdapter.swapCursor(mCursor);
 
@@ -256,9 +254,14 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
         if(mBeerRecyclerViewAdapter.getItemCount() == 0){
+            mEmptyView.setVisibility(View.VISIBLE);
             if(!Utils.isOnline(getActivity())){
                 mEmptyView.setText(getString(R.string.empty_beer_list) + "\n" + getString(R.string.no_connectivity));
+            }else{
+                mEmptyView.setText(getString(R.string.no_results));
             }
+        }else{
+            mEmptyView.setVisibility(View.GONE);
         }
 
         if(data.getCount() > 0){
