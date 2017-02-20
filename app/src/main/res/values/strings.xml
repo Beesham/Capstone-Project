@@ -50,7 +50,6 @@
     <!-- Details -->
     <string name="details_screen_title">Details</string>
     <string name="abv_format"><xliff:g id="abv_format">%s</xliff:g>%% alcohol</string>
-    <string name="ally_toolbar_titile"></string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Drink beer confirmation dialog -->
@@ -151,6 +150,20 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <!-- A11y Content Description -->
+    <string name="a11y_home_toolbar_title">home screen</string>
+    <string name="image_content_description" translatable="true">image, click for details</string>
+    <string name="a11y_started_drinking_time" translatable="true">Started drinking time, click to set time</string>
+    <string name="a11y_beer_volume" translatable="true">Volume of a single beer being drunk</string>
+    <string name="a11y_beer_volume_units">Volume units</string>
+    <string name="a11y_beer_count" translatable="true">Beer count</string>
+    <string name="a11y_bac" translatable="true">Blood alcohol content</string>
+    <string name="a11y_increment_beer_count" translatable="true">Increment beer count</string>
+    <string name="a11y_decrement_beer_count" translatable="true">Decrement beer count</string>
+
+    <string name="a11y_fab" translatable="true">Save this beer</string>
+    <string name="a11y_drink_beer" translatable="true">Drink this beer</string>
 
     <!-- Ads -->
     <string name="banner_ad_unit_id">ca-app-pub-9835470545063758/2871499220</string>
