@@ -1,155 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_home"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.beesham.beerac.ui.HomeFragment"
-    android:fitsSystemWindows="true">
-
-    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fragment_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        tools:context="com.beesham.beerac.ui.HomeFragment"
+        android:fitsSystemWindows="true">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/toolbar_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay">
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true">
 
                 <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_activity_home"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_activity_home"
+                        android:contentDescription="@string/a11y_home_toolbar_title"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
             </android.support.v7.widget.Toolbar>
 
             <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/photo"
-                    android:layout_width="match_parent"
-                    android:scaleType="centerCrop"
-                    android:background="@color/photo_placeholder"
-                    android:minHeight="?actionBarSize"
-                    android:layout_height="212dp"/>
+                        android:id="@+id/photo"
+                        android:layout_width="match_parent"
+                        android:scaleType="centerCrop"
+                        android:background="@color/photo_placeholder"
+                        android:minHeight="?actionBarSize"
+                        android:layout_height="212dp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="Beer name"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:fontFamily="sans-serif"/>
+                        android:id="@+id/beer_name_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Beer name"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:fontFamily="sans-serif"/>
             </FrameLayout>
 
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
-                android:id="@+id/drinking_time_start_text_view"
-                tools:text="3:00PM"
-                android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp"
+                    android:id="@+id/drinking_time_start_text_view"
+                    tools:text="3:00PM"
+                    android:contentDescription="@string/a11y_started_drinking_time"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
                 <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:ems="3"
-                    android:id="@+id/volume_edit_text"
-                    tools:text="355"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:ems="3"
+                        android:id="@+id/volume_edit_text"
+                        tools:text="355"
+                        android:contentDescription="@string/a11y_beer_volume"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
                 <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/units_spinner"/>
+                        android:id="@+id/units_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/a11y_beer_volume_units"/>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_layout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
-
-                <Button
-                    android:text="-"
+                    android:id="@+id/linear_layout"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/decrement_beers_button"
-                    android:layout_weight="1"/>
+                    android:layout_marginTop="16dp">
+
+                <Button
+                        android:id="@+id/decrement_beers_button"
+                        android:text="-"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/a11y_decrement_beer_count"
+                        android:layout_weight="1"/>
 
                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0 beers had"
-                    android:ems="10"
-                    android:id="@+id/total_beers_text_view"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:inputType="number"/>
+                        android:id="@+id/total_beers_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/a11y_beer_count"
+                        android:text="0 beers had"
+                        android:ems="10"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:inputType="number"/>
 
                 <Button
-                    android:text="+"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/increment_beers_button"
-                    android:layout_weight="1"/>
+                        android:id="@+id/increment_beers_button"
+                        android:text="+"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/a11y_increment_beer_count"
+                        android:layout_weight="1"/>
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/bac_text_view"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textAlignment="center"
-                android:text="BAC: 0.00%"
-                android:layout_marginTop="24dp"
-                android:layout_weight="1"/>
-
-            <!--TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/drinking_time_start_text_view"
-                    android:layout_toLeftOf="@+id/units_spinner"
-                    android:layout_toStartOf="@+id/units_spinner"
-                    android:id="@+id/end_drinking_time_text_view"
-                    tools:text="now"/-->
+                    android:id="@+id/bac_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:contentDescription="@string/a11y_bac"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textAlignment="center"
+                    tools:text="BAC: 0.000%"
+                    android:layout_marginTop="24dp"
+                    android:layout_weight="1"/>
 
         </LinearLayout>
 
