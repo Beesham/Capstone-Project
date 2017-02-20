@@ -37,6 +37,8 @@ import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 public class SearchActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener{ //implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
+    private static final String TAG = SearchActivity.class.getSimpleName();
+    public static final String FRAG_FROM_SEARCH_ACT_KEY = "detail_started_from_search_act";
 
     public static boolean mTwoPane;
     private final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
@@ -54,7 +56,7 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
 
             args.putString(getString(R.string.beer_details_uri_key),
                     buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
-            args.putString("act_started_frag", LOG_TAG);
+            args.putString(FRAG_FROM_SEARCH_ACT_KEY, TAG);
             fragment.setArguments(args);
 
             if (savedInstanceState == null) {
@@ -70,7 +72,7 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
     @Override
     public void onFragmentInteraction(Bundle bundle) {
         DetailsActivityFragment fragment = new DetailsActivityFragment();
-        bundle.putString("act_started_frag", LOG_TAG);
+        bundle.putString(FRAG_FROM_SEARCH_ACT_KEY, TAG);
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()

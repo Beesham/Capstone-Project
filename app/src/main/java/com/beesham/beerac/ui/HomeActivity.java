@@ -12,6 +12,8 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
         TimePickerFragment.TimeSetter{
 
     public static final String LOG_TAG = HomeActivity.class.getSimpleName();
+    public static final String TAG = HomeActivity.class.getSimpleName();
+    public static final String FRAG_FROM_HOME_ACT_KEY = "detail_started_from_home_act";
     public static boolean mTwoPane;
 
     public static final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
@@ -30,7 +32,7 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
 
             args.putString(getString(R.string.beer_details_uri_key),
                     buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
-            args.putString("act_started_frag", LOG_TAG);
+            args.putString(FRAG_FROM_HOME_ACT_KEY, TAG);
             fragment.setArguments(args);
 
             if (savedInstanceState == null) {

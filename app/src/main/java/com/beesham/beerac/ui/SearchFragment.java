@@ -59,7 +59,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private static final String LOG_TAG = SearchFragment.class.getSimpleName();
     private static final int BEERS_LOADER = 0;
 
-    private final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
     private static final String SELECTED_KEY = "selected_position";
 
     private BeerRecyclerViewAdapter mBeerRecyclerViewAdapter;
@@ -160,7 +159,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     public void onResume() {
         super.onResume();
 
-        mTracker.setScreenName("Search");
+        mTracker.setScreenName(getString(R.string.title_activity_search));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 

@@ -51,6 +51,7 @@ import butterknife.ButterKnife;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
+import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
@@ -457,7 +458,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if(!data.moveToFirst()) return;
 
         data.moveToFirst();
-        if(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals("Y")){
+        if(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals(RESPONSE_HAS_LABELS)){
             Picasso.with(getActivity())
                     .load(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)))
                     .into(mBeerImage);

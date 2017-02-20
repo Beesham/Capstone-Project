@@ -46,6 +46,7 @@ import okhttp3.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
+import static com.beesham.beerac.ui.HomeActivity.FRAG_FROM_HOME_ACT_KEY;
 
 /**
  * Details fragment showing beer details and allows for user to save/fav a beer
@@ -110,8 +111,8 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
         Bundle bundle = getArguments();
         if(bundle != null){
-            if(bundle.containsKey("act_started_frag")) {
-                if (bundle.getString("act_started_frag").equals(HomeActivity.LOG_TAG)) {
+            if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
+                if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)) {
                     beerNameTextView.setVisibility(View.GONE);
                     beerImageView.setVisibility(View.GONE);
                 }else{
