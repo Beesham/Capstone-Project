@@ -98,10 +98,13 @@ public class Utils {
         }
 
         currentPage = beerListJsonObj.getInt(KEY_CURRENTPAGE);
-        numberOfPages = beerListJsonObj.getInt(KEY_NUMBEROFPAGES);
+        try {
+            numberOfPages = beerListJsonObj.getInt(KEY_NUMBEROFPAGES);
+        }catch (JSONException e){
+            e.printStackTrace();
+            numberOfPages = 0;
+        }
         totalResults = beerListJsonObj.getInt(KEY_TOTALRESULTS);
-
-        Log.v("Utils", "num of pages: " + numberOfPages);
 
         JSONArray beerListJsonArray = beerListJsonObj.getJSONArray(KEY_DATA);
 
