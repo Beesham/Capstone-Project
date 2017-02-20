@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -22,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
@@ -33,6 +33,8 @@ import com.google.android.gms.analytics.Tracker;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.R.attr.data;
+
 /**
  *
  */
@@ -40,6 +42,7 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
     private static final String LOG_TAG = SavesFragment.class.getSimpleName();
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.empty_view) TextView mEmptyView;
 
     private static final int BEERS_LOADER = 0;
     private static final String SELECTED_KEY = "selected_position";
@@ -110,7 +113,7 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
     }
@@ -191,10 +194,13 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursor = data;
-        if(!mCursor.moveToFirst()) {return;}
 
         mBeerRecyclerViewAdapter.swapCursor(mCursor);
         if(mPosition != ListView.INVALID_POSITION)  mRecyclerView.smoothScrollToPosition(mPosition);
+
+        if(mBeerRecyclerViewAdapter.getItemCount() == 0){
+            mEmptyView.setText(getString(R.string.empty_beer_list));
+        }
 
         if(data.getCount() > 0){
             mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
