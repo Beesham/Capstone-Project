@@ -77,8 +77,6 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
             public void onClick(Bundle bundle, BeerRecyclerViewAdapter.BeerViewHolder beerViewHolder) {
                 mListener.onFragmentInteraction(bundle);
                 mPosition = beerViewHolder.getAdapterPosition();
-                Log.v(LOG_TAG, "I was clicked: ");
-
             }
         }, mChoiceMode);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.beer_recycler_view);
@@ -219,8 +217,6 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
             });
 
         }
-
-        Log.v(LOG_TAG, "size of cursor: " + mCursor.getCount());
     }
 
     @Override

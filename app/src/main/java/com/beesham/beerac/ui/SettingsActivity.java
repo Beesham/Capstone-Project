@@ -143,7 +143,6 @@ public class SettingsActivity extends PreferenceActivity {
             if(resultCode == RESULT_OK){
                 Place place = PlacePicker.getPlace(this, data);
                 String address = place.getAddress().toString();
-                Log.v(LOG_TAG, "Address: " + address);
                 LatLng latLng = place.getLatLng();
 
                 if(TextUtils.isEmpty(address)){

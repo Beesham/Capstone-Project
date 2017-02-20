@@ -16,6 +16,8 @@ import com.beesham.beerac.ui.HomeFragment;
 import com.beesham.beerac.ui.Utils;
 import com.squareup.picasso.Picasso;
 
+import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
+
 /**
  * Implementation of App Widget functionality.
  */
@@ -98,7 +100,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                 null);
 
         if(c.moveToFirst()) {
-            if (c.getString(c.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals("Y")) {
+            if (c.getString(c.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals(RESPONSE_HAS_LABELS)) {
                 Picasso.with(context)
                         .load(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLMEDIUM)))
                         .into(mRemoteViews, imageId, appWidgetIds);

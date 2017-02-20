@@ -37,19 +37,20 @@ public class BeerACIntentService extends IntentService {
 
     public static final String EXTRA_QUERY = "com.beesham.beerac.service.extra.QUERY";
 
+    public static final String RESPONSE_HAS_LABELS = "Y";
+    public static final String RESPONSE_NO_LABELS = "N";
 
     private static final String BREWERY_BASE_URL = "http://api.brewerydb.com/v2";
-    private static final String KEY = "b0c0eceef49f7ecd827331cde0912036";
+    private static final String KEY = "xxxxxxxxxxxxxxxxxxxx"; //TODO: place API key here
     private final String PATH_SEARCH = "search";
     private static final String PATH_BEER = "beer";
 
 
     private static final String PARAM_KEY = "key";
     private final String PARMA_BEER_MULTI = "beers";
-    //private final String PARMA_BEER_SINGLE = "beer";
     private final String PARAM_QUERY = "q";
     private final String PARAM_TYPE = "type";
-    private final static String PARAM_WITH_BREWERIES = "withBreweries";
+    private final static String PARAM_WITH_BREWERIES = "withBreweries"; //To be implemented in later versions, maybe
 
     String type = "beer";
 
@@ -113,15 +114,14 @@ public class BeerACIntentService extends IntentService {
         contentValues.put(Columns.SavedBeerColumns.ABV, beer.getAbv());
 
         if(beer.hasLabels()){
-            contentValues.put(Columns.SavedBeerColumns.LABELS, "Y");
+            contentValues.put(Columns.SavedBeerColumns.LABELS, RESPONSE_HAS_LABELS);
             contentValues.put(Columns.SavedBeerColumns.IMAGEURLICON, beer.getUrl_icon());
             contentValues.put(Columns.SavedBeerColumns.IMAGEURLMEDIUM, beer.getUrl_medium());
             contentValues.put(Columns.SavedBeerColumns.IMAGEURLLARGE, beer.getUrl_large());
         }else{
-            contentValues.put(Columns.SavedBeerColumns.LABELS, "N");
+            contentValues.put(Columns.SavedBeerColumns.LABELS, RESPONSE_NO_LABELS);
         }
 
-        Log.v(LOG_TAG, "beer: " + beer.toString());
         logBeers(contentValues);
     }
 
@@ -139,7 +139,7 @@ public class BeerACIntentService extends IntentService {
         String responseStr = null;
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        OkHttpClient client = builder.connectTimeout(5, TimeUnit.MINUTES)
+        OkHttpClient client = builder.connectTimeout(5, TimeUnit.MINUTES)   //Set 5 min timeouts because of API latency, ny lower and err
                 .readTimeout(5, TimeUnit.MINUTES)
                 .writeTimeout(5, TimeUnit.MINUTES)
                 .build();
@@ -166,11 +166,8 @@ public class BeerACIntentService extends IntentService {
             contentValuesVector.toArray(contentValuesArray);
 
             getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
-            Log.v(LOG_TAG, "Content URI " + BeerProvider.SearchedBeers.CONTENT_URI);
 
             inserted = getContentResolver().bulkInsert(BeerProvider.SearchedBeers.CONTENT_URI, contentValuesArray);
-
-            Log.v(LOG_TAG, "Rows inserted: " + inserted);
         }
     }
 
