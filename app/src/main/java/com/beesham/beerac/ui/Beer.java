@@ -117,19 +117,4 @@ public class Beer {
         this.isOrganic = isOrganic;
     }
 
-
-    @Override
-    public String toString() {
-        return "Beer{" +
-                "name='" + name + '\'' +
-                ", id='" + id + '\'' +
-                ", description='" + description + '\'' +
-                ", abv='" + abv + '\'' +
-                ", labels=" + labels +
-                ", year=" + year +
-                ", url_icon='" + url_icon + '\'' +
-                ", url_medium='" + url_medium + '\'' +
-                ", url_large='" + url_large + '\'' +
-                '}';
-    }
 }

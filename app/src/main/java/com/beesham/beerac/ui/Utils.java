@@ -36,12 +36,17 @@ import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
+import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_NO_LABELS;
 
 /**
  * Created by beesham on 21/01/17.
  */
 
 public class Utils {
+
+    static final String STATUS_SUCCESS = "success";
+    static final String STATUS_FAILURE = "failure";
 
     static final String KEY_CURRENTPAGE = "currentPage";
     static final String KEY_NUMBEROFPAGES = "numberOfPages";
@@ -122,7 +127,7 @@ public class Utils {
                 }
 
                 if (beerListJsonArray.getJSONObject(i).has(KEY_LABELS)) {
-                    labels = "Y";
+                    labels = RESPONSE_HAS_LABELS;
 
                     imageUrlIcon = beerListJsonArray.getJSONObject(i)
                             .getJSONObject(KEY_LABELS)
@@ -136,7 +141,7 @@ public class Utils {
                             .getJSONObject(KEY_LABELS)
                             .getString(KEY_IMAGEURL_LARGE);
                 } else {
-                    labels = "N";
+                    labels = RESPONSE_NO_LABELS;
                 }
 
                 ContentValues contentValues = new ContentValues();
@@ -145,7 +150,7 @@ public class Utils {
                 contentValues.put(Columns.SearchedBeerColumns.DESCRIPTION, description);
                 contentValues.put(Columns.SearchedBeerColumns.LABELS, labels);
 
-                if (labels.equals("Y")) {
+                if (labels.equals(RESPONSE_HAS_LABELS)) {
                     contentValues.put(Columns.SearchedBeerColumns.IMAGEURLICON, imageUrlIcon);
                     contentValues.put(Columns.SearchedBeerColumns.IMAGEURLLARGE, imageUrlMedium);
                     contentValues.put(Columns.SearchedBeerColumns.IMAGEURLMEDIUM, imageUrlLarge);
@@ -177,7 +182,7 @@ public class Utils {
         boolean hasImages = false;
 
         if(beerJsonObj.has(KEY_STATUS)){
-            if(beerJsonObj.getString(KEY_STATUS).equals("failure")){
+            if(beerJsonObj.getString(KEY_STATUS).equals(STATUS_FAILURE)){
                 throw new JSONException(beerJsonObj.getString(KEY_ERR_MSG));
             }
         }
@@ -290,8 +295,6 @@ public class Utils {
 
         double elapsedHours =  TimeUnit.MILLISECONDS.toHours(elapsedTime);
         double elapsedMins = (TimeUnit.MILLISECONDS.toMinutes(elapsedTime)%60)/60.0;
-
-        Log.v("UTILS", "elapsed time: " + (elapsedHours + elapsedMins));
 
         return (elapsedHours + elapsedMins);
     }

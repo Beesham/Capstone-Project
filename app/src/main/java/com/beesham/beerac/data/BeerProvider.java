@@ -20,7 +20,6 @@ public class BeerProvider {
     interface Path{
         String SAVED_BEERS = "saved_beers";
         String SEARCHED_BEERS = "searched_beers";
-
     }
 
     private static Uri buildUri(String... paths){

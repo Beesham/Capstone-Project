@@ -13,6 +13,8 @@ import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 public class SavesActivity extends AppCompatActivity implements SavesFragment.OnFragmentInteractionListener{//  implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = SavesActivity.class.getSimpleName();
+    private static final String TAG = SavesActivity.class.getSimpleName();
+    public static final String FRAG_FROM_SAVE_ACT_KEY = "detail_started_from_save_act";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
@@ -31,7 +33,7 @@ public class SavesActivity extends AppCompatActivity implements SavesFragment.On
 
             args.putString(getString(R.string.beer_details_uri_key),
                     buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
-            args.putString("act_started_frag", LOG_TAG);
+            args.putString(FRAG_FROM_SAVE_ACT_KEY, TAG);
             fragment.setArguments(args);
 
             if (savedInstanceState == null) {
@@ -48,7 +50,7 @@ public class SavesActivity extends AppCompatActivity implements SavesFragment.On
     @Override
     public void onFragmentInteraction(Bundle bundle) {
         DetailsActivityFragment fragment = new DetailsActivityFragment();
-        bundle.putString("act_started_frag", LOG_TAG);
+        bundle.putString(FRAG_FROM_SAVE_ACT_KEY, TAG);
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()
