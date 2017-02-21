@@ -1,14 +1,16 @@
 package com.beesham.beerac.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +28,6 @@ import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
-import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
 /**
  * Created by beesham on 24/01/17.
@@ -49,7 +50,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
     }
 
     public class BeerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        @BindView(R.id.beer_image_image_view) ImageView beer_icon_imageView;
+        @BindView(R.id.beer_image_image_view) ImageView beerImageView;
         @BindView(R.id.drink_beer_image_container) FrameLayout drinkBeer_icon_container;
         @BindView(R.id.beer_name_text_view) TextView beer_name_textView;
 
@@ -117,8 +118,20 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                                 mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
                         ));
 
-                mContext.startActivity(new Intent(mContext, DetailsActivity.class)
-                        .putExtras(args));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Bundle transitionsBundle = ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(
+                                    (Activity) mContext,
+                                    beerImageView,
+                                    beerImageView.getTransitionName()
+                            ).toBundle();
+
+                    mContext.startActivity(new Intent(mContext, DetailsActivity.class)
+                            .putExtras(args), transitionsBundle);
+                }else {
+                    mContext.startActivity(new Intent(mContext, DetailsActivity.class)
+                            .putExtras(args));
+                }
             }
         }
     }
@@ -162,9 +175,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
             Picasso.with(mContext)
                     .load(imagePath)
-                    .resize(50, 50)
                     .placeholder(R.mipmap.ic_launcher)
-                    .into(holder.beer_icon_imageView);
+                    .into(holder.beerImageView);
         }
 
         holder.beer_name_textView.setText(mCursor.getString(
