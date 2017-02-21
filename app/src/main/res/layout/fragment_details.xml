@@ -45,11 +45,11 @@
                         <ImageView
                             android:id="@+id/photo"
                             android:layout_width="match_parent"
+                            android:layout_height="212dp"
+                            style="@style/TransitionPhoto"
                             android:scaleType="centerCrop"
                             android:background="@color/photo_placeholder"
-                            android:minHeight="?actionBarSize"
-                            android:layout_weight="1"
-                            android:layout_height="212dp"/>
+                            android:minHeight="?actionBarSize"/>
 
                         <TextView
                             android:id="@+id/beer_name_text_view"
