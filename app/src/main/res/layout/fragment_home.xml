@@ -17,14 +17,12 @@
                 android:id="@+id/toolbar_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
                 android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fitsSystemWindows="true">
+                    android:layout_height="match_parent">
 
                 <TextView
                         android:id="@+id/toolbar_title"
@@ -44,10 +42,11 @@
                 <ImageView
                         android:id="@+id/photo"
                         android:layout_width="match_parent"
+                        android:layout_height="212dp"
+                        style="@style/TransitionPhoto"
                         android:scaleType="centerCrop"
                         android:background="@color/photo_placeholder"
-                        android:minHeight="?actionBarSize"
-                        android:layout_height="212dp"/>
+                        android:minHeight="?actionBarSize"/>
 
                 <TextView
                         android:id="@+id/beer_name_text_view"
@@ -70,14 +69,31 @@
                 android:orientation="vertical">
 
             <TextView
+                    android:text="@string/label_time_picker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
+                    android:paddingTop="16dp"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textSize="12sp"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/drinking_time_start_text_view"
                     tools:text="3:00PM"
                     android:contentDescription="@string/a11y_started_drinking_time"
                     android:layout_gravity="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+            <TextView
+                    android:text="@string/label_beer_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textSize="12sp"/>
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -86,12 +102,12 @@
                     android:gravity="center">
 
                 <EditText
+                        android:id="@+id/volume_edit_text"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:inputType="number"
                         android:ems="3"
-                        android:id="@+id/volume_edit_text"
                         tools:text="355"
                         android:contentDescription="@string/a11y_beer_volume"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
@@ -103,12 +119,20 @@
                         android:contentDescription="@string/a11y_beer_volume_units"/>
             </LinearLayout>
 
+            <TextView
+                    android:text="@string/label_beer_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textSize="12sp"/>
+
             <LinearLayout
                     android:id="@+id/linear_layout"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
+                    android:layout_height="wrap_content">
 
                 <Button
                         android:id="@+id/decrement_beers_button"
@@ -145,6 +169,7 @@
                     android:contentDescription="@string/a11y_bac"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textAlignment="center"
+                    android:gravity="center"
                     tools:text="BAC: 0.000%"
                     android:layout_marginTop="24dp"
                     android:layout_weight="1"/>
