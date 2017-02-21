@@ -3,13 +3,17 @@ package com.beesham.beerac.ui;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -50,6 +54,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.R.attr.editable;
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
@@ -255,8 +260,21 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mBeerId != null) {
                     if(!HomeActivity.mTwoPane) {
                         args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
-                        startActivity((new Intent(getActivity(), DetailsActivity.class))
-                                .putExtras(args));
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            Bundle transitionsBundle = ActivityOptionsCompat
+                                    .makeSceneTransitionAnimation(
+                                            getActivity(),
+                                            mBeerImage,
+                                            mBeerImage.getTransitionName()
+                                    ).toBundle();
+                            startActivity((new Intent(getActivity(), DetailsActivity.class))
+                                    .putExtras(args), transitionsBundle);
+                        }else{
+                            startActivity((new Intent(getActivity(), DetailsActivity.class))
+                                    .putExtras(args));
+                        }
+
                     }
                 }
             }

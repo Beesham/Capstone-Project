@@ -15,4 +15,7 @@
     <style name="BeerListStyle">
     </style>
 
+    <style name="TransitionPhoto">
+    </style>
+
 </resources>

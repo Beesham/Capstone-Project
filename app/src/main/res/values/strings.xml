@@ -25,6 +25,9 @@
 
     <!-- Home -->
     <string name="home_screen_title">Home</string>
+    <string name="label_time_picker" translatable="true">Started Drinking Time</string>
+    <string name="label_beer_volume" translatable="true">Drink Size</string>
+    <string name="label_beer_count" translatable="true">Beer Count</string>
     <string name="beers_had"><xliff:g id="beers_had">%d</xliff:g> beers had</string>
     <string name="bac_format">BAC: <xliff:g id="bac_format">%.03f</xliff:g>%%</string>
     <string name="title_activity_details">Details</string>
@@ -150,6 +153,9 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <!-- Transitions -->
+    <string name="transition_photo">beer_photo</string>
 
     <!-- A11y Content Description -->
     <string name="a11y_home_toolbar_title">home screen</string>
