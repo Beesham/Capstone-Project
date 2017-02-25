@@ -52,22 +52,40 @@
                             android:minHeight="?actionBarSize"/>
 
                         <TextView
-                            android:id="@+id/beer_name_text_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            tools:text="Beer name"
-                            android:layout_gravity="bottom"
-                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                            android:layout_marginStart="@dimen/activity_horizontal_margin"
-                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+                                android:id="@+id/beer_name_text_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/title_scrim"
+                                tools:text="Beer name"
+                                android:layout_gravity="bottom"
+                                android:paddingLeft="@dimen/activity_horizontal_margin"
+                                android:paddingStart="@dimen/activity_horizontal_margin"
+                                android:paddingBottom="@dimen/activity_horizontal_margin"
+                                android:textSize="34sp"
+                                android:textColor="@android:color/white"/>
                 </FrameLayout>
 
         </android.support.design.widget.AppBarLayout>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/a11y_fab"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_favourite_outline"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/progressBar"/>
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -129,22 +147,6 @@ Proin mattis et orci ac mattis. Maecenas nec nibh consectetur, sollicitudin mass
 
                 </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/a11y_fab"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_favourite_outline"/>
-
-        <ProgressBar
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/progressBar"/>
 
 
 </android.support.design.widget.CoordinatorLayout>
