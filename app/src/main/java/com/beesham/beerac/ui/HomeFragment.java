@@ -48,6 +48,7 @@ import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -68,14 +69,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
     @BindView(R.id.beer_name_text_view) TextView mBeerNameTextView;
-    @BindView(R.id.toolbar_title) TextView mToolbarTitle;
     @BindView(R.id.bac_text_view) TextView mBACTextView;
     @BindView(R.id.total_beers_text_view) TextView mTotalBeersTextView;
     @BindView(R.id.increment_beers_button) TextView mIncrementBeerTextView;
     @BindView(R.id.decrement_beers_button) TextView mDecrementBeerTextView;
-    @BindView(R.id.units_spinner) Spinner mUnitsSpinner;
+    @BindView(R.id.volume_spinner) Spinner mVolumeSpinner;
     @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
-    @BindView(R.id.volume_edit_text) TextView mVolumeEditText;
 
     public static final int INC_BEER = 1;
     public static final int DEC_BEER = 0;
@@ -93,8 +92,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private double mABV;
     private int mBeerCount = 0;
     private double mBAC = 0;
-    private int start_end_time_selector = 0;
     private long mStartTime;
+    private int mVolumeSpinnerPosition;
 
     private SharedPreferences mPreferences;
 
@@ -189,6 +188,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
         mBACTextView.setText(getString(R.string.bac_format, mBAC));
 
+        mVolumeSpinner.setSelection(mVolumeSpinnerPosition);
+        Log.v(LOG_TAG, "position vol onResume:" + mVolumeSpinnerPosition);
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -229,7 +230,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void initializeFirstLaunchVariables(){
         mBeerId = getString(R.string.default_preferred_beer); //Naughty 90 Beer
-        mVolumeEditText.setText(getString(R.string.default_volume));
+        //mVolumeEditText.setText(getString(R.string.default_volume));
         getActivity().getSharedPreferences(getString(R.string.pref_file),
                 MODE_PRIVATE)
                 .edit()
@@ -301,36 +302,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getActivity().getSupportFragmentManager(), TIME_PICKER_FRAG_TAG);
-                start_end_time_selector = 0;
-            }
-        });
-
-        SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        int volInt = prefs.getInt(getString(R.string.beer_volume_key),
-                0);
-        String vol =  Integer.toString(volInt);
-
-        mVolumeEditText.setText(vol);
-
-        mVolumeEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!TextUtils.isEmpty(mVolumeEditText.getText())) {
-                    SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-                    prefs.edit()
-                            .putInt(getString(R.string.beer_volume_key), Integer.parseInt(mVolumeEditText.getText().toString()))
-                            .commit();
-                }
             }
         });
 
@@ -339,18 +310,29 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void setupVolumeUnitsSpinner(){
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.units, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
 
-        mUnitsSpinner.setAdapter(spinnerAdapter);
-        mUnitsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(getActivity(),
+                getResources().getStringArray(R.array.beer_volumes_array),
+                        getResources().getStringArray(R.array.units));
+
+        mVolumeSpinner.setAdapter(spinnerAdapter);
+        mVolumeSpinnerPosition = spinnerAdapter.getPosition(Integer.toString(prefs.getInt(getString(R.string.beer_volume_key),
+                Integer.parseInt(getString(R.string.default_volume)))));
+        Log.v(LOG_TAG, "position vol :" + mVolumeSpinnerPosition);
+
+
+        mVolumeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                 SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
                 prefs.edit()
-                        .putString(getString(R.string.pref_units_key), parent.getItemAtPosition(position).toString())
+                        .putInt(getString(R.string.beer_volume_key), Integer.parseInt(parent.getItemAtPosition(position).toString()))
                         .commit();
+
+                mVolumeSpinnerPosition = position;
+
+                Log.v(LOG_TAG, "val vol to prefs:" + parent.getItemAtPosition(position).toString());
             }
 
             @Override
