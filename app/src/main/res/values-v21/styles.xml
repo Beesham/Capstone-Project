@@ -3,4 +3,9 @@
     <style name="TransitionPhoto">
         <item name="android:transitionName">@string/transition_photo</item>
     </style>
+
+    <style name="TransitionTitle">
+        <item name="android:transitionName">@string/transition_beer_title</item>
+    </style>
+
 </resources>

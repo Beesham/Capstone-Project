@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -119,13 +120,16 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                         ));
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Pair<View, String> beerImagePair = Pair.create((View)beerImageView, beerImageView.getTransitionName());
+                    Pair<View, String> beerTitlePair = Pair.create((View)beer_name_textView, beer_name_textView.getTransitionName());
+
                     Bundle transitionsBundle = ActivityOptionsCompat
                             .makeSceneTransitionAnimation(
                                     (Activity) mContext,
-                                    beerImageView,
-                                    beerImageView.getTransitionName()
+                                    beerImagePair,
+                                    beerTitlePair
                             ).toBundle();
-
+                    
                     mContext.startActivity(new Intent(mContext, DetailsActivity.class)
                             .putExtras(args), transitionsBundle);
                 }else {
