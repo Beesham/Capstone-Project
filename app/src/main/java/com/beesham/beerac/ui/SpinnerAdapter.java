@@ -15,8 +15,6 @@ import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 /**
  * Created by beesham on 23/02/17.
  */
@@ -27,7 +25,7 @@ public class SpinnerAdapter extends BaseAdapter {
     ArrayList<String> mVolumeArray;
     String[] mUnitsArray;
 
-    @BindView(R.id.volume_text_view) TextView mVolumerTextView;
+    @BindView(R.id.volume_text_view) TextView mVolumeTextView;
     @BindView(R.id.units_text_view) TextView mUnitsTextView;
 
     public SpinnerAdapter(Context context, String[] volumeArray, String[] unitsArray) {
@@ -56,7 +54,7 @@ public class SpinnerAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent) {
         view = View.inflate(mContext, R.layout.volume_spinner_item, null);
         ButterKnife.bind(this, view);
-        mVolumerTextView.setText((String) mVolumeArray.get(position));
+        mVolumeTextView.setText((String) mVolumeArray.get(position));
         mUnitsTextView.setText(mUnitsArray[0]);
         return view;
     }

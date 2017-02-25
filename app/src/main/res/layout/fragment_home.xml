@@ -16,12 +16,6 @@
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
-
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -31,16 +25,6 @@
                         android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-
-                    <!--TextView
-                            android:id="@+id/toolbar_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="@string/title_activity_home"
-                            android:contentDescription="@string/a11y_home_toolbar_title"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"/-->
-
                 </android.support.v7.widget.Toolbar>
 
                 <FrameLayout
@@ -62,14 +46,14 @@
                             android:layout_height="wrap_content"
                             tools:text="Beer name"
                             android:layout_gravity="bottom"
-                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                            android:layout_marginStart="@dimen/activity_horizontal_margin"
-                            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                            android:fontFamily="sans-serif"/>
+                            android:background="@drawable/title_scrim"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingStart="@dimen/activity_horizontal_margin"
+                            android:paddingBottom="@dimen/activity_horizontal_margin"
+                            android:textSize="34sp"
+                            android:textColor="@android:color/white"/>
                 </FrameLayout>
             </LinearLayout>
-        </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -78,109 +62,8 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+        <include layout="@layout/fragment_home_base"/>
 
-            <TextView
-                    android:text="@string/label_time_picker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    android:layout_gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textSize="12sp"/>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/drinking_time_start_text_view"
-                    tools:text="3:00PM"
-                    android:contentDescription="@string/a11y_started_drinking_time"
-                    android:layout_gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-
-            <TextView
-                    android:text="@string/label_beer_volume"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    android:layout_gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textSize="12sp"/>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                <Spinner
-                    android:id="@+id/volume_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/a11y_beer_volume"/>
-
-            </LinearLayout>
-
-            <TextView
-                    android:text="@string/label_beer_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="16dp"
-                    android:layout_gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textSize="12sp"/>
-
-            <LinearLayout
-                    android:id="@+id/linear_layout"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <Button
-                        android:id="@+id/decrement_beers_button"
-                        android:text="-"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/a11y_decrement_beer_count"
-                        android:layout_weight="1"/>
-
-                <EditText
-                        android:focusable="false"
-                        android:id="@+id/total_beers_text_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/a11y_beer_count"
-                        android:text="0 beers had"
-                        android:ems="10"
-                        android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:inputType="number"/>
-
-                <Button
-                        android:id="@+id/increment_beers_button"
-                        android:text="+"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/a11y_increment_beer_count"
-                        android:layout_weight="1"/>
-            </LinearLayout>
-
-            <TextView
-                    android:id="@+id/bac_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:contentDescription="@string/a11y_bac"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textAlignment="center"
-                    android:gravity="center"
-                    tools:text="BAC: 0.000%"
-                    android:layout_marginTop="24dp"
-                    android:layout_weight="1"/>
-
-        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
 

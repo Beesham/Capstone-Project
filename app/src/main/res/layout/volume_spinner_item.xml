@@ -5,8 +5,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp">
+>
 
     <TextView
             tools:text="355"
@@ -29,6 +28,8 @@
             android:textAppearance="?android:attr/textAppearanceListItemSmall"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:gravity="center_vertical"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
             android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
             android:paddingRight="?android:attr/listPreferredItemPaddingRight"/>
 </LinearLayout>
