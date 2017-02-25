@@ -162,6 +162,8 @@
 
     <!-- Transitions -->
     <string name="transition_photo">beer_photo</string>
+    <string name="transition_beer_title">beer_title</string>
+
 
     <!-- A11y Content Description -->
     <string name="a11y_home_toolbar_title">home screen</string>

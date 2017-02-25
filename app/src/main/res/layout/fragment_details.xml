@@ -53,6 +53,7 @@
 
                         <TextView
                                 android:id="@+id/beer_name_text_view"
+                                style="@style/TransitionTitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/title_scrim"
