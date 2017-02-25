@@ -38,6 +38,7 @@
                     android:paddingStart="8dp"
                     android:paddingLeft="8dp"
                     android:id="@+id/beer_name_text_view"
+                    style="@style/TransitionTitle"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:fontFamily="roboto-regular"
