@@ -20,6 +20,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.text.TextUtilsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -263,11 +264,14 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                         args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            Pair<View, String> beerImagePair = Pair.create((View)mBeerImage, mBeerImage.getTransitionName());
+                            Pair<View, String> beerTitlePair = Pair.create((View)mBeerNameTextView, mBeerNameTextView.getTransitionName());
+
                             Bundle transitionsBundle = ActivityOptionsCompat
                                     .makeSceneTransitionAnimation(
                                             getActivity(),
-                                            mBeerImage,
-                                            mBeerImage.getTransitionName()
+                                            beerImagePair,
+                                            beerTitlePair
                                     ).toBundle();
                             startActivity((new Intent(getActivity(), DetailsActivity.class))
                                     .putExtras(args), transitionsBundle);
