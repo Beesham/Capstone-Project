@@ -129,7 +129,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                                     beerImagePair,
                                     beerTitlePair
                             ).toBundle();
-                    
+
                     mContext.startActivity(new Intent(mContext, DetailsActivity.class)
                             .putExtras(args), transitionsBundle);
                 }else {
