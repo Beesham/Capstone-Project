@@ -75,7 +75,8 @@
             android:contentDescription="@string/a11y_fab"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_favourite_outline"/>
+            app:srcCompat="@drawable/ic_favourite_outline"
+            app:layout_behavior="com.beesham.beerac.ui.ScrollAwareFABBehavior"/>
 
         <ProgressBar
             style="?android:attr/progressBarStyle"
