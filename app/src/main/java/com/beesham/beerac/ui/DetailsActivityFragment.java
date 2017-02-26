@@ -64,6 +64,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
     @BindView(R.id.abv_text_view) TextView mAbvTextView;
+    @BindView(R.id.title_scrim_view) View mTitleScrimView;
     @BindView(R.id.style_name_text_view) TextView mBeerStyleNameTextView;
     @BindView(R.id.style_description_text_view) TextView mBeerStyleDescriptionTextView;
     @BindView(R.id.food_pairings_text_view) TextView mFoodPairingsTextView;
@@ -117,8 +118,10 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         if(bundle != null){
             if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
                 if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)) {
+                    mTitleScrimView.setVisibility(View.GONE);
                     beerImageView.setVisibility(View.GONE);
                 }else{
+                    mTitleScrimView.setVisibility(View.VISIBLE);
                     beerImageView.setVisibility(View.VISIBLE);
                 }
             }
