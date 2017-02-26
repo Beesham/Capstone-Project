@@ -265,13 +265,11 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             Pair<View, String> beerImagePair = Pair.create((View)mBeerImage, mBeerImage.getTransitionName());
-                            Pair<View, String> beerTitlePair = Pair.create((View)mBeerNameTextView, mBeerNameTextView.getTransitionName());
 
                             Bundle transitionsBundle = ActivityOptionsCompat
                                     .makeSceneTransitionAnimation(
                                             getActivity(),
-                                            beerImagePair,
-                                            beerTitlePair
+                                            beerImagePair
                                     ).toBundle();
                             startActivity((new Intent(getActivity(), DetailsActivity.class))
                                     .putExtras(args), transitionsBundle);

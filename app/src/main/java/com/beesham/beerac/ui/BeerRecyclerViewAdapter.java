@@ -121,13 +121,11 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     Pair<View, String> beerImagePair = Pair.create((View)beerImageView, beerImageView.getTransitionName());
-                    Pair<View, String> beerTitlePair = Pair.create((View)beer_name_textView, beer_name_textView.getTransitionName());
 
                     Bundle transitionsBundle = ActivityOptionsCompat
                             .makeSceneTransitionAnimation(
                                     (Activity) mContext,
-                                    beerImagePair,
-                                    beerTitlePair
+                                    beerImagePair
                             ).toBundle();
 
                     mContext.startActivity(new Intent(mContext, DetailsActivity.class)

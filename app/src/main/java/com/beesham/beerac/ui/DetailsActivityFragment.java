@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -61,7 +63,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     private Beer beer;
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
-    @BindView(R.id.beer_name_text_view) TextView beerNameTextView;
     @BindView(R.id.abv_text_view) TextView mAbvTextView;
     @BindView(R.id.style_name_text_view) TextView mBeerStyleNameTextView;
     @BindView(R.id.style_description_text_view) TextView mBeerStyleDescriptionTextView;
@@ -69,6 +70,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @BindView(R.id.photo) ImageView beerImageView;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
 
     public DetailsActivityFragment() {
     }
@@ -76,6 +78,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         Bundle bundle = getArguments();
         if(bundle != null) {
@@ -107,16 +110,15 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
             ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_navigate_home));
         }
 
         Bundle bundle = getArguments();
         if(bundle != null){
             if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
                 if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)) {
-                    beerNameTextView.setVisibility(View.GONE);
                     beerImageView.setVisibility(View.GONE);
                 }else{
-                    beerNameTextView.setVisibility(View.VISIBLE);
                     beerImageView.setVisibility(View.VISIBLE);
                 }
             }
@@ -223,7 +225,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             mFab.setImageResource(R.drawable.ic_favourite_fill);
 
         progressBar.setVisibility(View.GONE);
-        if(beerNameTextView != null) beerNameTextView.setText(beer.getName());
+        mCollapsingToolbar.setTitle(beer.getName());
         descriptionTextView.setText(beer.getDescription());
         mBeerStyleNameTextView.setText(beer.getStyleName());
         mAbvTextView.setText(getString(R.string.abv_format, beer.getAbv()));
