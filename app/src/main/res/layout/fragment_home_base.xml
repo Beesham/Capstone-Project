@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
@@ -60,40 +61,42 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="12sp"/>
 
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
         <LinearLayout
                 android:id="@+id/linear_layout"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
 
-            <Button
+            <ImageButton
                     android:id="@+id/decrement_beers_button"
-                    android:text="-"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/a11y_decrement_beer_count"
-                    android:layout_weight="1"/>
+                    app:srcCompat="@drawable/button_decrease"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/a11y_decrement_beer_count"/>
 
             <EditText
                     android:focusable="false"
                     android:id="@+id/total_beers_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:contentDescription="@string/a11y_beer_count"
                     android:text="0 beers had"
                     android:ems="10"
-                    android:layout_weight="1"
                     android:textAlignment="center"
                     android:inputType="number"/>
 
-            <Button
+            <ImageButton
                     android:id="@+id/increment_beers_button"
-                    android:text="+"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/a11y_increment_beer_count"
-                    android:layout_weight="1"/>
+                    app:srcCompat="@drawable/button_increase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/a11y_increment_beer_count"/>
         </LinearLayout>
+        </FrameLayout>
 
         <TextView
                 android:id="@+id/bac_text_view"
