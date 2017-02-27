@@ -41,7 +41,7 @@ public class BeerACIntentService extends IntentService {
     public static final String RESPONSE_NO_LABELS = "N";
 
     private static final String BREWERY_BASE_URL = "http://api.brewerydb.com/v2";
-    private static final String KEY = "b0c0eceef49f7ecd827331cde0912036 "; //TODO: place API key here
+    private static final String KEY = "xxxxxxxxxxxxxxxxxxxxx"; //TODO: place API key here
     private final String PATH_SEARCH = "search";
     private static final String PATH_BEER = "beer";
 
