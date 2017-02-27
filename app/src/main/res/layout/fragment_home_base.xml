@@ -85,7 +85,6 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/a11y_beer_count"
                     android:text="0 beers had"
-                    android:ems="10"
                     android:textAlignment="center"
                     android:inputType="number"/>
 
