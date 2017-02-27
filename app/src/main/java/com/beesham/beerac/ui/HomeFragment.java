@@ -3,8 +3,6 @@ package com.beesham.beerac.ui;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -19,14 +17,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,7 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,14 +43,11 @@ import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.editable;
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
@@ -72,8 +63,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @BindView(R.id.beer_name_text_view) TextView mBeerNameTextView;
     @BindView(R.id.bac_text_view) TextView mBACTextView;
     @BindView(R.id.total_beers_text_view) TextView mTotalBeersTextView;
-    @BindView(R.id.increment_beers_button) TextView mIncrementBeerTextView;
-    @BindView(R.id.decrement_beers_button) TextView mDecrementBeerTextView;
+    @BindView(R.id.increment_beers_button) ImageButton mIncrementBeerButton;
+    @BindView(R.id.decrement_beers_button) ImageButton mDecrementBeerButton;
     @BindView(R.id.volume_spinner) Spinner mVolumeSpinner;
     @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
 
@@ -283,7 +274,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        mIncrementBeerTextView.setOnClickListener(new View.OnClickListener() {
+        mIncrementBeerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 increaseBeerCount();
@@ -291,7 +282,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        mDecrementBeerTextView.setOnClickListener(new View.OnClickListener() {
+        mDecrementBeerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 decreaseBeerCount();
