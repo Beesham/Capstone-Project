@@ -131,7 +131,6 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onSaveInstanceState(outState);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Bundle bundle) {
         if (mListener != null) {
             mListener.onFragmentInteraction(bundle);
@@ -164,7 +163,6 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Bundle bundle);
     }
 
