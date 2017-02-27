@@ -168,7 +168,8 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
                     .commit();
         }
 
-        getActivity().finish();
+        if(!HomeActivity.mTwoPane)
+            getActivity().finish();
     }
 
     private boolean checkIfBeerExists(){
