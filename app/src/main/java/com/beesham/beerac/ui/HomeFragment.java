@@ -86,6 +86,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private double mBAC = 0;
     private long mStartTime;
     private int mVolumeSpinnerPosition;
+    SpinnerAdapter spinnerAdapter;
 
     private SharedPreferences mPreferences;
 
@@ -174,13 +175,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mBeerCount = prefs .getInt(getString(R.string.beer_count_key), mBeerCount);
             updateBeerCountTextView();
         }
+        
+        updateBAC();
 
-        mBAC = Double.longBitsToDouble(getActivity().getSharedPreferences(getString(R.string.pref_file),
-                MODE_PRIVATE)
-                .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
-        mBACTextView.setText(getString(R.string.bac_format, mBAC));
-
+        spinnerAdapter.notifyDataSetChanged();
         mVolumeSpinner.setSelection(mVolumeSpinnerPosition);
+
         Log.v(LOG_TAG, "position vol onResume:" + mVolumeSpinnerPosition);
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
@@ -305,7 +305,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private void setupVolumeUnitsSpinner(){
         SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
 
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapter(getActivity(),
+        spinnerAdapter = new SpinnerAdapter(getActivity(),
                 getResources().getStringArray(R.array.beer_volumes_array),
                         getResources().getStringArray(R.array.units));
 
@@ -324,8 +324,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                         .commit();
 
                 mVolumeSpinnerPosition = position;
-
-                Log.v(LOG_TAG, "val vol to prefs:" + parent.getItemAtPosition(position).toString());
+                updateBAC();
             }
 
             @Override
@@ -353,7 +352,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mBeerCount = Utils.adjustBeerCount(getActivity(), INC_BEER, mBeerCount);
         updateBeerCountTextView();
         //storeBeerCount();
-        Utils.updateWidget(getActivity());
     }
 
     public void decreaseBeerCount(){
@@ -362,12 +360,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         updateBeerCountTextView();
         //storeBeerCount();
-        Utils.updateWidget(getActivity());
     }
 
     private void updateBAC(){
         getBAC();
         mBACTextView.setText(getString(R.string.bac_format, mBAC));
+        Utils.updateWidget(getActivity());
     }
 
     private void getBAC(){
@@ -384,6 +382,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .edit()
                 .putLong( getActivity().getString(R.string.start_drinking_time_key), mStartTime)
                 .apply();
+
+        updateBAC();
     }
 
     public void setUriInHomeActivity(String uri) {
