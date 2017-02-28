@@ -69,28 +69,6 @@ public class SettingsActivity extends PreferenceActivity {
                             ? listPreference.getEntries()[index]
                             : null);
 
-        } else if (preference instanceof RingtonePreference) {
-            // For ringtone preferences, look up the correct display value
-            // using RingtoneManager.
-            if (TextUtils.isEmpty(stringValue)) {
-                // Empty values correspond to 'silent' (no ringtone).
-                preference.setSummary(R.string.pref_ringtone_silent);
-
-            } else {
-                Ringtone ringtone = RingtoneManager.getRingtone(
-                        preference.getContext(), Uri.parse(stringValue));
-
-                if (ringtone == null) {
-                    // Clear the summary if there was a lookup error.
-                    preference.setSummary(null);
-                } else {
-                    // Set the summary to reflect the new ringtone display
-                    // name.
-                    String name = ringtone.getTitle(preference.getContext());
-                    preference.setSummary(name);
-                }
-            }
-
         } else {
             // For all other preferences, set the summary to the value's
             // simple string representation.
@@ -134,10 +112,10 @@ public class SettingsActivity extends PreferenceActivity {
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_gender_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_body_weight_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
     }
 
-    @Override
+   /* @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == LocationEditTextPreference.PLACE_PICKER_REQUEST){
             if(resultCode == RESULT_OK){
@@ -169,23 +147,9 @@ public class SettingsActivity extends PreferenceActivity {
                     Toast.makeText(this, R.string.location_error, Toast.LENGTH_SHORT).show();
                 }
 
-
-               /* // Add attributions for our new PlacePicker location.
-                if (mAttribution != null) {
-                    mAttribution.setVisibility(View.VISIBLE);
-                } else {
-                    // For pre-Honeycomb devices, we cannot add a footer, so we will use a snackbar
-                    View rootView = findViewById(android.R.id.content);
-                    Snackbar.make(rootView, getString(R.string.attribution_text),
-                            Snackbar.LENGTH_LONG).show();
-                }*/
-
-
-                //Utility.resetLocationStatus(this);
-                //SunshineSyncAdapter.syncImmediately(this);
             }else{
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
-    }
+    }*/
 }
