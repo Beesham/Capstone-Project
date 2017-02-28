@@ -387,7 +387,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .edit()
                 .putLong( getActivity().getString(R.string.start_drinking_time_key), mStartTime)
                 .apply();
-        
+
         updateBAC();
     }
 
