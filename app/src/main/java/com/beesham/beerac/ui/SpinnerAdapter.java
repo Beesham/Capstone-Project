@@ -1,6 +1,8 @@
 package com.beesham.beerac.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +56,18 @@ public class SpinnerAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent) {
         view = View.inflate(mContext, R.layout.volume_spinner_item, null);
         ButterKnife.bind(this, view);
-        mVolumeTextView.setText((String) mVolumeArray.get(position));
-        mUnitsTextView.setText(mUnitsArray[0]);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+
+        if(preferences.getString(mContext.getString(R.string.pref_units_key),
+                mContext.getString(R.string.pref_units_default)).equals(mContext.getString(R.string.pref_units_default))) {
+            mUnitsTextView.setText(mUnitsArray[0]);
+            mVolumeTextView.setText((String) mVolumeArray.get(position));
+
+        }else{
+            mUnitsTextView.setText(mUnitsArray[1]);
+            mVolumeTextView.setText((String) Double.toString(Utils.mLToOz(Integer.parseInt(mVolumeArray.get(position)))));
+        }
         return view;
     }
 
