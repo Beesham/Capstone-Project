@@ -18,4 +18,7 @@
     <style name="TransitionPhoto"/>
     <style name="TransitionTitle"/>
 
+    <!-- Settings activity theme. -->
+    <style name="SettingsTheme" parent="AppTheme"/>
+
 </resources>
