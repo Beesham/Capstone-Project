@@ -34,7 +34,7 @@ public class UtilsTest{
 
     @Test
     public void convertMillisToHourAndMins() throws Exception {
-        long time =  Utils.timeInMillis(13, 15);
+        long time =  Utils.timeInMillis(13, 15); // 13 hours (1pm), 15 mins
         int[] timeArray;
 
         timeArray = Utils.convertTimeMillisToHourAndMins(time);
