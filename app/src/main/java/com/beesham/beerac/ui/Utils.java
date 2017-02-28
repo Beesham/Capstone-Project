@@ -395,6 +395,14 @@ public class Utils {
         return (TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute));
     }
 
+    public static int[] convertTimeMillisToHourAndMins(long millis){
+        int[] timeArray = new int[2];
+        timeArray[0] = (int) TimeUnit.MILLISECONDS.toHours(millis);
+        timeArray[1] = (int) TimeUnit.MILLISECONDS.toMinutes(millis)%60;
+
+        return timeArray;
+    }
+
     public static int adjustBeerCount(Context context, int incDecFlag, int beerCount){
 
         switch (incDecFlag){

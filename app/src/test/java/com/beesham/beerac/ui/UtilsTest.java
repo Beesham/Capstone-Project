@@ -4,12 +4,14 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by beesham on 05/02/17.
  */
+
 public class UtilsTest{
     @Test
     public void calculateBAC() throws Exception {
@@ -28,6 +30,17 @@ public class UtilsTest{
                 timePassed);
 
         assertEquals(0.106, bac);
+    }
+
+    @Test
+    public void convertMillisToHourAndMins() throws Exception {
+        long time =  Utils.timeInMillis(13, 15);
+        int[] timeArray;
+
+        timeArray = Utils.convertTimeMillisToHourAndMins(time);
+
+        assertEquals(13, timeArray[0]);
+        assertEquals(15, timeArray[1]);
     }
 
 }

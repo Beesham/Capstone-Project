@@ -139,15 +139,10 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     MODE_PRIVATE)
                     .getLong(getString(R.string.bac_key), Double.doubleToLongBits(0f)));
 
-            Calendar calendar = Calendar.getInstance();
-            setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-            mStartTime = getActivity().getSharedPreferences(getString(R.string.pref_file),
-                    MODE_PRIVATE)
-                    .getLong(getString(R.string.start_drinking_time_key),
-                            Utils.timeInMillis(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
-
             updateBeerCountTextView();
             mBACTextView.setText(getString(R.string.bac_format, mBAC));
+
+            Log.v(LOG_TAG, "savedInstance null");
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
@@ -175,7 +170,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mBeerCount = prefs .getInt(getString(R.string.beer_count_key), mBeerCount);
             updateBeerCountTextView();
         }
-        
+
+        restoreTime();
         updateBAC();
 
         spinnerAdapter.notifyDataSetChanged();
@@ -297,9 +293,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 timePicker.show(getActivity().getSupportFragmentManager(), TIME_PICKER_FRAG_TAG);
             }
         });
-
-        Calendar calendar = Calendar.getInstance();
-        setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
     }
 
     private void setupVolumeUnitsSpinner(){
@@ -362,6 +355,18 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         //storeBeerCount();
     }
 
+    private void restoreTime(){
+        //Restore mStartTime val from prefs
+        Calendar calendar = Calendar.getInstance();
+        mStartTime = getActivity().getSharedPreferences(getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .getLong(getString(R.string.start_drinking_time_key),
+                        Utils.timeInMillis(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
+
+        int[] timeArray = Utils.convertTimeMillisToHourAndMins(mStartTime);
+        setTime(timeArray[0], timeArray[1]);
+    }
+
     private void updateBAC(){
         getBAC();
         mBACTextView.setText(getString(R.string.bac_format, mBAC));
@@ -382,7 +387,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .edit()
                 .putLong( getActivity().getString(R.string.start_drinking_time_key), mStartTime)
                 .apply();
-
+        
         updateBAC();
     }
 
