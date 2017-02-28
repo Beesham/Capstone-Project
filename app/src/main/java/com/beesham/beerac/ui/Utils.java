@@ -323,7 +323,8 @@ public class Utils {
     }
 
     public static double mLToOz(int mL){
-        return mL /  29.5735296875;
+        DecimalFormat df = new DecimalFormat("#.#");
+        return Double.parseDouble(df.format(mL /  29.5735296875));
     }
 
     public static String doubleToString(double d){
@@ -335,14 +336,14 @@ public class Utils {
     }
 
     public static double getBac(Context context){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
 
 
-        String gender = preferences.getString(context.getString(R.string.pref_gender_key),
+        String gender = defaultPreferences.getString(context.getString(R.string.pref_gender_key),
                 context.getString(R.string.pref_gender_default));
 
-        double bodyWeight = Double.parseDouble(preferences.getString(context.getString(R.string.pref_body_weight_key),
+        double bodyWeight = Double.parseDouble(defaultPreferences.getString(context.getString(R.string.pref_body_weight_key),
                 context.getString(R.string.pref_default_body_weight)));
 
         double timePassed = getTimePassed(context);
@@ -372,20 +373,14 @@ public class Utils {
             abv = Double.parseDouble(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.ABV)));
         }
 
-        if(prefs.getString(context.getString(R.string.pref_units_key), null).equals("mL")){
-            drinkSize = Utils.mLToOz(context.getSharedPreferences(context.getString(R.string.pref_file),
-                    MODE_PRIVATE)
-                    .getInt(context.getString(R.string.beer_volume_key),
-                            Integer.parseInt(context.getString(R.string.default_volume))));
-        }else{
-            drinkSize = (context.getSharedPreferences(context.getString(R.string.pref_file),
-                    MODE_PRIVATE)
-                    .getInt(context.getString(R.string.beer_volume_key),
-                            Integer.parseInt(context.getString(R.string.default_volume))));
-        }
+
+        drinkSize = Utils.mLToOz(context.getSharedPreferences(context.getString(R.string.pref_file),
+                MODE_PRIVATE)
+                .getInt(context.getString(R.string.beer_volume_key),
+                        Integer.parseInt(context.getString(R.string.default_volume))));
+
 
         return calculateBAC(numOfBeers, abv, drinkSize, gender, bodyWeight, timePassed);
-
     }
 
     public static void storeBAC(Context context, double bac){
