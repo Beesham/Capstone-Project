@@ -55,13 +55,6 @@ import static com.beesham.beerac.ui.HomeActivity.FRAG_FROM_HOME_ACT_KEY;
  */
 public class DetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Beer>{
 
-    private static final String LOG_TAG = DetailsActivityFragment.class.getSimpleName();
-
-    Uri mUri;
-
-    private Tracker mTracker;
-    private Beer beer;
-
     @BindView(R.id.description_text_view) TextView descriptionTextView;
     @BindView(R.id.abv_text_view) TextView mAbvTextView;
     @BindView(R.id.title_scrim_view) View mTitleScrimView;
@@ -72,6 +65,18 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
+
+    private static final String LOG_TAG = DetailsActivityFragment.class.getSimpleName();
+
+    private static final int LOADER_BEER_EXISTS_ID = 0;
+    private static final int LOADER_SEARCHED_BEER_ID = 1;
+
+
+    Uri mUri;
+
+    private Tracker mTracker;
+    private Beer beer;
+
 
     public DetailsActivityFragment() {
     }
@@ -128,14 +133,18 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         }
 
         if(mUri != null) {
-            getLoaderManager().initLoader(0, null, this).forceLoad();
+            if(Utils.checkIfBeerExists(getContext(), mUri.getPathSegments().get(2))){
+                getLoaderManager().initLoader(LOADER_BEER_EXISTS_ID, null, this).forceLoad();
+            }else {
+                getLoaderManager().initLoader(LOADER_SEARCHED_BEER_ID, null, this).forceLoad();
+            }
         }
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(!checkIfBeerExists()) {
+                if(!Utils.checkIfBeerExists(getContext(), beer.getId())) {
                     String beerId = beer.getId();
                     Intent intent = new Intent(getActivity(), BeerACIntentService.class);
                     intent.setAction(ACTION_GET_BEER_DETAILS);
@@ -172,52 +181,69 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             getActivity().finish();
     }
 
-    private boolean checkIfBeerExists(){
-        final String[] projections = {
-                Columns.SavedBeerColumns.BEERID,
-        };
-
-        Cursor c = getActivity().getContentResolver().query(
-                BeerProvider.SavedBeers.CONTENT_URI,
-                projections,
-                Columns.SavedBeerColumns.BEERID + "=?",
-                new String[]{beer.getId()},
-                null);
-
-        if(c.getCount() > 0){
-            return true;
-        }
-
-        return false;
-    }
-
     @Override
     public Loader<Beer> onCreateLoader(int id, Bundle args) {
-        return new android.support.v4.content.AsyncTaskLoader<Beer>(getActivity()) {
-            @Override
-            public Beer loadInBackground() {
-                String responseStr = null;
-                OkHttpClient client = new OkHttpClient();
-
-                Request request = new Request.Builder()
-                        .url(mUri.toString())
-                        .build();
-
-                try {
-                    Response response = client.newCall(request).execute();
-                    responseStr = response.body().string();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    return Utils.extractBeerDetails(responseStr);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
+        final String[] projections = {
+                Columns.SavedBeerColumns.BEERID,
+                Columns.SavedBeerColumns.NAME,
+                Columns.SavedBeerColumns.DESCRIPTION,
+                Columns.SavedBeerColumns.STYLE_NAME,
+                Columns.SavedBeerColumns.STYLE_DESCRIPTION,
+                Columns.SavedBeerColumns.FOOD_PARINGS,
+                Columns.SavedBeerColumns.ISORGANIC,
+                Columns.SavedBeerColumns.YEAR,
+                Columns.SavedBeerColumns.ABV,
+                Columns.SavedBeerColumns.LABELS,
+                Columns.SavedBeerColumns.IMAGEURLICON,
+                Columns.SavedBeerColumns.IMAGEURLLARGE,
+                Columns.SavedBeerColumns.IMAGEURLMEDIUM
         };
+
+        switch (id){
+            case LOADER_BEER_EXISTS_ID:
+                return new android.support.v4.content.AsyncTaskLoader<Beer>(getActivity()) {
+                    @Override
+                    public Beer loadInBackground() {
+                        Cursor c = getContext().getContentResolver().query(
+                                BeerProvider.SavedBeers.CONTENT_URI,
+                                projections,
+                                Columns.SavedBeerColumns.BEERID + "=?",
+                                new String[]{mUri.getPathSegments().get(2)},
+                                null);
+
+                        return Utils.extractBeerFromCursor(c);
+                    }
+                };
+
+
+            case LOADER_SEARCHED_BEER_ID:
+                return new android.support.v4.content.AsyncTaskLoader<Beer>(getActivity()) {
+                    @Override
+                    public Beer loadInBackground() {
+                        String responseStr = null;
+                        OkHttpClient client = new OkHttpClient();
+
+                        Request request = new Request.Builder()
+                                .url(mUri.toString())
+                                .build();
+
+                        try {
+                            Response response = client.newCall(request).execute();
+                            responseStr = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            return Utils.extractBeerDetails(responseStr);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+        }
+        return null;
     }
 
     @Override
@@ -228,7 +254,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             return;
         }
 
-        if(checkIfBeerExists())
+        if(Utils.checkIfBeerExists(getActivity(), beer.getId()))
             mFab.setImageResource(R.drawable.ic_favourite_fill);
 
         progressBar.setVisibility(View.GONE);
