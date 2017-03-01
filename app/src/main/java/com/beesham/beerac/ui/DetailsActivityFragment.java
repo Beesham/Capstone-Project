@@ -223,7 +223,10 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @Override
     public void onLoadFinished(Loader<Beer> loader, Beer data) {
         beer = data;
-        if(beer == null) return;
+        if(beer == null) {
+            beerImageView.setImageResource(R.drawable.stockbeer);
+            return;
+        }
 
         if(checkIfBeerExists())
             mFab.setImageResource(R.drawable.ic_favourite_fill);
@@ -240,6 +243,8 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             if (!TextUtils.isEmpty(beer.getUrl_large())) {
                 Picasso.with(getContext())
                         .load(beer.getUrl_large())
+                        .placeholder(R.drawable.stockbeer)
+                        .error(R.drawable.stockbeer)
                         .into(beerImageView);
             }
         }
