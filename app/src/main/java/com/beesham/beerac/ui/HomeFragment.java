@@ -466,8 +466,11 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals(RESPONSE_HAS_LABELS)){
             Picasso.with(getActivity())
                     .load(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)))
-                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.stockbeer)
+                    .error(R.drawable.stockbeer)
                     .into(mBeerImage);
+
+            Log.v(LOG_TAG, "beer image url: " + data.getString(data.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)));
         }
 
         mBeerNameTextView.setText(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.NAME)));
