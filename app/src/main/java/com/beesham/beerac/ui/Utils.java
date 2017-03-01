@@ -13,6 +13,7 @@ import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.beesham.beerac.R;
@@ -167,6 +168,8 @@ public class Utils {
     }
 
     public static Beer extractBeerDetails(String jsonResponse) throws JSONException {
+        if(TextUtils.isEmpty(jsonResponse)) return null;
+
         JSONObject beerJsonObj = new JSONObject(jsonResponse);
 
         String name;
