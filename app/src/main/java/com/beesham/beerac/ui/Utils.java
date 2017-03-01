@@ -247,6 +247,40 @@ public class Utils {
         return beer;
     }
 
+    public static Beer extractBeerFromCursor(Cursor c){
+        boolean hasLabels = false;
+        int year = 0;
+        c.moveToFirst();
+
+        if(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals(RESPONSE_HAS_LABELS)){
+            hasLabels = true;
+        }
+
+        if(!TextUtils.isEmpty(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.YEAR)))){
+            year = Integer.parseInt(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.YEAR)));
+        }
+
+        Beer beer = new Beer(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.NAME)),
+                c.getString(c.getColumnIndex(Columns.SavedBeerColumns.BEERID)),
+                c.getString(c.getColumnIndex(Columns.SavedBeerColumns.DESCRIPTION)),
+                c.getString(c.getColumnIndex(Columns.SavedBeerColumns.ABV)),
+                hasLabels,
+                year);
+
+        beer.setIsOrganic(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.ISORGANIC)));
+        beer.setFoodPairings(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.FOOD_PARINGS)));
+        beer.setStyleName(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.STYLE_NAME)));
+        beer.setStyleDescription(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.STYLE_DESCRIPTION)));
+        if(hasLabels) {
+            beer.setUrl_icon(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLICON)));
+            beer.setUrl_medium(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLMEDIUM)));
+            beer.setUrl_large(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)));
+        }
+
+        c.close();
+        return beer;
+    }
+
     /**
      * BAC is calculated using Widmark Formula
      * % BAC = (A x 5.14 / W x r) – .015 x H
@@ -437,6 +471,25 @@ public class Utils {
         // since it seems the onUpdate() is only fired on that:
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
         context.sendBroadcast(intent);
+    }
+
+    public static boolean checkIfBeerExists(Context context, String beerId){
+        final String[] projections = {
+                Columns.SavedBeerColumns.BEERID,
+        };
+
+        Cursor c = context.getContentResolver().query(
+                BeerProvider.SavedBeers.CONTENT_URI,
+                projections,
+                Columns.SavedBeerColumns.BEERID + "=?",
+                new String[]{beerId},
+                null);
+
+        if(c.getCount() > 0){
+            return true;
+        }
+
+        return false;
     }
 
     /**
