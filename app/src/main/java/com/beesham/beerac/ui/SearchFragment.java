@@ -256,7 +256,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         if(mBeerRecyclerViewAdapter.getItemCount() == 0){
             mEmptyView.setVisibility(View.VISIBLE);
             if(!Utils.isOnline(getActivity())){
-                mEmptyView.setText(getString(R.string.empty_beer_list) + "\n" + getString(R.string.no_connectivity));
+                mEmptyView.setText(getString(R.string.no_connectivity));
             }else{
                 mEmptyView.setText(getString(R.string.no_results));
             }
