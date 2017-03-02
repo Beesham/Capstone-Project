@@ -77,8 +77,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     private static String PREF_FILE;
 
 
-    private int LOADER_FIRST_LAUNCH_ID = 0;
-    private int LOADER_ID = 1;
+    private static final int LOADER_FIRST_LAUNCH_ID = 0;
+    private static final int LOADER_ID = 1;
 
     private String mBeerId;
     private double mABV;
@@ -432,7 +432,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         };
 
         switch (id) {
-            case 0 :{
+            case LOADER_FIRST_LAUNCH_ID :{
                 return new CursorLoader(
                         getContext(),
                         BeerProvider.SavedBeers.CONTENT_URI,
@@ -443,7 +443,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 );
             }
 
-            case 1 :{
+            case LOADER_ID :{
                 return new CursorLoader(
                         getContext(),
                         BeerProvider.SavedBeers.CONTENT_URI,
@@ -460,7 +460,10 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if(!data.moveToFirst()) return;
+        if(!data.moveToFirst()){
+            mBeerImage.setImageResource(R.drawable.stockbeer);
+            return;
+        }
 
         data.moveToFirst();
         if(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals(RESPONSE_HAS_LABELS)){
@@ -469,15 +472,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     .placeholder(R.drawable.stockbeer)
                     .error(R.drawable.stockbeer)
                     .into(mBeerImage);
-
-            Log.v(LOG_TAG, "beer image url: " + data.getString(data.getColumnIndex(Columns.SavedBeerColumns.IMAGEURLLARGE)));
         }
 
         mBeerNameTextView.setText(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.NAME)));
         mBeerNameTextView.setContentDescription(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.NAME)));
 
         mBeerImage.setContentDescription(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.NAME)) + getString(R.string.image_content_description));
-
 
         mABV = Double.parseDouble(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.ABV)));
     }
