@@ -65,6 +65,8 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
+    @BindView(R.id.empty_view) TextView mEmptyView;
+
 
     private static final String LOG_TAG = DetailsActivityFragment.class.getSimpleName();
 
@@ -251,6 +253,8 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         beer = data;
         if(beer == null) {
             beerImageView.setImageResource(R.drawable.stockbeer);
+            progressBar.setVisibility(View.GONE);
+            mFab.setVisibility(View.GONE);
             return;
         }
 
@@ -258,6 +262,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             mFab.setImageResource(R.drawable.ic_favourite_fill);
 
         progressBar.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.GONE);
         mCollapsingToolbar.setTitle(beer.getName());
         descriptionTextView.setText(beer.getDescription());
         mBeerStyleNameTextView.setText(beer.getStyleName());

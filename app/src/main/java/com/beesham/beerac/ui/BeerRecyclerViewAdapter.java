@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.Columns;
@@ -64,6 +65,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                 @Override
                 public void onClick(View view) {
                     mCursor.moveToPosition(getPosition());
+                    final String beerId =  mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID));
 
                     final SharedPreferences prefs =
                             mContext.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
@@ -74,7 +76,6 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                     builder.setPositiveButton(mContext.getString(android.R.string.ok),
                             new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            String beerId =  mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID));
                             prefs.edit()
                                     .putString(mContext.getString(R.string.preferred_beer_key), beerId)
                                     .commit();
@@ -82,9 +83,13 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                             Intent intent = new Intent(mContext, BeerACIntentService.class);
                             intent.setAction(ACTION_GET_BEER_DETAILS);
                             intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
-                            BeerACIntentService.startBeerQueryService(mContext, intent);
+
+                            if(!Utils.checkIfBeerExists(mContext, beerId)) {
+                                BeerACIntentService.startBeerQueryService(mContext, intent);
+                            }
 
                             Utils.updateWidget(mContext);
+
                         }
                     });
                     builder.setNegativeButton(mContext.getString(android.R.string.cancel),
@@ -95,7 +100,17 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                     });
 
                     AlertDialog dialog = builder.create();
-                    dialog.show();
+
+                    if(Utils.isOnline(mContext)) {
+                        dialog.show();
+                    }else if(!Utils.isOnline(mContext) && Utils.checkIfBeerExists(mContext, beerId)){
+                        dialog.show();
+                    }else{
+                        Toast.makeText(mContext, mContext.getString(R.string.no_network) + "\n"  +
+                                        mContext.getString(R.string.unable_to_drink_beer),
+                                Toast.LENGTH_LONG).show();
+                    }
+
                 }
             });
         }

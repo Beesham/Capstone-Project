@@ -132,10 +132,13 @@
 
     <!-- Connectivity error messages -->
     <string name="no_connectivity">The network is not available to fetch beer data</string>
+    <string name="no_network">The network is unavailable</string>
+    <string name="unable_to_drink_beer" translatable="true">Unable to drink beer</string>
     <string name="empty_beer_list">No Beer Saved</string>
     <string name="no_results">No Results Found</string>
     <string name="empty_beer_list_server_down">No beer information available. There seems to be a problem on our end.</string>
-    <string name="appwidget_text">EXAMPLE</string>
+
+
     <string name="add_widget">Add widget</string>
 
 
