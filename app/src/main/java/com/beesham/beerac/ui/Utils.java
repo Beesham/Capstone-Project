@@ -281,6 +281,22 @@ public class Utils {
         return beer;
     }
 
+    public static void logBeers(Context context, Vector<ContentValues> contentValuesVector){
+        int inserted = 0;
+
+        context.getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
+
+        if(contentValuesVector.size() > 0){
+            ContentValues[] contentValuesArray = new ContentValues[contentValuesVector.size()];
+            contentValuesVector.toArray(contentValuesArray);
+            inserted = context.getContentResolver().bulkInsert(BeerProvider.SearchedBeers.CONTENT_URI, contentValuesArray);
+        }
+    }
+
+    public static void logBeers(Context context, ContentValues contentValues) {
+        context.getContentResolver().insert(BeerProvider.SavedBeers.CONTENT_URI, contentValues);
+    }
+
     /**
      * BAC is calculated using Widmark Formula
      * % BAC = (A x 5.14 / W x r) – .015 x H
