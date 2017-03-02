@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.data.BeerProvider;
 
 import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
@@ -44,6 +45,7 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
             mTwoPane = false;
         }
 
+        int rowsdeleted = getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
     }
 
 
