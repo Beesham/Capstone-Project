@@ -89,7 +89,7 @@ public class BeerACIntentService extends IntentService {
         String response = run(builder.build().toString());
         try {
             getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
-            logBeers(Utils.extractBeers(response));
+            Utils.logBeers(getApplicationContext(), Utils.extractBeers(response));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -105,24 +105,7 @@ public class BeerACIntentService extends IntentService {
             e.printStackTrace();
         }
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Columns.SavedBeerColumns.BEERID, beer.getId());
-        contentValues.put(Columns.SavedBeerColumns.DESCRIPTION, beer.getDescription());
-        contentValues.put(Columns.SavedBeerColumns.STYLE_NAME, beer.getStyleName());
-        contentValues.put(Columns.SavedBeerColumns.STYLE_DESCRIPTION, beer.getStyleDescription());
-        contentValues.put(Columns.SavedBeerColumns.NAME, beer.getName());
-        contentValues.put(Columns.SavedBeerColumns.ISORGANIC, beer.getIsOrganic());
-        contentValues.put(Columns.SavedBeerColumns.ABV, beer.getAbv());
-
-        if(beer.hasLabels()){
-            contentValues.put(Columns.SavedBeerColumns.LABELS, RESPONSE_HAS_LABELS);
-            contentValues.put(Columns.SavedBeerColumns.IMAGEURLICON, beer.getUrl_icon());
-            contentValues.put(Columns.SavedBeerColumns.IMAGEURLMEDIUM, beer.getUrl_medium());
-            contentValues.put(Columns.SavedBeerColumns.IMAGEURLLARGE, beer.getUrl_large());
-        }else{
-            contentValues.put(Columns.SavedBeerColumns.LABELS, RESPONSE_NO_LABELS);
-        }
-        logBeers(contentValues);
+        Utils.logBeers(getApplicationContext(), beer.toContentValues());
     }
 
     public static String buildBeerByIdUri(String queryString){
@@ -157,22 +140,4 @@ public class BeerACIntentService extends IntentService {
 
         return responseStr;
     }
-
-
-    private void logBeers(Vector<ContentValues> contentValuesVector){
-        int inserted = 0;
-
-        getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
-
-        if(contentValuesVector.size() > 0){
-            ContentValues[] contentValuesArray = new ContentValues[contentValuesVector.size()];
-            contentValuesVector.toArray(contentValuesArray);
-            inserted = getContentResolver().bulkInsert(BeerProvider.SearchedBeers.CONTENT_URI, contentValuesArray);
-        }
-    }
-
-    private void logBeers(ContentValues contentValues) {
-        getContentResolver().insert(BeerProvider.SavedBeers.CONTENT_URI, contentValues);
-    }
-
 }
