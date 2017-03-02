@@ -89,7 +89,6 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                             }
 
                             Utils.updateWidget(mContext);
-
                         }
                     });
                     builder.setNegativeButton(mContext.getString(android.R.string.cancel),

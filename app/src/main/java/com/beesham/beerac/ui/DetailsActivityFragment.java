@@ -147,12 +147,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             public void onClick(View view) {
 
                 if(!Utils.checkIfBeerExists(getContext(), beer.getId())) {
-                    String beerId = beer.getId();
-                    Intent intent = new Intent(getActivity(), BeerACIntentService.class);
-                    intent.setAction(ACTION_GET_BEER_DETAILS);
-                    intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
-                    BeerACIntentService.startBeerQueryService(getActivity(), intent);
-
+                    Utils.logBeers(getContext(), beer.toContentValues());
                     mFab.setImageResource(R.drawable.ic_favourite_fill);
                 }
                 else {
