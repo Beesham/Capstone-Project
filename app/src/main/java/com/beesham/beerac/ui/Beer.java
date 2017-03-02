@@ -1,5 +1,12 @@
 package com.beesham.beerac.ui;
 
+import android.content.ContentValues;
+
+import com.beesham.beerac.data.Columns;
+
+import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
+import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_NO_LABELS;
+
 /**
  * Created by beesham on 24/01/17.
  * Beer object
@@ -117,4 +124,25 @@ public class Beer {
         this.isOrganic = isOrganic;
     }
 
+    public ContentValues toContentValues(){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Columns.SavedBeerColumns.BEERID, getId());
+        contentValues.put(Columns.SavedBeerColumns.DESCRIPTION, getDescription());
+        contentValues.put(Columns.SavedBeerColumns.STYLE_NAME, getStyleName());
+        contentValues.put(Columns.SavedBeerColumns.STYLE_DESCRIPTION, getStyleDescription());
+        contentValues.put(Columns.SavedBeerColumns.NAME, getName());
+        contentValues.put(Columns.SavedBeerColumns.ISORGANIC, getIsOrganic());
+        contentValues.put(Columns.SavedBeerColumns.ABV, getAbv());
+
+        if(hasLabels()){
+            contentValues.put(Columns.SavedBeerColumns.LABELS, RESPONSE_HAS_LABELS);
+            contentValues.put(Columns.SavedBeerColumns.IMAGEURLICON, getUrl_icon());
+            contentValues.put(Columns.SavedBeerColumns.IMAGEURLMEDIUM, getUrl_medium());
+            contentValues.put(Columns.SavedBeerColumns.IMAGEURLLARGE, getUrl_large());
+        }else{
+            contentValues.put(Columns.SavedBeerColumns.LABELS, RESPONSE_NO_LABELS);
+        }
+
+        return contentValues;
+    }
 }
