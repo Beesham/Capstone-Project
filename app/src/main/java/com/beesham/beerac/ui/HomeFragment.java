@@ -130,6 +130,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
 
+        getActivity().getSupportLoaderManager().initLoader(3, null, this);
+
         if(savedInstanceState == null){
             mBeerCount = getActivity().getSharedPreferences(getString(R.string.pref_file),
                     MODE_PRIVATE)
@@ -159,11 +161,24 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onResume();
 
         SharedPreferences prefs = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
-        if(prefs.contains(getString(R.string.preferred_beer_key))) {
+        /*if(prefs.contains(getString(R.string.preferred_beer_key))) {
             if(mBeerId == null) {
                 mBeerId = prefs.getString(getString(R.string.preferred_beer_key), null);
                 getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
             }
+        }*/
+
+        if(mBeerId == null) {
+            mBeerId = Utils.getBeerIdFromPrefs(getContext());
+            if(mBeerId != null)
+                getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+        }
+
+        if(mBeerId == null){
+            mBeerImage.setImageResource(R.drawable.stockbeer);
+            mBeerNameTextView.setText(R.string.stock_beer_name);
+            mBeerNameTextView.setContentDescription(getString(R.string.stock_beer_name));
+            mABV = Double.parseDouble(getString(R.string.stock_beer_abv));
         }
 
         if(prefs.contains(getString(R.string.beer_count_key))) {
@@ -176,8 +191,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         spinnerAdapter.notifyDataSetChanged();
         mVolumeSpinner.setSelection(mVolumeSpinnerPosition);
-
-        Log.v(LOG_TAG, "position vol onResume:" + mVolumeSpinnerPosition);
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -218,7 +231,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void initializeFirstLaunchVariables(){
         mBeerId = getString(R.string.default_preferred_beer); //Naughty 90 Beer
-        //mVolumeEditText.setText(getString(R.string.default_volume));
         getActivity().getSharedPreferences(getString(R.string.pref_file),
                 MODE_PRIVATE)
                 .edit()
@@ -305,8 +317,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mVolumeSpinner.setAdapter(spinnerAdapter);
         mVolumeSpinnerPosition = spinnerAdapter.getPosition(Integer.toString(prefs.getInt(getString(R.string.beer_volume_key),
                 Integer.parseInt(getString(R.string.default_volume)))));
-        Log.v(LOG_TAG, "position vol :" + mVolumeSpinnerPosition);
-
 
         mVolumeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -344,7 +354,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     public void increaseBeerCount(){
         mBeerCount = Utils.adjustBeerCount(getActivity(), INC_BEER, mBeerCount);
         updateBeerCountTextView();
-        //storeBeerCount();
     }
 
     public void decreaseBeerCount(){
@@ -352,7 +361,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mBeerCount = Utils.adjustBeerCount(getActivity(), DEC_BEER, mBeerCount);
 
         updateBeerCountTextView();
-        //storeBeerCount();
     }
 
     private void restoreTime(){
@@ -453,17 +461,22 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                         null
                 );
             }
-        }
 
-        return null;
+            default:
+                return null;
+        }
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.v(LOG_TAG, "in loaderFin");
+
         if(!data.moveToFirst()){
-            mBeerImage.setImageResource(R.drawable.stockbeer);
+            Log.v(LOG_TAG, "no data in cur");
             return;
         }
+
+        Log.v(LOG_TAG, "data in cur");
 
         data.moveToFirst();
         if(data.getString(data.getColumnIndex(Columns.SavedBeerColumns.LABELS)).equals(RESPONSE_HAS_LABELS)){
