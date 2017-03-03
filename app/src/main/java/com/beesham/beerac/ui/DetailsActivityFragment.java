@@ -250,6 +250,14 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             beerImageView.setImageResource(R.drawable.stockbeer);
             progressBar.setVisibility(View.GONE);
             mFab.setVisibility(View.GONE);
+
+            if(Utils.isOnline(getContext())) {
+                mEmptyView.setVisibility(View.GONE);
+                mAbvTextView.setText(getString(R.string.abv_format, getString(R.string.stock_beer_abv)));
+                descriptionTextView.setText(getString(R.string.stock_beer_description));
+            }
+
+
             return;
         }
 
