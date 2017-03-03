@@ -424,6 +424,8 @@ public class Utils {
 
         if(c.moveToFirst()) {
             abv = Double.parseDouble(c.getString(c.getColumnIndex(Columns.SavedBeerColumns.ABV)));
+        }else{
+            abv = Double.parseDouble(context.getString(R.string.stock_beer_abv));
         }
 
 
