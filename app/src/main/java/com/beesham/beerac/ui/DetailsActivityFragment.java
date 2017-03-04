@@ -173,9 +173,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
                     .putString(getString(R.string.preferred_beer_key), null)
                     .commit();
         }
-
-        if(!HomeActivity.mTwoPane)
-            getActivity().finish();
     }
 
     @Override
