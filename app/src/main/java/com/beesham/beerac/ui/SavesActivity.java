@@ -13,7 +13,7 @@ import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 public class SavesActivity extends AppCompatActivity implements SavesFragment.OnFragmentInteractionListener{//  implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = SavesActivity.class.getSimpleName();
-    private static final String TAG = SavesActivity.class.getSimpleName();
+    public static final String TAG = SavesActivity.class.getSimpleName();
     public static final String FRAG_FROM_SAVE_ACT_KEY = "detail_started_from_save_act";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;

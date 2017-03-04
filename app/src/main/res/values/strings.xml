@@ -109,6 +109,7 @@
 
     <!-- Stock Beer -->
     <string name="stock_beer_name">Stock Beer</string>
+    <string name="stock_beer_id">stock_beer</string>
     <string name="stock_beer_description" translatable="true">Stock Beer is a general beer that has the most common abv. It is not an actual beer that is brewed or distributed. Please drink responsibly.</string>
     <string name="stock_beer_abv">5</string>
 
