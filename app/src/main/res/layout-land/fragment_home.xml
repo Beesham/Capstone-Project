@@ -40,7 +40,7 @@
                     <ImageView
                             android:id="@+id/photo"
                             android:layout_width="match_parent"
-                            android:layout_height="212dp"
+                            android:layout_height="@dimen/beer_photo_height"
                             style="@style/TransitionPhoto"
                             android:scaleType="centerCrop"
                             android:background="@color/photo_placeholder"
@@ -52,11 +52,13 @@
                             android:layout_height="wrap_content"
                             tools:text="Beer name"
                             android:layout_gravity="bottom"
-                            android:paddingLeft="16dp"
-                            android:paddingStart="16dp"
-                            android:paddingBottom="16dp"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:paddingStart="@dimen/activity_horizontal_margin"
+                            android:paddingEnd="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/activity_horizontal_margin"
+                            android:paddingBottom="@dimen/activity_horizontal_margin"
+                            android:textSize="@dimen/beer_name_text_size_display"
                             android:background="@drawable/title_scrim"
-                            android:textSize="34sp"
                             android:textColor="@android:color/white"/>
                 </FrameLayout>
             </LinearLayout>
