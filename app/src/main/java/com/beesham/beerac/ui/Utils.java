@@ -462,7 +462,9 @@ public class Utils {
                 break;
 
             case HomeFragment.DEC_BEER_FLAG:
-                beerCount--;
+                if(beerCount != 0) {
+                    beerCount--;
+                }
                 break;
         }
 
