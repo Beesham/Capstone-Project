@@ -34,7 +34,7 @@
                     <ImageView
                             android:id="@+id/photo"
                             android:layout_width="match_parent"
-                            android:layout_height="212dp"
+                            android:layout_height="@dimen/beer_photo_height"
                             style="@style/TransitionPhoto"
                             android:scaleType="centerCrop"
                             android:background="@color/photo_placeholder"
@@ -50,8 +50,10 @@
                             android:background="@drawable/title_scrim"
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingStart="@dimen/activity_horizontal_margin"
+                            android:paddingEnd="@dimen/activity_horizontal_margin"
+                            android:paddingRight="@dimen/activity_horizontal_margin"
                             android:paddingBottom="@dimen/activity_horizontal_margin"
-                            android:textSize="34sp"
+                            android:textSize="@dimen/beer_name_text_size_display"
                             android:textColor="@android:color/white"/>
                 </FrameLayout>
             </LinearLayout>

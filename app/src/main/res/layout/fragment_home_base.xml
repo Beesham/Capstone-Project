@@ -15,10 +15,10 @@
                 android:text="@string/label_time_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp"
+                android:paddingTop="@dimen/separator_padding"
                 android:layout_gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/label_text_size"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -33,10 +33,10 @@
                 android:text="@string/label_beer_volume"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp"
+                android:paddingTop="@dimen/separator_padding"
                 android:layout_gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/label_text_size"/>
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -56,10 +56,10 @@
                 android:text="@string/label_beer_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp"
+                android:paddingTop="@dimen/separator_padding"
                 android:layout_gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textSize="12sp"/>
+                android:textSize="@dimen/label_text_size"/>
 
         <FrameLayout
                 android:layout_width="match_parent"
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/a11y_beer_count"
-                    android:text="0 beers had"
+                    tools:text="0 beers had"
                     android:textAlignment="center"
                     android:inputType="number"/>
 
@@ -106,7 +106,7 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 tools:text="BAC: 0.000%"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/separator_padding"
                 android:layout_weight="1"/>
 
     </LinearLayout>
