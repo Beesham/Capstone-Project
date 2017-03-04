@@ -143,8 +143,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
             updateBeerCountTextView();
             mBACTextView.setText(getString(R.string.bac_format, mBAC));
-
-            Log.v(LOG_TAG, "savedInstance null");
         }
 
         AnalyticsApplication application = (AnalyticsApplication) getActivity().getApplication();
@@ -293,9 +291,9 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mDecrementBeerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mBeerCount != 0) {
-                    mBeerCount = Utils.adjustBeerCount(getActivity(), DEC_BEER_FLAG, mBeerCount);
-                }
+
+                mBeerCount = Utils.adjustBeerCount(getActivity(), DEC_BEER_FLAG, mBeerCount);
+
 
                 updateBeerCountTextView();
                 updateBAC();
