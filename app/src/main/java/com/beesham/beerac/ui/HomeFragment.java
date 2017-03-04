@@ -134,8 +134,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
 
-        getActivity().getSupportLoaderManager().initLoader(3, null, this);
-
         if(savedInstanceState == null){
             mBeerCount = mSharedPreferences.getInt(getString(R.string.beer_count_key), mBeerCount);
 
@@ -158,6 +156,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onResume() {
         super.onResume();
 
+        mBeerId = Utils.getBeerIdFromPrefs(getContext());
+
         if(mBeerId == null) {
             mBeerId = Utils.getBeerIdFromPrefs(getContext());
             if(mBeerId != null)
@@ -177,6 +177,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         restoreTime();
         updateBAC();
+
 
         spinnerAdapter.notifyDataSetChanged();
         mVolumeSpinner.setSelection(mVolumeSpinnerPosition);
@@ -291,10 +292,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mDecrementBeerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mBeerCount = Utils.adjustBeerCount(getActivity(), DEC_BEER_FLAG, mBeerCount);
-
-
                 updateBeerCountTextView();
                 updateBAC();
             }
