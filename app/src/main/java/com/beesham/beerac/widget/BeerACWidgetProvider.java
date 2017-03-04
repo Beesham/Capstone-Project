@@ -119,7 +119,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
 
         switch (intent.getAction()){
             case INC_BEER_COUNT_ACTION:
-                Utils.adjustBeerCount(context, HomeFragment.INC_BEER,
+                Utils.adjustBeerCount(context, HomeFragment.INC_BEER_FLAG,
                         context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
                         .getInt(context.getString(R.string.beer_count_key), 0));
 
@@ -128,7 +128,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                 break;
 
             case DEC_BEER_COUNT_ACTION:
-                Utils.adjustBeerCount(context, HomeFragment.DEC_BEER,
+                Utils.adjustBeerCount(context, HomeFragment.DEC_BEER_FLAG,
                         context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
                                 .getInt(context.getString(R.string.beer_count_key), 0));
 

@@ -21,4 +21,6 @@
     <!-- Settings activity theme. -->
     <style name="SettingsTheme" parent="AppTheme"/>
 
+    <!-- CardView Style-->
+    <style name="CardView"/>
 </resources>
