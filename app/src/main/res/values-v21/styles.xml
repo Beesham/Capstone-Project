@@ -14,4 +14,9 @@
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
+    <!-- CardView Style-->
+    <style name="CardView">
+        <item name="android:elevation">@dimen/card_view_elevation</item>
+    </style>
+
 </resources>

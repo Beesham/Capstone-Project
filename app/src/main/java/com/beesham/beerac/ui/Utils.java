@@ -14,22 +14,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.widget.BeerACWidgetProvider;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -461,11 +457,11 @@ public class Utils {
     public static int adjustBeerCount(Context context, int incDecFlag, int beerCount){
 
         switch (incDecFlag){
-            case HomeFragment.INC_BEER:
+            case HomeFragment.INC_BEER_FLAG:
                 beerCount++;
                 break;
 
-            case HomeFragment.DEC_BEER:
+            case HomeFragment.DEC_BEER_FLAG:
                 beerCount--;
                 break;
         }

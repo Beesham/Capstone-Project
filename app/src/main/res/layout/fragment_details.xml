@@ -29,7 +29,7 @@
                                 <ImageView
                                     android:id="@+id/photo"
                                     android:layout_width="match_parent"
-                                    android:layout_height="212dp"
+                                    android:layout_height="@dimen/beer_photo_height"
                                     style="@style/TransitionPhoto"
                                     android:scaleType="centerCrop"
                                     android:background="@color/photo_placeholder"
@@ -73,7 +73,8 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
+            android:layout_marginLeft="@dimen/scroll_view_padding"
+            android:layout_marginRight="@dimen/scroll_view_padding"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <FrameLayout
@@ -95,8 +96,8 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:layout_marginBottom="8dp"
+                                    android:paddingTop="@dimen/default_padding"
+                                    android:paddingBottom="@dimen/default_padding"
                                     android:orientation="horizontal">
 
                                         <TextView
