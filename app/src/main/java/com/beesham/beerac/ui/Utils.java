@@ -386,8 +386,6 @@ public class Utils {
 
     public static double getBac(Context context){
         SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE);
-
 
         String gender = defaultPreferences.getString(context.getString(R.string.pref_gender_key),
                 context.getString(R.string.pref_gender_default));
@@ -487,6 +485,18 @@ public class Utils {
         // since it seems the onUpdate() is only fired on that:
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
         context.sendBroadcast(intent);
+    }
+
+    /**
+     * Checks if the weight preferences is empty
+     * @param context
+     * @return true if weight is empty, else false
+     */
+    public static boolean checkForEmptyWeightPref(Context context){
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return TextUtils.isEmpty(defaultPreferences.getString(context.getString(R.string.pref_body_weight_key),
+                null));
     }
 
     public static boolean checkIfBeerExists(Context context, String beerId){
