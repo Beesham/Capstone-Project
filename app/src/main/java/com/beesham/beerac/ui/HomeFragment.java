@@ -283,18 +283,27 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mIncrementBeerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mBeerCount = Utils.adjustBeerCount(getActivity(), INC_BEER_FLAG, mBeerCount);
-                updateBeerCountTextView();
-                updateBAC();
+                if(!Utils.checkForEmptyWeightPref(getActivity())){
+                    mBeerCount = Utils.adjustBeerCount(getActivity(), INC_BEER_FLAG, mBeerCount);
+                    updateBeerCountTextView();
+                    updateBAC();
+                }else{
+                    showToast();
+                }
+
             }
         });
 
         mDecrementBeerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mBeerCount = Utils.adjustBeerCount(getActivity(), DEC_BEER_FLAG, mBeerCount);
-                updateBeerCountTextView();
-                updateBAC();
+                if(!Utils.checkForEmptyWeightPref(getActivity())){
+                    mBeerCount = Utils.adjustBeerCount(getActivity(), DEC_BEER_FLAG, mBeerCount);
+                    updateBeerCountTextView();
+                    updateBAC();
+                }else{
+                    showToast();
+                }
             }
         });
     }
@@ -353,14 +362,23 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void updateBAC(){
-        getBAC();
-        mBACTextView.setText(getString(R.string.bac_format, mBAC));
-        Utils.updateWidget(getActivity());
+        if(!Utils.checkForEmptyWeightPref(getActivity())){
+            getBAC();
+            mBACTextView.setText(getString(R.string.bac_format, mBAC));
+            Utils.updateWidget(getActivity());
+        }else{
+            showToast();
+        }
+
     }
 
     private void getBAC(){
         mBAC = Utils.getBac(getActivity());
         Utils.storeBAC(getContext(), mBAC);
+    }
+
+    private void showToast(){
+        Toast.makeText(getActivity(), getString(R.string.no_weight_toast), Toast.LENGTH_SHORT).show();
     }
 
     public void setTime(int hourOfDay, int minute) {

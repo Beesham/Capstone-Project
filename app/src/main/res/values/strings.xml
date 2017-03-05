@@ -10,6 +10,7 @@
     <string name="bac_key">bac</string>
 
     <string name="default_preferred_beer">oeGSxs</string>
+    <string name="default_volume">355</string>
 
 
     <string name="pref_version_code_key">version_code</string>
@@ -33,7 +34,7 @@
     <string name="title_activity_details">Details</string>
     <string name="action_settings">Settings</string>
 
-    <string name="default_volume">355</string>
+    <string name="no_weight_toast" translatable="true">Please set Weight in app Settings</string>
 
     <!-- Home Units Spinner -->
     <string-array name="units">
