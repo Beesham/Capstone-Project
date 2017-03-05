@@ -28,6 +28,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
         }
+        buildTypes.each {
+            it.buildConfigField 'String', 'BREWERYDB_API_KEY', BREWERYDB_API_KEY
+        }
     }
 }
 
@@ -42,8 +45,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
-    compile 'com.google.android.gms:play-services-location:10.0.1'
-    compile 'com.google.android.gms:play-services-places:10.0.1'
     compile 'com.google.firebase:firebase-ads:10.0.1'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'net.simonvt.schematic:schematic:0.7.0'
