@@ -51,7 +51,6 @@ import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEERS;
  */
 public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    //@BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.adView) AdView mAdView;
     @BindView(R.id.empty_view) TextView mEmptyView;
 
@@ -124,11 +123,9 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
             mBeerRecyclerViewAdapter.onRestoreInstanceState(savedInstanceState);
         }
 
-        //TODO: remove testdevice before launch
-        //MobileAds.initialize(getApplicationContext(), "ca-app-pub-9835470545063758~1394766028");
         AdRequest request = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
-                .addTestDevice("22D3A58CFBB4E012B9BDABD394696C04")  // An example device ID
+                .addTestDevice("XXXXXXXXXXXXXXXXXXXXX")  // Test device ID TODO: place test device id here
                 .build();
         mAdView.loadAd(request);
 
