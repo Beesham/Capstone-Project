@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
@@ -119,24 +120,36 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
 
         switch (intent.getAction()){
             case INC_BEER_COUNT_ACTION:
-                Utils.adjustBeerCount(context, HomeFragment.INC_BEER_FLAG,
-                        context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
-                        .getInt(context.getString(R.string.beer_count_key), 0));
+                if(!Utils.checkForEmptyWeightPref(context)) {
+                    Utils.adjustBeerCount(context, HomeFragment.INC_BEER_FLAG,
+                            context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
+                                    .getInt(context.getString(R.string.beer_count_key), 0));
 
-                Utils.storeBAC(context, Utils.getBac(context));
-                Utils.updateWidget(context);
+                    Utils.storeBAC(context, Utils.getBac(context));
+                    Utils.updateWidget(context);
+                }else{
+                    showToast(context);
+                }
                 break;
 
             case DEC_BEER_COUNT_ACTION:
-                Utils.adjustBeerCount(context, HomeFragment.DEC_BEER_FLAG,
-                        context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
-                                .getInt(context.getString(R.string.beer_count_key), 0));
+                if(!Utils.checkForEmptyWeightPref(context)) {
+                    Utils.adjustBeerCount(context, HomeFragment.DEC_BEER_FLAG,
+                            context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
+                                    .getInt(context.getString(R.string.beer_count_key), 0));
 
-                Utils.storeBAC(context, Utils.getBac(context));
-                Utils.updateWidget(context);
+                    Utils.storeBAC(context, Utils.getBac(context));
+                    Utils.updateWidget(context);
+                }else{
+                    showToast(context);
+                }
                 break;
         }
         super.onReceive(context, intent);
+    }
+
+    private void showToast(Context context){
+        Toast.makeText(context, context.getString(R.string.no_weight_toast), Toast.LENGTH_SHORT).show();
     }
 
     @Override
