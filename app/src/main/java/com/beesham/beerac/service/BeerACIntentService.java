@@ -7,6 +7,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.beesham.beerac.BuildConfig;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.ui.Beer;
@@ -25,9 +26,6 @@ import okhttp3.Response;
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
  */
 public class BeerACIntentService extends IntentService {
 
@@ -41,7 +39,7 @@ public class BeerACIntentService extends IntentService {
     public static final String RESPONSE_NO_LABELS = "N";
 
     private static final String BREWERY_BASE_URL = "http://api.brewerydb.com/v2";
-    private static final String KEY = "b0c0eceef49f7ecd827331cde0912036"; //TODO: place API key here
+    private static final String KEY = BuildConfig.BREWERYDB_API_KEY;
     private final String PATH_SEARCH = "search";
     private static final String PATH_BEER = "beer";
 
