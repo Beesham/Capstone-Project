@@ -1,33 +1,19 @@
 package com.beesham.beerac.ui;
 
-
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.beesham.beerac.R;
 
-import java.io.IOException;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On handset devices,
@@ -118,44 +104,6 @@ public class SettingsActivity extends PreferenceActivity {
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_body_weight_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
     }
-
-   /* @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == LocationEditTextPreference.PLACE_PICKER_REQUEST){
-            if(resultCode == RESULT_OK){
-                Place place = PlacePicker.getPlace(this, data);
-                String address = place.getAddress().toString();
-                LatLng latLng = place.getLatLng();
-
-                if(TextUtils.isEmpty(address)){
-                    address = String.format("(%.2f, %.2f", latLng.latitude, latLng.longitude);
-                }
-
-                String country = null;
-                try {
-                    country = Utils.getCountryName(this, latLng.latitude, latLng.longitude);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(getString(R.string.pref_location_key), country);
-                editor.commit();
-
-                Preference locationPreference = findPreference(getString(R.string.pref_location_key));
-                if(country != null) {
-                    setPreferenceSummary(locationPreference, country);
-                }else{
-                    Toast.makeText(this, R.string.location_error, Toast.LENGTH_SHORT).show();
-                }
-
-            }else{
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        }
-    }*/
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
