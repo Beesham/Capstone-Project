@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
@@ -24,11 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +34,8 @@ import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_NO_LABELS;
 
 /**
  * Created by beesham on 21/01/17.
+ * Utils class contains functions that are referenced multiple times
+ * across the app
  */
 
 public class Utils {
@@ -68,18 +66,13 @@ public class Utils {
     static final String KEY_STATUS = "status";
     static final String KEY_ERR_MSG = "errorMessage";
 
-
-
-    public static String getCountryName(Context context, double latitude, double longitude) throws IOException {
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        List<Address> addresses;
-        addresses = geocoder.getFromLocation(latitude, longitude, 1);
-        if (addresses != null && !addresses.isEmpty()) {
-            return addresses.get(0).getCountryName();
-        }
-        return null;
-    }
-
+    /**
+     * Extracts beers from a json response by parsing for key-value pairs
+     *
+     * @param jsonResponse of the list of beers to be parsed
+     * @return a vector of content values to be inserted in a database
+     * @throws JSONException
+     */
     public static Vector<ContentValues> extractBeers(String jsonResponse) throws JSONException {
 
         int currentPage;
@@ -163,6 +156,12 @@ public class Utils {
         return contentValuesVector;
     }
 
+    /**
+     * Extracts the details of a beer from a json response
+     * @param jsonResponse of a specific beer
+     * @return a beer object that contains relevant details of a beer
+     * @throws JSONException
+     */
     public static Beer extractBeerDetails(String jsonResponse) throws JSONException {
         if(TextUtils.isEmpty(jsonResponse)) return null;
 
@@ -243,6 +242,11 @@ public class Utils {
         return beer;
     }
 
+    /**
+     * Extracts the details of a beer from a cursor
+     * @param c a cursor that holds details of a beer queried from a local db
+     * @return a beer object that contains relevant details of a beer
+     */
     public static Beer extractBeerFromCursor(Cursor c){
         boolean hasLabels = false;
         int year = 0;
@@ -277,6 +281,11 @@ public class Utils {
         return beer;
     }
 
+    /**
+     * Inserts a vector of beers in a local db as cache
+     * @param context
+     * @param contentValuesVector of beer
+     */
     public static void logBeers(Context context, Vector<ContentValues> contentValuesVector){
         int inserted = 0;
 
@@ -289,6 +298,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Inserts a single beers in a local db for offline viewing and as favorites
+     * @param context
+     * @param contentValues
+     */
     public static void logBeers(Context context, ContentValues contentValues) {
         context.getContentResolver().insert(BeerProvider.SavedBeers.CONTENT_URI, contentValues);
     }
@@ -376,14 +390,11 @@ public class Utils {
         return Double.parseDouble(df.format(mL /  29.5735296875));
     }
 
-    public static String doubleToString(double d){
-        return Double.toString(d);
-    }
-
-    public static String integerToString(int i){
-        return Integer.toString(i);
-    }
-
+    /**
+     * Calculates the blood alcohol content
+     * @param context
+     * @return the BAC calculated
+     */
     public static double getBac(Context context){
         SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -432,6 +443,11 @@ public class Utils {
         return calculateBAC(numOfBeers, abv, drinkSize, gender, bodyWeight, timePassed);
     }
 
+    /**
+     * Stores the BAC in sharedPrefs
+     * @param context
+     * @param bac
+     */
     public static void storeBAC(Context context, double bac){
         context.getSharedPreferences(context.getString(R.string.pref_file),
                 MODE_PRIVATE)
