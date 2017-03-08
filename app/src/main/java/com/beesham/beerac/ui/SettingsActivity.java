@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -25,8 +26,13 @@ import com.beesham.beerac.R;
  */
 public class SettingsActivity extends PreferenceActivity {
 
+    private static String KEY_PREF_UNITS;
+    private static String KEY_PREF_BODY_WEIGHT;
+    private static String KEY_PREF_GENDER;
+
+    private static Preference mBodyWeightPref;
+
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
-    private ImageView mAttribution;
 
     /**
      * A preference value change listener that updates the preference's summary to reflect its new
@@ -43,7 +49,7 @@ public class SettingsActivity extends PreferenceActivity {
 
     private static void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
-        //String key = preference.getKey();
+        String key = preference.getKey();
         
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in
@@ -57,19 +63,39 @@ public class SettingsActivity extends PreferenceActivity {
                             ? listPreference.getEntries()[index]
                             : null);
 
-        } else {
+            if(key.equals(KEY_PREF_UNITS)){
+                //Commit the change so the pref will be save instantly so as to avoid a delay for when
+                //body weight pref updates
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext()).edit()
+                        .putString(preference.getContext().getString(R.string.pref_units_key), stringValue)
+                        .commit();
+
+                sBindPreferenceSummaryToValueListener.onPreferenceChange(mBodyWeightPref,
+                        PreferenceManager
+                                .getDefaultSharedPreferences(preference.getContext())
+                                .getString(preference.getContext().getString(R.string.pref_body_weight_key), ""));
+            }
+        }else {
+
+            String[] mUnitsArray =  preference.getContext().getResources().getStringArray(R.array.pref_weight_units_list_values);
+
             // For all other preferences, set the summary to the value's
             // simple string representation.
-            preference.setSummary(stringValue);
+            if(key.equals(KEY_PREF_BODY_WEIGHT)) {
+                if (PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getContext().getString(R.string.pref_units_key), "").equals("imperial")) {
+                    preference.setSummary(stringValue + " " + mUnitsArray[0]);
+                } else if (PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getContext().getString(R.string.pref_units_key), "").equals("metric")){
+                    preference.setSummary(stringValue + " " +mUnitsArray[1]);
+                }
+            }else{
+                preference.setSummary(stringValue);
+            }
         }
-    }
-    /**
-     * Helper method to determine if the device has an extra-large screen. For example, 10" tablets
-     * are extra-large.
-     */
-    private static boolean isXLargeTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
     /**
@@ -100,9 +126,15 @@ public class SettingsActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.pref_general);
 
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_gender_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_body_weight_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
+        KEY_PREF_UNITS = getString(R.string.pref_units_key);
+        KEY_PREF_BODY_WEIGHT = getString(R.string.pref_body_weight_key);
+        KEY_PREF_GENDER = getString(R.string.pref_gender_key);
+
+        mBodyWeightPref = findPreference(getString(R.string.pref_body_weight_key));
+
+        bindPreferenceSummaryToValue(findPreference(KEY_PREF_GENDER));
+        bindPreferenceSummaryToValue(findPreference(KEY_PREF_UNITS));
+        bindPreferenceSummaryToValue(mBodyWeightPref);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
