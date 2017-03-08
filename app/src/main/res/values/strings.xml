@@ -38,8 +38,8 @@
 
     <!-- Home Units Spinner -->
     <string-array name="units">
-        <item>mL</item>
         <item>oZ</item>
+        <item>mL</item>
     </string-array>
 
     <string-array name="beer_volumes_array">
@@ -71,7 +71,7 @@
     <string name="pref_header_general">General</string>
 
     <string name="pref_gender_label">Gender</string>
-    <string name="pref_gender_key">gender</string>
+    <string name="pref_gender_key">pref_gender</string>
     <string name="pref_gender_default">Male</string>
     <string name="gender_male" translatable="true">Male</string>
     <string name="gender_female" translatable="true">Female</string>
@@ -86,26 +86,25 @@
 
 
     <string name="pref_body_weight_label">Body Weight</string>
-    <string name="pref_body_weight_key">body_weight</string>
+    <string name="pref_body_weight_key">pref_body_weight</string>
     <string name="pref_default_body_weight">120</string>
 
-    <string name="pref_location_label">Location</string>
-    <string name="pref_location_key" translatable="false">location</string>
-    <string name="pref_location_default" translatable="false">Canada</string>
-
-    <string name="location_error" translatable="true">Unsupported location</string>
-
     <!-- Units settings -->
-    <string name="pref_units_label">Volume Units</string>
-    <string name="pref_units_key">units</string>
-    <string name="pref_units_default">mL</string>
+    <string name="pref_units_label">Units System</string>
+    <string name="pref_units_key">pref_units</string>
+    <string name="pref_units_default">imperial</string>
     <string-array name="pref_units_list_titles">
-        <item>Milliliters (mL)</item>
-        <item>Ounces (oZ)</item>
+        <item>Metric</item>
+        <item>Imperial</item>
     </string-array>
     <string-array name="pref_units_list_values">
-        <item>mL</item>
-        <item>oZ</item>
+        <item>metric</item>
+        <item>imperial</item>
+    </string-array>
+
+    <string-array name="pref_weight_units_list_values">
+        <item>Lbs</item>
+        <item>Kg</item>
     </string-array>
 
     <!-- Stock Beer -->
