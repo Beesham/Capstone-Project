@@ -1,5 +1,6 @@
 package com.beesham.beerac.ui;
 
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +45,8 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
         } else {
             mTwoPane = false;
         }
+
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 
         int rowsdeleted = getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
     }
