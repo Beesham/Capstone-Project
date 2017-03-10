@@ -3,6 +3,7 @@ package com.beesham.beerac.ui;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.beesham.beerac.R;
@@ -29,6 +31,9 @@ public class SettingsActivity extends PreferenceActivity {
     private static String KEY_PREF_UNITS;
     private static String KEY_PREF_BODY_WEIGHT;
     private static String KEY_PREF_GENDER;
+
+    private static String UNIT_SYSTEM_METRIC;
+    private static String UNIT_SYSTEM_IMPERIAL;
 
     private static Preference mBodyWeightPref;
 
@@ -50,6 +55,10 @@ public class SettingsActivity extends PreferenceActivity {
     private static void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
         String key = preference.getKey();
+        Context context = preference.getContext();
+
+        SharedPreferences defaultSharedPrefs =  PreferenceManager
+                .getDefaultSharedPreferences(preference.getContext());
         
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in
@@ -66,15 +75,32 @@ public class SettingsActivity extends PreferenceActivity {
             if(key.equals(KEY_PREF_UNITS)){
                 //Commit the change so the pref will be save instantly so as to avoid a delay for when
                 //body weight pref updates
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext()).edit()
+                double bodyweight = Double.parseDouble(defaultSharedPrefs
+                        .getString(preference.getContext().getString(R.string.pref_body_weight_key), ""));
+
+                if(!stringValue.equals(defaultSharedPrefs.getString(context.getString(R.string.last_selected_units_key), null))){
+                    if(stringValue.equals(UNIT_SYSTEM_IMPERIAL)){
+                        Log.v(LOG_TAG, "From Kg to Lbs");
+                        bodyweight = Utils.kgToLbs(bodyweight);
+                    }else if(stringValue.equals(UNIT_SYSTEM_METRIC)){
+                        Log.v(LOG_TAG, "From Lbs to Kg");
+                        bodyweight = Utils.lbsToKg(bodyweight);
+                    }
+                    defaultSharedPrefs.edit()
+                            .putString(context.getString(R.string.pref_body_weight_key), Double.toString(bodyweight))
+                            .commit();
+                }
+
+                defaultSharedPrefs.edit()
                         .putString(preference.getContext().getString(R.string.pref_units_key), stringValue)
+                        .putString(context.getString(R.string.last_selected_units_key), stringValue)
                         .commit();
 
+                Log.v(LOG_TAG, "strVal: " + stringValue);
+
                 sBindPreferenceSummaryToValueListener.onPreferenceChange(mBodyWeightPref,
-                        PreferenceManager
-                                .getDefaultSharedPreferences(preference.getContext())
-                                .getString(preference.getContext().getString(R.string.pref_body_weight_key), ""));
+                      Double.toString(bodyweight));
+
             }
         }else {
 
@@ -85,12 +111,12 @@ public class SettingsActivity extends PreferenceActivity {
             if(key.equals(KEY_PREF_BODY_WEIGHT)) {
                 if (PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getContext().getString(R.string.pref_units_key), "").equals("imperial")) {
+                        .getString(preference.getContext().getString(R.string.pref_units_key), "").equals(UNIT_SYSTEM_IMPERIAL)) {
                     preference.setSummary(stringValue + " " + mUnitsArray[0]);
                 } else if (PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getContext().getString(R.string.pref_units_key), "").equals("metric")){
-                    preference.setSummary(stringValue + " " +mUnitsArray[1]);
+                        .getString(preference.getContext().getString(R.string.pref_units_key), "").equals(UNIT_SYSTEM_METRIC)){
+                    preference.setSummary(stringValue + " " + mUnitsArray[1]);
                 }
             }else{
                 preference.setSummary(stringValue);
@@ -129,6 +155,9 @@ public class SettingsActivity extends PreferenceActivity {
         KEY_PREF_UNITS = getString(R.string.pref_units_key);
         KEY_PREF_BODY_WEIGHT = getString(R.string.pref_body_weight_key);
         KEY_PREF_GENDER = getString(R.string.pref_gender_key);
+
+        UNIT_SYSTEM_IMPERIAL = getString(R.string.unit_system_imperial);
+        UNIT_SYSTEM_METRIC = getString(R.string.unit_system_metric);
 
         mBodyWeightPref = findPreference(getString(R.string.pref_body_weight_key));
 
