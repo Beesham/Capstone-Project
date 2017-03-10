@@ -382,7 +382,11 @@ public class Utils {
     }
 
     public static double kgToLbs(double bodyWeightInKg){
-        return bodyWeightInKg*2.2;  // 1kg = 2.2Lbs
+        return Math.ceil(bodyWeightInKg*2.20462);  // 1kg = 2.2Lbs
+    }
+
+    public static double lbsToKg(double bodyWeightInLbs){
+        return bodyWeightInLbs*0.45359237;  // 1Lbs = 0.45359237Kgs
     }
 
     public static double mLToOz(int mL){
@@ -403,6 +407,11 @@ public class Utils {
 
         double bodyWeight = Double.parseDouble(defaultPreferences.getString(context.getString(R.string.pref_body_weight_key),
                 context.getString(R.string.pref_default_body_weight)));
+
+        if(defaultPreferences.getString(context.getString(R.string.pref_units_key), null)
+                .equals(context.getString(R.string.unit_system_metric))) {
+            bodyWeight = kgToLbs(bodyWeight);
+        }
 
         double timePassed = getTimePassed(context);
         double drinkSize;
