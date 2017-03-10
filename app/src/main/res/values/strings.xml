@@ -102,6 +102,10 @@
         <item>imperial</item>
     </string-array>
 
+    <string name="unit_system_imperial">imperial</string>
+    <string name="unit_system_metric">metric</string>
+    <string name="last_selected_units_key">last_units</string>
+
     <string-array name="pref_weight_units_list_values">
         <item>Lbs</item>
         <item>Kg</item>
