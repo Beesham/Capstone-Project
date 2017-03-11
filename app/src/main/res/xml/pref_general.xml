@@ -12,7 +12,7 @@
             android:positiveButtonText="@null"/>
 
     <!-- Body Weight -->
-    <EditTextPreference
+    <com.beesham.beerac.ui.WeightPreference
             android:key="@string/pref_body_weight_key"
             android:title="@string/pref_body_weight_label"
             android:defaultValue="@string/pref_default_body_weight"
