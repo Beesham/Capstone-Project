@@ -12,6 +12,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -75,8 +76,13 @@ public class SettingsActivity extends PreferenceActivity {
             if(key.equals(KEY_PREF_UNITS)){
                 //Commit the change so the pref will be save instantly so as to avoid a delay for when
                 //body weight pref updates
-                double bodyweight = Double.parseDouble(defaultSharedPrefs
-                        .getString(preference.getContext().getString(R.string.pref_body_weight_key), ""));
+                double bodyweight = 0;
+                if(!TextUtils.isEmpty(defaultSharedPrefs
+                        .getString(preference.getContext().getString(R.string.pref_body_weight_key), ""))){
+                   bodyweight = Double.parseDouble(defaultSharedPrefs
+                            .getString(preference.getContext().getString(R.string.pref_body_weight_key), ""));
+                }
+
 
                 if(!stringValue.equals(defaultSharedPrefs.getString(context.getString(R.string.last_selected_units_key), null))){
                     if(stringValue.equals(UNIT_SYSTEM_IMPERIAL)){
@@ -96,8 +102,6 @@ public class SettingsActivity extends PreferenceActivity {
                         .putString(context.getString(R.string.last_selected_units_key), stringValue)
                         .commit();
 
-                Log.v(LOG_TAG, "strVal: " + stringValue);
-
                 sBindPreferenceSummaryToValueListener.onPreferenceChange(mBodyWeightPref,
                       Double.toString(bodyweight));
 
@@ -109,14 +113,20 @@ public class SettingsActivity extends PreferenceActivity {
             // For all other preferences, set the summary to the value's
             // simple string representation.
             if(key.equals(KEY_PREF_BODY_WEIGHT)) {
+                String text = "";
+
+                if(!TextUtils.isEmpty(stringValue)){
+                    text = Double.toString(Math.ceil(Double.parseDouble(stringValue)));
+                }
+
                 if (PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getContext().getString(R.string.pref_units_key), "").equals(UNIT_SYSTEM_IMPERIAL)) {
-                    preference.setSummary(stringValue + " " + mUnitsArray[0]);
+                    preference.setSummary(text + " " + mUnitsArray[0]);
                 } else if (PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getContext().getString(R.string.pref_units_key), "").equals(UNIT_SYSTEM_METRIC)){
-                    preference.setSummary(stringValue + " " + mUnitsArray[1]);
+                    preference.setSummary(text + " " + mUnitsArray[1]);
                 }
             }else{
                 preference.setSummary(stringValue);
