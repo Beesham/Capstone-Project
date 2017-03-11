@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.preference.EditTextPreference;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -67,7 +68,7 @@ public class WeightPreference extends DialogPreference {
         this(context, null);
     }
 
-    /**
+     /**
      * Saves the text to the {SharedPreferences}.
      *
      * @param text The text to save
@@ -95,11 +96,24 @@ public class WeightPreference extends DialogPreference {
         return mText;
     }
 
+    /**
+     * Setup the dialog view
+     * Set edittext to value from SharedPrefs because of delay of stock implementation
+     * @param view
+     */
     @Override
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
         EditText editText = mEditText;
-        editText.setText(getText());
+
+        String text = "";
+        if(!TextUtils.isEmpty(PreferenceManager.getDefaultSharedPreferences(view.getContext())
+                .getString(view.getContext().getString(R.string.pref_body_weight_key), ""))) {
+            text = Double.toString(Math.ceil(Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(view.getContext())
+                    .getString(view.getContext().getString(R.string.pref_body_weight_key), null))));
+        }
+
+        editText.setText(text);
 
         ViewParent oldParent = editText.getParent();
         if (oldParent != view) {
@@ -147,20 +161,7 @@ public class WeightPreference extends DialogPreference {
     public boolean shouldDisableDependents() {
         return TextUtils.isEmpty(mText) || super.shouldDisableDependents();
     }
-    /**
-     * Returns the {@link EditText} widget that will be shown in the dialog.
-     *
-     * @return The {@link EditText} widget that will be shown in the dialog.
-     */
-    public EditText getEditText() {
-        return mEditText;
-    }
-    /** @hide */
-    //@Override
-    protected boolean needInputMethod() {
-        // We want the input method to show, if possible, when dialog is displayed
-        return true;
-    }
+
     @Override
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
