@@ -36,4 +36,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!-- ImageView -->
     <dimen name="drink_beer_icon_padding">16dp</dimen>
 
+    <!-- Preferences -->
+    <!-- Preference widget area width (to the left of the text) -->
+    <dimen name="preference_widget_width">48dp</dimen>
+
 </resources>
