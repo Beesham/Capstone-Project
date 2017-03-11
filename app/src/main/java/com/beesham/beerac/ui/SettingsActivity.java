@@ -77,6 +77,7 @@ public class SettingsActivity extends PreferenceActivity {
                 //Commit the change so the pref will be save instantly so as to avoid a delay for when
                 //body weight pref updates
                 double bodyweight = 0;
+
                 if(!TextUtils.isEmpty(defaultSharedPrefs
                         .getString(preference.getContext().getString(R.string.pref_body_weight_key), ""))){
                    bodyweight = Double.parseDouble(defaultSharedPrefs
@@ -92,9 +93,15 @@ public class SettingsActivity extends PreferenceActivity {
                         Log.v(LOG_TAG, "From Lbs to Kg");
                         bodyweight = Utils.lbsToKg(bodyweight);
                     }
-                    defaultSharedPrefs.edit()
-                            .putString(context.getString(R.string.pref_body_weight_key), Double.toString(bodyweight))
-                            .commit();
+                    if(bodyweight != 0) {
+                        defaultSharedPrefs.edit()
+                                .putString(context.getString(R.string.pref_body_weight_key), Double.toString(bodyweight))
+                                .commit();
+                    }else{
+                        defaultSharedPrefs.edit()
+                                .putString(context.getString(R.string.pref_body_weight_key), "")
+                                .commit();
+                    }
                 }
 
                 defaultSharedPrefs.edit()
@@ -102,8 +109,13 @@ public class SettingsActivity extends PreferenceActivity {
                         .putString(context.getString(R.string.last_selected_units_key), stringValue)
                         .commit();
 
-                sBindPreferenceSummaryToValueListener.onPreferenceChange(mBodyWeightPref,
-                      Double.toString(bodyweight));
+                if(bodyweight != 0) {
+                    sBindPreferenceSummaryToValueListener.onPreferenceChange(mBodyWeightPref,
+                            Double.toString(bodyweight));
+                }else{
+                    sBindPreferenceSummaryToValueListener.onPreferenceChange(mBodyWeightPref,
+                            "");
+                }
 
             }
         }else {
