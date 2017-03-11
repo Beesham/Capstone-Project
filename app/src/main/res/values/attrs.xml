@@ -15,5 +15,8 @@
     <declare-styleable name="SearchFragment">
         <attr name="android:choiceMode" />
         <attr name="autoSelectView" format="boolean"/>
+
+        <!-- Default style for EditTextPreference. -->
+        <attr name="editTextPreferenceStyle" format="reference" />
     </declare-styleable>
 </resources>
