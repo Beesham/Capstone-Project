@@ -120,6 +120,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mSharedPreferences = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mBeerId = Utils.getBeerIdFromPrefs(getContext());
 
