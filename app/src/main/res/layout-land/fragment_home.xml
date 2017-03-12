@@ -22,17 +22,6 @@
                 android:layout_height="match_parent"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                </android.support.v7.widget.Toolbar>
-
                 <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -61,7 +50,13 @@
                             android:background="@drawable/title_scrim"
                             android:textColor="@android:color/white"/>
                 </FrameLayout>
-            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@drawable/toolbar_scrim">
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
