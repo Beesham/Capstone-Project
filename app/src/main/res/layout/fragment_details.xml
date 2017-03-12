@@ -8,51 +8,6 @@
     android:layout_height="match_parent"
     tools:context="com.beesham.beerac.ui.DetailsActivityFragment">
 
-        <android.support.design.widget.AppBarLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:contentScrim="?attr/colorPrimary"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_collapseMode="parallax"
-                            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
-
-                                <ImageView
-                                    android:id="@+id/photo"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/beer_photo_height"
-                                    style="@style/TransitionPhoto"
-                                    android:scaleType="centerCrop"
-                                    android:background="@color/photo_placeholder"
-                                    android:minHeight="?actionBarSize"/>
-
-                                <View
-                                    android:id="@+id/title_scrim_view"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="?actionBarSize"
-                                    android:background="@drawable/title_scrim"
-                                    android:layout_gravity="bottom"/>
-                        </FrameLayout>
-
-                        <android.support.v7.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            app:layout_collapseMode="pin">
-                        </android.support.v7.widget.Toolbar>
-
-                </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
