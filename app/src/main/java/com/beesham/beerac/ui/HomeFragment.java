@@ -59,7 +59,7 @@ import static java.lang.reflect.Array.getInt;
  */
 public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+    //@BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
     @BindView(R.id.beer_name_text_view) TextView mBeerNameTextView;
     @BindView(R.id.bac_text_view) TextView mBACTextView;
@@ -119,8 +119,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mSharedPreferences = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mBeerId = Utils.getBeerIdFromPrefs(getContext());
 

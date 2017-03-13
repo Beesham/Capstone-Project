@@ -3,10 +3,14 @@ package com.beesham.beerac.ui;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
@@ -20,10 +24,13 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
 
     public static final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
 
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
         //Looks for the details container, if found, then a tablet layout is used
         if (findViewById(R.id.beer_detail_container) != null) {
@@ -49,6 +56,9 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 
         int rowsdeleted = getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
 
