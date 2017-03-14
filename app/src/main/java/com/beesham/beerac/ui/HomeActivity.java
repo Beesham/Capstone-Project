@@ -4,7 +4,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
@@ -14,8 +13,7 @@ import butterknife.ButterKnife;
 
 import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
-public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
-        TimePickerFragment.TimeSetter{
+public class HomeActivity extends AppCompatActivity implements TimePickerFragment.TimeSetter{
 
     public static final String LOG_TAG = HomeActivity.class.getSimpleName();
     public static final String TAG = HomeActivity.class.getSimpleName();
@@ -55,21 +53,16 @@ public class HomeActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 
+        //Remove all searched data from cache so as to not show old data if connectivity is lost and a query is made
         int rowsdeleted = getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
-
-    @Override
-    public void onFragmentInteraction(String uri) {
-
-    }
-
     @Override
     public void setTime(int hourOfDay, int minute) {
         ((HomeFragment ) getSupportFragmentManager().findFragmentById(R.id.fragment_home))
-        .setTime(hourOfDay, minute);
+        .setTimeTextView(hourOfDay, minute);
     }
 }
