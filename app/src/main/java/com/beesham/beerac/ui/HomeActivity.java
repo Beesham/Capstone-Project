@@ -1,6 +1,7 @@
 package com.beesham.beerac.ui;
 
 import android.preference.PreferenceManager;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ public class HomeActivity extends AppCompatActivity implements TimePickerFragmen
     public static final String DETAIL_ACTIVITY_FRAG_TAG = "DETAIL_FRAG";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,8 @@ public class HomeActivity extends AppCompatActivity implements TimePickerFragmen
         int rowsdeleted = getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowTitleEnabled(true);
+
     }
 
     @Override
