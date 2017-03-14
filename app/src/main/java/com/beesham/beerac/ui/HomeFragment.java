@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -18,10 +17,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +47,7 @@ import butterknife.ButterKnife;
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
-import static java.lang.reflect.Array.getInt;
+import static java.lang.Long.getLong;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
@@ -97,12 +93,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         // Required empty public constructor
     }
 
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,13 +109,11 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mSharedPreferences = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
 
-        //((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         mBeerId = Utils.getBeerIdFromPrefs(getContext());
 
         setupViews();
 
+        //Checks for initial launch of app and init the appropriate LOADER
         if(Utils.checkForFirstLaunch(getActivity())){
             initializeFirstLaunchVariables();
             getActivity().getSupportLoaderManager().initLoader(LOADER_FIRST_LAUNCH_ID, null, this);
@@ -179,14 +167,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         restoreTime();
         updateBAC();
 
-
         spinnerAdapter.notifyDataSetChanged();
         mVolumeSpinner.setSelection(mVolumeSpinnerPosition);
 
         mTracker.setScreenName(getString(R.string.home_screen_title));
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -208,11 +194,11 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.settings:
-                launchSettingsActivity();
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
 
             case R.id.mybeers:
-                launchMyBeersActivity();
+                startActivity(new Intent(getActivity(), SavesActivity.class));
                 return true;
 
             default:
@@ -256,8 +242,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             Pair<View, String> beerImagePair = Pair.create((View)mBeerImage, mBeerImage.getTransitionName());
 
-                            Bundle transitionsBundle = ActivityOptionsCompat
-                                    .makeSceneTransitionAnimation(
+                            Bundle transitionsBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                                             getActivity(),
                                             beerImagePair
                                     ).toBundle();
@@ -279,7 +264,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        setupVolumeUnitsSpinner();
+        setupVolumeSpinner();
 
         mIncrementBeerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,7 +274,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     updateBeerCountTextView();
                     updateBAC();
                 }else{
-                    showToast();
+                    showWeightErrorToast();
                 }
 
             }
@@ -303,13 +288,13 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     updateBeerCountTextView();
                     updateBAC();
                 }else{
-                    showToast();
+                    showWeightErrorToast();
                 }
             }
         });
     }
 
-    private void setupVolumeUnitsSpinner(){
+    private void setupVolumeSpinner(){
         spinnerAdapter = new SpinnerAdapter(getActivity(),
                 getResources().getStringArray(R.array.beer_volumes_array),
                         getResources().getStringArray(R.array.units));
@@ -340,26 +325,14 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mTotalBeersTextView.setText(getString(R.string.beers_had, mBeerCount));
     }
 
-    private void launchMyBeersActivity(){
-        Intent i = new Intent(getActivity(), SavesActivity.class);
-        startActivity(i);
-    }
-
-    private void launchSettingsActivity(){
-        Intent i = new Intent(getActivity(), SettingsActivity.class);
-        startActivity(i);
-    }
-
     private void restoreTime(){
         //Restore mStartTime val from prefs
         Calendar calendar = Calendar.getInstance();
-        mStartTime = getActivity().getSharedPreferences(getString(R.string.pref_file),
-                MODE_PRIVATE)
-                .getLong(getString(R.string.start_drinking_time_key),
+        mStartTime = mSharedPreferences.getLong(getString(R.string.start_drinking_time_key),
                         Utils.timeInMillis(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
 
         int[] timeArray = Utils.convertTimeMillisToHourAndMins(mStartTime);
-        setTime(timeArray[0], timeArray[1]);
+        setTimeTextView(timeArray[0], timeArray[1]);
     }
 
     private void updateBAC(){
@@ -368,7 +341,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             mBACTextView.setText(getString(R.string.bac_format, mBAC));
             Utils.updateWidget(getActivity());
         }else{
-            showToast();
+            showWeightErrorToast();
         }
 
     }
@@ -378,11 +351,11 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         Utils.storeBAC(getContext(), mBAC);
     }
 
-    private void showToast(){
+    private void showWeightErrorToast(){
         Toast.makeText(getActivity(), getString(R.string.no_weight_toast), Toast.LENGTH_SHORT).show();
     }
 
-    public void setTime(int hourOfDay, int minute) {
+    public void setTimeTextView(int hourOfDay, int minute) {
         mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
         mStartTime = Utils.timeInMillis(hourOfDay, minute);
 
@@ -398,9 +371,6 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
         }
     }
 
