@@ -22,12 +22,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsActivit
 
     private static final String LOG_TAG = DetailsActivity.class.getSimpleName();
 
-   /* @BindView(R.id.title_scrim_view) View mTitleScrimView;
-    @BindView(R.id.photo) ImageView beerImageView;
-    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;*/
-
-   @BindView(R.id.title_text_view)
-    TextView mTitle;
+    @BindView(R.id.title_text_view) TextView mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
