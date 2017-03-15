@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.beesham.beerac.R;
 import com.squareup.picasso.Picasso;
@@ -21,9 +22,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsActivit
 
     private static final String LOG_TAG = DetailsActivity.class.getSimpleName();
 
-    @BindView(R.id.title_scrim_view) View mTitleScrimView;
+   /* @BindView(R.id.title_scrim_view) View mTitleScrimView;
     @BindView(R.id.photo) ImageView beerImageView;
-    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;*/
+
+   @BindView(R.id.title_text_view)
+    TextView mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +51,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsActivit
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_navigate_home));
+
         }
     }
 
     @Override
     public void onFragmentInteraction(Beer beer) {
-        mCollapsingToolbar.setTitle(beer.getName());
-
-        if (!TextUtils.isEmpty(beer.getUrl_large())) {
-            Picasso.with(this)
-                    .load(beer.getUrl_large())
-                    .placeholder(R.drawable.stockbeer)
-                    .error(R.drawable.stockbeer)
-                    .into(beerImageView);
-        }
+        mTitle.setText(beer.getName());
     }
 }
