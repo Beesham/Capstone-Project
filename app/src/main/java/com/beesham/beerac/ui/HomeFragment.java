@@ -56,7 +56,6 @@ import static java.lang.Long.getLong;
  */
 public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    //@BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.photo) ImageView mBeerImage;
     @BindView(R.id.beer_name_text_view) TextView mBeerNameTextView;
     @BindView(R.id.bac_text_view) TextView mBACTextView;
