@@ -57,7 +57,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @BindView(R.id.description_text_view) TextView descriptionTextView;
     @BindView(R.id.abv_text_view) TextView mAbvTextView;
-    //@BindView(R.id.title_scrim_view) View mTitleScrimView;
     @BindView(R.id.style_name_text_view) TextView mBeerStyleNameTextView;
     @BindView(R.id.style_description_text_view) TextView mBeerStyleDescriptionTextView;
     @BindView(R.id.food_pairings_text_view) TextView mFoodPairingsTextView;
@@ -66,7 +65,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     @BindView(R.id.fab) FloatingActionButton mFab;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.empty_view) TextView mEmptyView;
-
 
     private static final String LOG_TAG = DetailsActivityFragment.class.getSimpleName();
 
@@ -118,24 +116,15 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         final View view =  inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
 
-       /* if(!HomeActivity.mTwoPane) {
-            Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_navigate_home));
-        }*/
-
-       mCollapsingToolbar.setTitleEnabled(true);
+        mCollapsingToolbar.setTitleEnabled(true);
         mCollapsingToolbar.setTitle("title");
 
         Bundle bundle = getArguments();
         if(bundle != null){
             if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
                 if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)) {
-                    //mTitleScrimView.setVisibility(View.GONE);
                     beerImageView.setVisibility(View.GONE);
                 }else{
-                    //mTitleScrimView.setVisibility(View.VISIBLE);
                     beerImageView.setVisibility(View.VISIBLE);
                 }
             }
