@@ -1,24 +1,16 @@
 package com.beesham.beerac.ui;
 
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.beesham.beerac.R;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static java.lang.System.load;
-
-public class DetailsActivity extends AppCompatActivity implements DetailsActivityFragment.OnFragmentInteractionListener{
+public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener{
 
     private static final String LOG_TAG = DetailsActivity.class.getSimpleName();
 
@@ -30,10 +22,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsActivit
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
 
-        Bundle bundle = getIntent().getExtras();
-
-        DetailsActivityFragment fragment = new DetailsActivityFragment();
-        fragment.setArguments(bundle);
+        DetailsFragment fragment = new DetailsFragment();
+        fragment.setArguments(getIntent().getExtras());
 
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction()
@@ -41,12 +31,14 @@ public class DetailsActivity extends AppCompatActivity implements DetailsActivit
                     .commit();
         }
 
+        //If we are not in two pane mode, setup the toolbar so the beer title can be set
+        //In two pane mode, the home activity toolbar spans across the detail fragment so
+        //there is no need for the fragment to setup a toolbar unless in single pane mode
         if(!HomeActivity.mTwoPane) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.drawable.ic_navigate_home));
-
         }
     }
 

@@ -87,7 +87,6 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
-       // getActivity().getSupportLoaderManager().initLoader(BEERS_LOADER, null, this);
 
         if(savedInstanceState != null){
             if(savedInstanceState.containsKey(SELECTED_KEY)){
@@ -129,12 +128,6 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
 
         mBeerRecyclerViewAdapter.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
-    }
-
-    public void onButtonPressed(Bundle bundle) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(bundle);
-        }
     }
 
     @Override
