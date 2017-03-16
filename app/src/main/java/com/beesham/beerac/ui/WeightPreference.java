@@ -19,6 +19,7 @@ import com.beesham.beerac.R;
 
 /**
  * Created by Beesham on 3/10/2017.
+ * Custom dialog preference to allow immediate display of pref changes
  */
 
 public class WeightPreference extends DialogPreference {
