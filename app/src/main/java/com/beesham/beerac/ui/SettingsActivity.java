@@ -87,10 +87,8 @@ public class SettingsActivity extends PreferenceActivity {
 
                 if(!stringValue.equals(defaultSharedPrefs.getString(context.getString(R.string.last_selected_units_key), null))){
                     if(stringValue.equals(UNIT_SYSTEM_IMPERIAL)){
-                        Log.v(LOG_TAG, "From Kg to Lbs");
                         bodyweight = Utils.kgToLbs(bodyweight);
                     }else if(stringValue.equals(UNIT_SYSTEM_METRIC)){
-                        Log.v(LOG_TAG, "From Lbs to Kg");
                         bodyweight = Utils.lbsToKg(bodyweight);
                     }
                     if(bodyweight != 0) {
