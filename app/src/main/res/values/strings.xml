@@ -138,8 +138,7 @@
     <string name="a11y_fab" translatable="true">Save this beer</string>
     <string name="a11y_drink_beer" translatable="true">Drink this beer</string>
 
-    <!-- Ads -->
-    <string name="banner_ad_unit_id">ca-app-pub-9835470545063758/2871499220</string>
+    <!-- Ads moved to gradle.properties-->
 
     <!-- Connectivity error messages -->
     <string name="no_connectivity">The network is not available to fetch beer data</string>
