@@ -63,7 +63,8 @@
 
     <!-- Drink beer confirmation dialog -->
     <string name="dialog_title">Drink this beer?</string>
-    <string name="dialog_confirmation_message">This beer will be saved under "My beers"</string>
+    <string name="dialog_confirmation_message_save">This beer will be saved under \"My Beers\"</string>
+    <string name="dialog_confirmation_message">Are you sure?</string>
 
     <!-- Strings related to Settings -->
 
