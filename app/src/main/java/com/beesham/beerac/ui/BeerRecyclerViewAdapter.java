@@ -72,7 +72,6 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle(mContext.getString(R.string.dialog_title));
-                    builder.setMessage(mContext.getString(R.string.dialog_confirmation_message));
                     builder.setPositiveButton(mContext.getString(android.R.string.ok),
                             new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -97,6 +96,12 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                             // User cancelled the dialog
                         }
                     });
+
+                    if(Utils.checkIfBeerExists(mContext, beerId)) {
+                        builder.setMessage(mContext.getString(R.string.dialog_confirmation_message));
+                    }else{
+                        builder.setMessage(mContext.getString(R.string.dialog_confirmation_message_save));
+                    }
 
                     AlertDialog dialog = builder.create();
 
