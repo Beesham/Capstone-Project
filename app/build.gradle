@@ -23,13 +23,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
         }
+        debug {
+        }
         buildTypes.each {
             it.buildConfigField 'String', 'BREWERYDB_API_KEY', BREWERYDB_API_KEY
+            it.resValue 'string', 'BANNER_AD_UNIT_ID', BANNER_AD_UNIT_ID
         }
     }
 }
