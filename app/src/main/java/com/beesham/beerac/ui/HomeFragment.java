@@ -19,6 +19,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -146,6 +147,12 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onResume();
 
         mBeerId = Utils.getBeerIdFromPrefs(getContext());
+
+        if(!getActivity().getSupportLoaderManager().hasRunningLoaders()) {
+            if (mBeerId != null) {
+                getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+            }
+        }
 
         if(mBeerId == null) {
             mBeerId = Utils.getBeerIdFromPrefs(getContext());
@@ -386,6 +393,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.v(LOG_TAG, "loading " + mBeerId);
+
         final String[] projections = {
                 Columns.SavedBeerColumns.BEERID,
                 Columns.SavedBeerColumns.NAME,
