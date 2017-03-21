@@ -3,9 +3,11 @@ package com.beesham.beerac.ui;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,10 +15,16 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
+import android.transition.Scene;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -142,7 +150,23 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
             }
         });
 
+        animateDescription();
         return view;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void animateDescription(){
+        Transition transition = TransitionInflater.from(getContext())
+                .inflateTransition(R.transition.description_transition);
+
+        transition.addTarget(R.id.abv_text_view);
+        transition.addTarget(R.id.style_name_text_view);
+        transition.addTarget(R.id.description_text_view);
+        transition.addTarget(R.id.style_description_text_view);
+        transition.addTarget(R.id.food_pairings_text_view);
+        transition.addTarget(R.id.fab);
+
+        getActivity().getWindow().setEnterTransition(transition);
     }
 
     @Override

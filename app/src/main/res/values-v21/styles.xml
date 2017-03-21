@@ -8,6 +8,10 @@
         <item name="android:transitionName">@string/transition_beer_title</item>
     </style>
 
+    <style name="TransitionDescription">
+        <item name="android:windowEnterTransition">@transition/description_transition</item>
+    </style>
+
     <!-- Settings activity theme. -->
     <style name="SettingsTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
         <item name="android:colorPrimary">@color/colorPrimary</item>
