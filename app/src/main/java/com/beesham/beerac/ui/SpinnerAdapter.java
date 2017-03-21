@@ -61,12 +61,12 @@ public class SpinnerAdapter extends BaseAdapter {
 
         if(preferences.getString(mContext.getString(R.string.pref_units_key),
                 mContext.getString(R.string.pref_units_default)).equals(mContext.getString(R.string.pref_units_default))) {
+            mUnitsTextView.setText(mUnitsArray[0]);
+            mVolumeTextView.setText((String) Double.toString(Utils.mLToOz(Integer.parseInt(mVolumeArray.get(position)))));
+        }else{
             mUnitsTextView.setText(mUnitsArray[1]);
             mVolumeTextView.setText((String) mVolumeArray.get(position));
 
-        }else{
-            mUnitsTextView.setText(mUnitsArray[0]);
-            mVolumeTextView.setText((String) Double.toString(Utils.mLToOz(Integer.parseInt(mVolumeArray.get(position)))));
         }
         return view;
     }
