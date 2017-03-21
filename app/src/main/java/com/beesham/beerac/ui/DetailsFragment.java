@@ -113,9 +113,6 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         final View view =  inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, view);
 
-        mCollapsingToolbar.setTitleEnabled(true);
-        mCollapsingToolbar.setTitle("title");
-
         Bundle bundle = getArguments();
         if(bundle != null){
             if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
