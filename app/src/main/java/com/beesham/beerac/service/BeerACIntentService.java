@@ -1,5 +1,8 @@
 package com.beesham.beerac.service;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -8,6 +11,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.beesham.beerac.BuildConfig;
+import com.beesham.beerac.R;
+import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.ui.Beer;
@@ -50,6 +55,8 @@ public class BeerACIntentService extends IntentService {
     private final String PARAM_TYPE = "type";
     private final static String PARAM_WITH_BREWERIES = "withBreweries"; //To be implemented in later versions, maybe
 
+    private Tracker mTracker;
+
     String type = "beer";
 
 
@@ -64,6 +71,10 @@ public class BeerACIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        AnalyticsApplication application = (AnalyticsApplication) this.getApplication();
+        mTracker = application.getDefaultTracker();
+
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_GET_BEERS.equals(action)) {
@@ -135,6 +146,11 @@ public class BeerACIntentService extends IntentService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Search")
+                .setAction("Query")
+                .build());
 
         return responseStr;
     }

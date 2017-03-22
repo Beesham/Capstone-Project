@@ -67,7 +67,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private int mChoiceMode;
     private boolean mAutoSelectView;
 
-
     private Tracker mTracker;
 
     private OnFragmentInteractionListener mListener;
