@@ -1,0 +1,155 @@
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">BeerAC</string>
+    <string name="title_activity_home">Home</string>
+
+    <string name="beer_details_uri_key">beer_uri</string>
+    <string name="preferred_beer_key">preferred_beer</string>
+    <string name="start_drinking_time_key">start_drinking_time</string>
+    <string name="beer_count_key">beer_count</string>
+    <string name="beer_volume_key">beer_volume</string>
+    <string name="bac_key">bac</string>
+
+    <string name="default_preferred_beer">oeGSxs</string>
+    <string name="default_volume">355</string>
+
+
+    <string name="pref_version_code_key">version_code</string>
+
+    <string name="pref_file">com.beesham.beerac.PREF_FILE</string>
+
+    <string name="launch_key">launch</string>
+
+    <!-- Menu -->
+    <string name="menu_settings">Settings</string>
+    <string name="menu_mybeers">My Beers</string>
+    <string name="menu_search">Search</string>
+
+    <!-- Home -->
+    <string name="home_screen_title">Home</string>
+    <string name="label_time_picker" translatable="true">Started Drinking Time</string>
+    <string name="label_beer_volume" translatable="true">Drink Size</string>
+    <string name="label_beer_count" translatable="true">Beer Count</string>
+    <string name="beers_had"><xliff:g id="beers_had">%d</xliff:g> beers had</string>
+    <string name="bac_format">BAC: <xliff:g id="bac_format">%.03f</xliff:g>%%</string>
+    <string name="title_activity_details">Details</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="no_weight_toast" translatable="true">Please set Weight in app Settings</string>
+
+    <!-- Home Units Spinner -->
+    <string-array name="units">
+        <item>oZ</item>
+        <item>mL</item>
+    </string-array>
+
+    <string-array name="beer_volumes_array">
+        <item>341</item>
+        <item>355</item>
+        <item>473</item>
+        <item>650</item>
+    </string-array>
+
+    <!-- Search -->
+    <string name="search_hint">Search beers</string>
+    <string name="title_activity_search">Search Results</string>
+
+    <!-- Saves -->
+    <string name="title_activity_saves">My Beers</string>
+
+    <!-- Details -->
+    <string name="details_screen_title">Details</string>
+    <string name="abv_format"><xliff:g id="abv_format">%s</xliff:g>%% alcohol</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Drink beer confirmation dialog -->
+    <string name="dialog_title">Drink this beer?</string>
+    <string name="dialog_confirmation_message_save">This beer will be saved under \"My Beers\"</string>
+    <string name="dialog_confirmation_message">Are you sure?</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_gender_label">Gender</string>
+    <string name="pref_gender_key">pref_gender</string>
+    <string name="pref_gender_default">Male</string>
+    <string name="gender_male" translatable="true">Male</string>
+    <string name="gender_female" translatable="true">Female</string>
+    <string-array name="pref_gender_list_titles">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="pref_gender_list_values">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+
+    <string name="pref_body_weight_label">Body Weight</string>
+    <string name="pref_body_weight_key">pref_body_weight</string>
+    <string name="pref_default_body_weight">120</string>
+
+    <!-- Units settings -->
+    <string name="pref_units_label">Units System</string>
+    <string name="pref_units_key">pref_units</string>
+    <string name="pref_units_default">imperial</string>
+    <string-array name="pref_units_list_titles">
+        <item>Metric</item>
+        <item>Imperial</item>
+    </string-array>
+    <string-array name="pref_units_list_values">
+        <item>metric</item>
+        <item>imperial</item>
+    </string-array>
+
+    <string name="unit_system_imperial">imperial</string>
+    <string name="unit_system_metric">metric</string>
+    <string name="last_selected_units_key">last_units</string>
+
+    <string-array name="pref_weight_units_list_values">
+        <item>Lbs</item>
+        <item>Kg</item>
+    </string-array>
+
+    <!-- Stock Beer -->
+    <string name="stock_beer_name">Stock Beer</string>
+    <string name="stock_beer_id">stock_beer</string>
+    <string name="stock_beer_description" translatable="true">Stock Beer is a general beer that has the most common abv. It is not an actual beer that is brewed or distributed. Please drink responsibly.</string>
+    <string name="stock_beer_abv">5</string>
+
+
+    <!-- Transitions -->
+    <string name="transition_photo">beer_photo</string>
+    <string name="transition_beer_title">beer_title</string>
+
+
+    <!-- A11y Content Description -->
+    <string name="a11y_home_toolbar_title">home screen</string>
+    <string name="image_content_description" translatable="true">image, click for details</string>
+    <string name="a11y_started_drinking_time" translatable="true">Started drinking time, click to set time</string>
+    <string name="a11y_beer_volume" translatable="true">Volume of a single beer being drunk</string>
+    <string name="a11y_beer_volume_units">Volume units</string>
+    <string name="a11y_beer_count" translatable="true">Beer count</string>
+    <string name="a11y_bac" translatable="true">Blood alcohol content</string>
+    <string name="a11y_increment_beer_count" translatable="true">Increment beer count</string>
+    <string name="a11y_decrement_beer_count" translatable="true">Decrement beer count</string>
+
+    <string name="a11y_fab" translatable="true">Save this beer</string>
+    <string name="a11y_drink_beer" translatable="true">Drink this beer</string>
+
+    <!-- Ads moved to gradle.properties-->
+
+    <!-- Connectivity error messages -->
+    <string name="no_connectivity">The network is not available to fetch beer data</string>
+    <string name="no_network">The network is unavailable</string>
+    <string name="unable_to_drink_beer" translatable="true">Unable to drink beer</string>
+    <string name="empty_beer_list">No Beer Saved</string>
+    <string name="no_results">No Results Found</string>
+    <string name="empty_beer_list_server_down">No beer information available. There seems to be a problem on our end.</string>
+
+
+    <string name="add_widget">Add widget</string>
+
+
+</resources>
