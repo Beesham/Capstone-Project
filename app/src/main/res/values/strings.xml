@@ -68,9 +68,7 @@
 
     <!-- Strings related to Settings -->
 
-    <!-- General settings -->
-    <string name="pref_header_general">General</string>
-
+    <!-- Gender settings-->
     <string name="pref_gender_label">Gender</string>
     <string name="pref_gender_key">pref_gender</string>
     <string name="pref_gender_default">Male</string>
@@ -85,7 +83,7 @@
         <item>Female</item>
     </string-array>
 
-
+    <!-- Bodyweight settings -->
     <string name="pref_body_weight_label">Body Weight</string>
     <string name="pref_body_weight_key">pref_body_weight</string>
     <string name="pref_default_body_weight">120</string>
@@ -111,6 +109,13 @@
         <item>Lbs</item>
         <item>Kg</item>
     </string-array>
+
+    <!-- About setting -->
+    <string name="pref_about_label">About</string>
+    <string name="pref_about_key">pref_about</string>
+    <string name="pref_about_description">Powered by BreweryDB</string>
+    <string name="pref_about_extended_description">BeerAC is Powered by BreweryDB \n\nThe Blood Alcohol Content (BAC) calculated in BeerAC
+    is an approximation and the Widmark formula is used to perform this calculation.</string>
 
     <!-- Stock Beer -->
     <string name="stock_beer_name">Stock Beer</string>

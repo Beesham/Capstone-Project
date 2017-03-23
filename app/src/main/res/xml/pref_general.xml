@@ -12,7 +12,7 @@
             android:positiveButtonText="@null"/>
 
     <!-- Body Weight -->
-    <com.beesham.beerac.ui.WeightPreference
+    <com.beesham.beerac.ui.preferences.WeightPreference
             android:key="@string/pref_body_weight_key"
             android:title="@string/pref_body_weight_label"
             android:defaultValue="@string/pref_default_body_weight"
@@ -30,5 +30,11 @@
             android:entryValues="@array/pref_units_list_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"/>
+
+    <!-- About -->
+    <com.beesham.beerac.ui.preferences.AboutPreference
+            android:key="@string/pref_about_key"
+            android:title="@string/pref_about_label"
+            android:summary="@string/pref_about_description"/>
 
 </PreferenceScreen>

@@ -1,15 +1,13 @@
-package com.beesham.beerac.ui;
+package com.beesham.beerac.ui.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
-import android.preference.EditTextPreference;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -58,9 +56,9 @@ public class WeightPreference extends DialogPreference {
     public WeightPreference(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.editTextPreferenceStyle);
 
-        setLayoutResource(R.layout.preference_child);
+        setLayoutResource(R.layout.weight_preference_child);
 
-        setDialogLayoutResource(R.layout.preference_dialog_edittext);
+        setDialogLayoutResource(R.layout.weight_preference_dialog_edittext);
         setPositiveButtonText(android.R.string.ok);
         setNegativeButtonText(android.R.string.cancel);
     }
