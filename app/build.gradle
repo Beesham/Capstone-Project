@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        releaseConfig {
-            keyAlias 'beerac'
-            keyPassword 'beerac'
-            storeFile file("$rootDir/BeerACKeystore.jks")
-            storePassword 'beerac'
+        singingConfig {
+            keyAlias project.property("BEERAC.KEYALIAS")
+            keyPassword project.property("BEERAC.KEYPASS")
+            storeFile file("$rootDir/" + project.property("BEERAC.SIGNING"))
+            storePassword project.property("BEERAC.STOREPASS")
         }
     }
     compileSdkVersion 25
@@ -26,7 +26,7 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.releaseConfig
+            signingConfig signingConfigs.singingConfig
         }
         debug {
         }
