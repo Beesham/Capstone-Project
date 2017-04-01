@@ -279,11 +279,17 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         progressBar.setVisibility(View.GONE);
         mEmptyView.setVisibility(View.GONE);
         mCollapsingToolbar.setTitle(beer.getName());
+
         descriptionTextView.setText(beer.getDescription());
         mBeerStyleNameTextView.setText(beer.getStyleName());
         mAbvTextView.setText(getString(R.string.abv_format, beer.getAbv()));
         mBeerStyleDescriptionTextView.setText(beer.getStyleDescription());
-        mFoodPairingsTextView.setText(beer.getFoodParings());
+
+        if(!TextUtils.isEmpty(beer.getFoodParings())) {
+            mFoodPairingsTextView.setText(beer.getFoodParings());
+        }else{
+            mFoodPairingsTextView.setText(getString(R.string.no_food_pairings_message));
+        }
 
         if(!HomeActivity.mTwoPane)
             mListener.onFragmentInteraction(beer);

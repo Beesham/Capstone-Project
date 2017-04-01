@@ -152,20 +152,26 @@ Proin mattis et orci ac mattis. Maecenas nec nibh consectetur, sollicitudin mass
                                         android:layout_height="wrap_content"
                                         app:cardUseCompatPadding="true">
 
-                                        <TextView
+                                        <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="@string/food_pairings_label"/>
+                                                android:orientation="vertical"
+                                                android:padding="@dimen/default_padding">
 
-                                        <View style="@style/Divider"/>
+                                                <TextView
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="@string/food_pairings_label"/>
 
-                                        <TextView
-                                                android:id="@+id/food_pairings_text_view"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:padding="@dimen/default_padding"
-                                                tools:text="Lorem ipda justo ut odio feugiat, id scelerisque massa lobortis."
-                                                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                                                <View style="@style/Divider"/>
+
+                                                <TextView
+                                                        android:id="@+id/food_pairings_text_view"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        tools:text="Lorem ipda justo ut odio feugiat, id scelerisque massa lobortis."
+                                                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                                        </LinearLayout>
                                 </android.support.v7.widget.CardView>
 
                         </LinearLayout>
