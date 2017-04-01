@@ -61,6 +61,14 @@
     <string name="abv_format"><xliff:g id="abv_format">%s</xliff:g>%% alcohol</string>
     <string name="title_activity_settings">Settings</string>
 
+    <string name="description_label">Description</string>
+    <string name="food_pairings_label">Food Pairings</string>
+    <string name="brewery_label">Brewery</string>
+
+    <string name="no_food_pairings_message">No suggested food pairings</string>
+    <string name="no_brewery_message">No Brewery information</string>
+    <string name="no_beer_description">No beer description</string>
+
     <!-- Drink beer confirmation dialog -->
     <string name="dialog_title">Drink this beer?</string>
     <string name="dialog_confirmation_message_save">This beer will be saved under \"My Beers\"</string>
