@@ -9,16 +9,22 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin">
 
         <TextView
                 android:text="@string/label_time_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/separator_padding"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="@dimen/label_text_size"/>
+
+        <View style="@style/Divider"/>
 
         <TextView
                 android:layout_width="wrap_content"
@@ -34,9 +40,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/separator_padding"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="@dimen/label_text_size"/>
+
+        <View style="@style/Divider"/>
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -57,9 +65,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/separator_padding"
-                android:layout_gravity="center"
+                android:layout_gravity="left"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="@dimen/label_text_size"/>
+
+        <View style="@style/Divider"/>
 
         <FrameLayout
                 android:layout_width="match_parent"
