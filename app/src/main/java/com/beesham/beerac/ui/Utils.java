@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
+import com.beesham.beerac.model.Beer;
 import com.beesham.beerac.widget.BeerACWidgetProvider;
 
 import org.json.JSONArray;

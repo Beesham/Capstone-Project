@@ -33,6 +33,7 @@ import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
+import com.beesham.beerac.model.Beer;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;

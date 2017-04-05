@@ -20,6 +20,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="scroll_view_padding">8dp</dimen>
     <dimen name="beer_name_text_size_display">34sp</dimen>
     <dimen name="label_text_size">12sp</dimen>
+    <dimen name="bac_padding">16dp</dimen>
 
     <!-- CardView -->
     <dimen name="card_view_margin">4dp</dimen>

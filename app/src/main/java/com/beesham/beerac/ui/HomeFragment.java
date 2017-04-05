@@ -18,6 +18,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.SearchView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,10 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.beesham.beerac.R;
@@ -40,7 +43,9 @@ import com.beesham.beerac.service.BeerACIntentService;
 import com.beesham.beerac.ui.preferences.SettingsActivity;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +67,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @BindView(R.id.increment_beers_button) ImageButton mIncrementBeerButton;
     @BindView(R.id.decrement_beers_button) ImageButton mDecrementBeerButton;
     @BindView(R.id.volume_spinner) Spinner mVolumeSpinner;
-    @BindView(R.id.drinking_time_start_text_view) TextView mStartDrinkTimeTextView;
+    @BindView(R.id.drinking_time_start_text_view) EditText mStartDrinkTimeEditTextView;
 
     public static final int INC_BEER_FLAG = 1;
     public static final int DEC_BEER_FLAG = 0;
@@ -261,7 +266,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
-        mStartDrinkTimeTextView.setOnClickListener(new View.OnClickListener() {
+        mStartDrinkTimeEditTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
@@ -361,7 +366,16 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public void setTimeTextView(int hourOfDay, int minute) {
-        mStartDrinkTimeTextView.setText(String.format("%d : %02d", hourOfDay, minute));
+        Calendar calendar = new GregorianCalendar(1990, 1, 1, hourOfDay, minute);
+
+        if(!DateFormat.is24HourFormat(getActivity())){
+            if(hourOfDay > 12){ //PM
+                mStartDrinkTimeEditTextView.setText(String.format("%d : %02d PM", calendar.get(Calendar.HOUR), minute));
+            }else{  //AM
+                mStartDrinkTimeEditTextView.setText(String.format("%d : %02d AM", calendar.get(Calendar.HOUR), minute));
+            }
+        }
+
         mStartTime = Utils.timeInMillis(hourOfDay, minute);
 
         mSharedPreferences.edit()

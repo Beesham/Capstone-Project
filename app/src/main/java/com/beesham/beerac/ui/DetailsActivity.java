@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.model.Beer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
