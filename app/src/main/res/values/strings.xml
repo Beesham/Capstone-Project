@@ -164,5 +164,10 @@
 
     <string name="add_widget">Add widget</string>
 
+    <!-- Disclaimer -->
+    <string name="disclaimer_label" translatable="true">Disclaimer</string>
+    <string name="disclaimer_description" translatable="true">BeerAC should not be used as a accurate tool to measure blood alcohol content. The
+    readings/calculations are purely for entertainment purposes and any reading being accurate to a breathalyzer should be considered
+    a coincidence.\n\nPlease do not drink and drive\n\nDrink responsibly</string>
 
 </resources>

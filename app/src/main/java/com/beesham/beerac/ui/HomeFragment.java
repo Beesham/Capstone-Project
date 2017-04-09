@@ -5,6 +5,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -32,7 +34,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.beesham.beerac.R;
@@ -43,7 +44,6 @@ import com.beesham.beerac.service.BeerACIntentService;
 import com.beesham.beerac.ui.preferences.SettingsActivity;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -121,6 +121,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if(Utils.checkForFirstLaunch(getActivity())){
             initializeFirstLaunchVariables();
             getActivity().getSupportLoaderManager().initLoader(LOADER_FIRST_LAUNCH_ID, null, this);
+            displayDisclaimer();
         }else{
             if(mBeerId != null) {
                 getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
@@ -235,6 +236,21 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         }else{
             Toast.makeText(getActivity(), R.string.no_connectivity, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void displayDisclaimer(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.disclaimer_label)
+                .setMessage(R.string.disclaimer_description)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //OK
+                    }
+                })
+                .create();
+
+        alertDialog.show();
     }
 
     private void setupViews(){
