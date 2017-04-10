@@ -349,6 +349,7 @@ public class Utils {
 
     public static double getTimePassed(Context context){
         Calendar calendar = Calendar.getInstance();
+        long elapsedTime = 0;
 
         long startedDrinkingTime = context.getSharedPreferences(context.getString(R.string.pref_file),
                 MODE_PRIVATE)
@@ -357,8 +358,13 @@ public class Utils {
 
         long curHourInMillis = TimeUnit.HOURS.toMillis(calendar.get(Calendar.HOUR_OF_DAY));
         long curMinInMillis =  TimeUnit.MINUTES.toMillis(calendar.get(Calendar.MINUTE));
+        long curTimeInMillis = curHourInMillis + curMinInMillis;
 
-        long elapsedTime = (curHourInMillis + curMinInMillis) - startedDrinkingTime;
+        if(startedDrinkingTime > curTimeInMillis){
+            elapsedTime = curTimeInMillis + (TimeUnit.HOURS.toMillis(24) - startedDrinkingTime);
+        }else {
+            elapsedTime = curTimeInMillis - startedDrinkingTime;
+        }
 
         double elapsedHours =  TimeUnit.MILLISECONDS.toHours(elapsedTime);
         double elapsedMins = (TimeUnit.MILLISECONDS.toMinutes(elapsedTime)%60)/60.0;

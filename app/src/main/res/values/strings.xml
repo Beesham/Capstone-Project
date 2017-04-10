@@ -123,7 +123,8 @@
     <string name="pref_about_key">pref_about</string>
     <string name="pref_about_description">Powered by BreweryDB</string>
     <string name="pref_about_extended_description">BeerAC is Powered by BreweryDB \n\nThe Blood Alcohol Content (BAC) calculated in BeerAC
-    is an approximation and the Widmark formula is used to perform this calculation.</string>
+    is an approximation and the Widmark formula is used to perform this calculation.
+    \n\nCalculations are limited to a 48hr period</string>
 
     <!-- Stock Beer -->
     <string name="stock_beer_name">Stock Beer</string>
