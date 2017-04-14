@@ -55,9 +55,6 @@ public class HomeActivity extends AppCompatActivity implements TimePickerFragmen
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 
-        //Remove all searched data from cache so as to not show old data if connectivity is lost and a query is made
-        int rowsdeleted = getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
-
         setSupportActionBar(mToolbar);
     }
 
@@ -65,5 +62,13 @@ public class HomeActivity extends AppCompatActivity implements TimePickerFragmen
     public void setTime(int hourOfDay, int minute) {
         ((HomeFragment ) getSupportFragmentManager().findFragmentById(R.id.fragment_home))
         .setTimeTextView(hourOfDay, minute);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Remove all searched data from cache so as to not show old data if connectivity is lost and a query is made
+        int rowsdeleted = getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
     }
 }

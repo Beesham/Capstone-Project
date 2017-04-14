@@ -74,28 +74,28 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                     builder.setTitle(mContext.getString(R.string.dialog_title));
                     builder.setPositiveButton(mContext.getString(android.R.string.ok),
                             new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            prefs.edit()
-                                    .putString(mContext.getString(R.string.preferred_beer_key), beerId)
-                                    .commit();
+                                public void onClick(DialogInterface dialog, int id) {
+                                    prefs.edit()
+                                            .putString(mContext.getString(R.string.preferred_beer_key), beerId)
+                                            .commit();
 
-                            Intent intent = new Intent(mContext, BeerACIntentService.class);
-                            intent.setAction(ACTION_GET_BEER_DETAILS);
-                            intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
+                                    Intent intent = new Intent(mContext, BeerACIntentService.class);
+                                    intent.setAction(ACTION_GET_BEER_DETAILS);
+                                    intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
 
-                            if(!Utils.checkIfBeerExists(mContext, beerId)) {
-                                BeerACIntentService.startBeerQueryService(mContext, intent);
-                            }
+                                    if(!Utils.checkIfBeerExists(mContext, beerId)) {
+                                        BeerACIntentService.startBeerQueryService(mContext, intent);
+                                    }
 
-                            Utils.updateWidget(mContext);
-                        }
-                    });
+                                    Utils.updateWidget(mContext);
+                                }
+                            });
                     builder.setNegativeButton(mContext.getString(android.R.string.cancel),
                             new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                }
+                            });
 
                     if(Utils.checkIfBeerExists(mContext, beerId)) {
                         builder.setMessage(mContext.getString(R.string.dialog_confirmation_message));
