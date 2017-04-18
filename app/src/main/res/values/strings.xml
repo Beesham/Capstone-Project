@@ -130,15 +130,18 @@
     <string name="pref_about_label">About</string>
     <string name="pref_about_key">pref_about</string>
     <string name="pref_about_description">Powered by BreweryDB</string>
-    <string name="pref_about_extended_description">BeerAC is Powered by BreweryDB \n\nThe Blood Alcohol Content (BAC) calculated in BeerAC
-    is an approximation and the Widmark formula is used to perform this calculation.
-    \n\nCalculations are limited to a 48hr period</string>
+    <string name="pref_about_extended_description">BeerAC is Powered by BreweryDB
+        \n\nThe Blood Alcohol Content (BAC) calculated in BeerAC is an approximation and the Widmark formula is used to perform this calculation.
+    \n\nCalculations are limited to a 48hr period
+    \n\nBeerAC uses time as a factor to determine your BAC. The time is the \'Starting drinking time\' you set and the current time</string>
 
     <!-- Disclaimer -->
     <string name="disclaimer_label" translatable="true">Disclaimer</string>
     <string name="disclaimer_description" translatable="true">BeerAC should not be used as a accurate tool to measure blood alcohol content. The
     readings/calculations are purely for entertainment purposes and any reading being accurate to a breathalyzer should be considered
-    a coincidence.\n\nPlease do not drink and drive\n\nDrink responsibly</string>
+    a coincidence.
+        \n\nBeerAC uses the BreweryDB API but is not endorsed or certified by PintLabs.
+        \n\nPlease do not drink and drive\n\nDrink responsibly</string>
 
     <!-- Stock Beer -->
     <string name="stock_beer_name">Stock Beer</string>

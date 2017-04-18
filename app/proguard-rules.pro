@@ -15,3 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
+-keep class android.support.v7.widget.SearchView { *; }
+-keep class com.google.analytics.** { *; }
