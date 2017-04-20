@@ -6,6 +6,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.beesham.beerac.R;
 public class WeightPreference extends DialogPreference {
 
     private static final String LOG_TAG = WeightPreference.class.getSimpleName();
+    private static final int MAX_INPUT_LENGTH = 8;
 
     /**
      * The edit text shown in the dialog.
@@ -47,6 +50,8 @@ public class WeightPreference extends DialogPreference {
          * We reset the enabled state.
          */
         mEditText.setEnabled(true);
+        mEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_INPUT_LENGTH)});
     }
 
     public WeightPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -108,8 +113,11 @@ public class WeightPreference extends DialogPreference {
         String text = "";
         if(!TextUtils.isEmpty(PreferenceManager.getDefaultSharedPreferences(view.getContext())
                 .getString(view.getContext().getString(R.string.pref_body_weight_key), ""))) {
-            text = Double.toString(Math.ceil(Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(view.getContext())
-                    .getString(view.getContext().getString(R.string.pref_body_weight_key), null))));
+            /*text = Double.toString(Math.ceil(Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(view.getContext())
+                    .getString(view.getContext().getString(R.string.pref_body_weight_key), null))));*/
+
+            text = Double.toString(Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(view.getContext())
+                    .getString(view.getContext().getString(R.string.pref_body_weight_key), null)));
         }
 
         editText.setText(text);

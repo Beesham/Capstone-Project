@@ -389,11 +389,13 @@ public class Utils {
     }
 
     public static double kgToLbs(double bodyWeightInKg){
-        return Math.ceil(bodyWeightInKg*2.20462);  // 1kg = 2.2Lbs
+        DecimalFormat df = new DecimalFormat("#.#");
+        return Double.parseDouble(df.format(bodyWeightInKg*2.20462)); // 1kg = 2.2Lbs
     }
 
     public static double lbsToKg(double bodyWeightInLbs){
-        return bodyWeightInLbs*0.45359237;  // 1Lbs = 0.45359237Kgs
+        DecimalFormat df = new DecimalFormat("#.#");
+        return  Double.parseDouble(df.format(bodyWeightInLbs*0.45359237));  // 1Lbs = 0.45359237Kgs
     }
 
     public static double mLToOz(int mL){
