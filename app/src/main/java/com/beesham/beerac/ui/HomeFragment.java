@@ -42,6 +42,9 @@ import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
 import com.beesham.beerac.ui.preferences.SettingsActivity;
+import com.beesham.beerac.utils.BeerUtils;
+import com.beesham.beerac.utils.MathUtils;
+import com.beesham.beerac.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -113,7 +116,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mSharedPreferences = getActivity().getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE);
 
-        mBeerId = Utils.getBeerIdFromPrefs(getContext());
+        mBeerId = BeerUtils.getBeerIdFromPrefs(getContext());
 
         setupViews();
 
@@ -150,7 +153,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onResume() {
         super.onResume();
 
-        mBeerId = Utils.getBeerIdFromPrefs(getContext());
+        mBeerId = BeerUtils.getBeerIdFromPrefs(getContext());
 
         if(!getActivity().getSupportLoaderManager().hasRunningLoaders()) {
             if (mBeerId != null) {
@@ -159,7 +162,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         }
 
         if(mBeerId == null) {
-            mBeerId = Utils.getBeerIdFromPrefs(getContext());
+            mBeerId = BeerUtils.getBeerIdFromPrefs(getContext());
             if(mBeerId != null)
                 getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
         }
@@ -355,9 +358,9 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         //Restore mStartTime val from prefs
         Calendar calendar = Calendar.getInstance();
         mStartTime = mSharedPreferences.getLong(getString(R.string.start_drinking_time_key),
-                        Utils.timeInMillis(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
+                MathUtils.timeInMillis(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)));
 
-        int[] timeArray = Utils.convertTimeMillisToHourAndMins(mStartTime);
+        int[] timeArray = MathUtils.convertTimeMillisToHourAndMins(mStartTime);
         setTimeTextView(timeArray[0], timeArray[1]);
     }
 
@@ -373,7 +376,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void getBAC(){
-        mBAC = Utils.getBac(getActivity());
+        mBAC = MathUtils.getBac(getActivity());
         Utils.storeBAC(getContext(), mBAC);
     }
 
@@ -392,7 +395,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
 
-        mStartTime = Utils.timeInMillis(hourOfDay, minute);
+        mStartTime = MathUtils.timeInMillis(hourOfDay, minute);
 
         mSharedPreferences.edit()
                 .putLong( getActivity().getString(R.string.start_drinking_time_key), mStartTime)

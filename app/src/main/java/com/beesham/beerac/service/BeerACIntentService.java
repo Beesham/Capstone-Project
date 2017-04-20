@@ -4,25 +4,20 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import android.app.IntentService;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.beesham.beerac.BuildConfig;
-import com.beesham.beerac.R;
 import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
-import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.model.Beer;
-import com.beesham.beerac.model.Beer;
-import com.beesham.beerac.ui.Utils;
+import com.beesham.beerac.utils.BeerUtils;
+import com.beesham.beerac.utils.Utils;
 
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -99,7 +94,7 @@ public class BeerACIntentService extends IntentService {
         String response = run(builder.build().toString());
         try {
             getContentResolver().delete(BeerProvider.SearchedBeers.CONTENT_URI, null, null);
-            Utils.logBeers(getApplicationContext(), Utils.extractBeers(response));
+            BeerUtils.logBeers(getApplicationContext(), BeerUtils.extractBeers(response));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -110,12 +105,12 @@ public class BeerACIntentService extends IntentService {
         Beer beer = null;
 
         try {
-            beer = Utils.extractBeerDetails(response);
+            beer = BeerUtils.extractBeerDetails(response);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Utils.logBeers(getApplicationContext(), beer.toContentValues());
+        BeerUtils.logBeers(getApplicationContext(), beer.toContentValues());
     }
 
     public static String buildBeerByIdUri(String queryString){

@@ -14,7 +14,8 @@ import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.ui.HomeActivity;
 import com.beesham.beerac.ui.HomeFragment;
-import com.beesham.beerac.ui.Utils;
+import com.beesham.beerac.utils.MathUtils;
+import com.beesham.beerac.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
@@ -125,7 +126,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                             context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
                                     .getInt(context.getString(R.string.beer_count_key), 0));
 
-                    Utils.storeBAC(context, Utils.getBac(context));
+                    Utils.storeBAC(context, MathUtils.getBac(context));
                     Utils.updateWidget(context);
                 }else{
                     showToast(context);
@@ -138,7 +139,7 @@ public class BeerACWidgetProvider extends AppWidgetProvider {
                             context.getSharedPreferences(context.getString(R.string.pref_file), Context.MODE_PRIVATE)
                                     .getInt(context.getString(R.string.beer_count_key), 0));
 
-                    Utils.storeBAC(context, Utils.getBac(context));
+                    Utils.storeBAC(context, MathUtils.getBac(context));
                     Utils.updateWidget(context);
                 }else{
                     showToast(context);

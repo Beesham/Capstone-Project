@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.beesham.beerac.R;
+import com.beesham.beerac.utils.MathUtils;
+import com.beesham.beerac.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +64,7 @@ public class SpinnerAdapter extends BaseAdapter {
         if(preferences.getString(mContext.getString(R.string.pref_units_key),
                 mContext.getString(R.string.pref_units_default)).equals(mContext.getString(R.string.pref_units_default))) {
             mUnitsTextView.setText(mUnitsArray[0]);
-            mVolumeTextView.setText((String) Double.toString(Utils.mLToOz(Integer.parseInt(mVolumeArray.get(position)))));
+            mVolumeTextView.setText((String) Double.toString(MathUtils.mLToOz(Integer.parseInt(mVolumeArray.get(position)))));
         }else{
             mUnitsTextView.setText(mUnitsArray[1]);
             mVolumeTextView.setText((String) mVolumeArray.get(position));

@@ -13,7 +13,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.beesham.beerac.R;
-import com.beesham.beerac.ui.Utils;
+import com.beesham.beerac.utils.MathUtils;
+import com.beesham.beerac.utils.Utils;
 
 
 /**
@@ -85,9 +86,9 @@ public class SettingsActivity extends PreferenceActivity {
 
                 if(!stringValue.equals(defaultSharedPrefs.getString(context.getString(R.string.last_selected_units_key), null))){
                     if(stringValue.equals(UNIT_SYSTEM_IMPERIAL)){
-                        bodyweight = Utils.kgToLbs(bodyweight);
+                        bodyweight = MathUtils.kgToLbs(bodyweight);
                     }else if(stringValue.equals(UNIT_SYSTEM_METRIC)){
-                        bodyweight = Utils.lbsToKg(bodyweight);
+                        bodyweight = MathUtils.lbsToKg(bodyweight);
                     }
                     if(bodyweight != 0) {
                         defaultSharedPrefs.edit()

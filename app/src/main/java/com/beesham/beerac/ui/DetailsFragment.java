@@ -15,16 +15,11 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
-import android.transition.Scene;
-import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,6 +29,8 @@ import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.model.Beer;
+import com.beesham.beerac.utils.BeerUtils;
+import com.beesham.beerac.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -126,7 +123,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         }
 
         if(mUri != null) {
-            if(Utils.checkIfBeerExists(getContext(), mUri.getPathSegments().get(2))){
+            if(BeerUtils.checkIfBeerExists(getContext(), mUri.getPathSegments().get(2))){
                 getLoaderManager().initLoader(LOADER_BEER_EXISTS_ID, null, this).forceLoad();
             }else {
                 getLoaderManager().initLoader(LOADER_SEARCHED_BEER_ID, null, this).forceLoad();
@@ -137,8 +134,8 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
             @Override
             public void onClick(View view) {
 
-                if(!Utils.checkIfBeerExists(getContext(), beer.getId())) {
-                    Utils.logBeers(getContext(), beer.toContentValues());
+                if(!BeerUtils.checkIfBeerExists(getContext(), beer.getId())) {
+                    BeerUtils.logBeers(getContext(), beer.toContentValues());
                     mFab.setImageResource(R.drawable.ic_favourite_fill);
                 }
                 else {
@@ -223,7 +220,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
                                 new String[]{mUri.getPathSegments().get(2)},
                                 null);
 
-                        return Utils.extractBeerFromCursor(c);
+                        return BeerUtils.extractBeerFromCursor(c);
                     }
                 };
 
@@ -247,7 +244,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
                         }
 
                         try {
-                            return Utils.extractBeerDetails(responseStr);
+                            return BeerUtils.extractBeerDetails(responseStr);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -274,7 +271,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
             return;
         }
 
-        if(Utils.checkIfBeerExists(getActivity(), beer.getId()))
+        if(BeerUtils.checkIfBeerExists(getActivity(), beer.getId()))
             mFab.setImageResource(R.drawable.ic_favourite_fill);
 
         progressBar.setVisibility(View.GONE);

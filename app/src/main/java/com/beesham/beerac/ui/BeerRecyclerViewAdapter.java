@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
+import com.beesham.beerac.utils.BeerUtils;
+import com.beesham.beerac.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -83,7 +85,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                                     intent.setAction(ACTION_GET_BEER_DETAILS);
                                     intent.putExtra(BeerACIntentService.EXTRA_QUERY, beerId);
 
-                                    if(!Utils.checkIfBeerExists(mContext, beerId)) {
+                                    if(!BeerUtils.checkIfBeerExists(mContext, beerId)) {
                                         BeerACIntentService.startBeerQueryService(mContext, intent);
                                     }
 
@@ -97,7 +99,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                                 }
                             });
 
-                    if(Utils.checkIfBeerExists(mContext, beerId)) {
+                    if(BeerUtils.checkIfBeerExists(mContext, beerId)) {
                         builder.setMessage(mContext.getString(R.string.dialog_confirmation_message));
                     }else{
                         builder.setMessage(mContext.getString(R.string.dialog_confirmation_message_save));
@@ -107,7 +109,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
 
                     if(Utils.isOnline(mContext)) {
                         dialog.show();
-                    }else if(!Utils.isOnline(mContext) && Utils.checkIfBeerExists(mContext, beerId)){
+                    }else if(!Utils.isOnline(mContext) && BeerUtils.checkIfBeerExists(mContext, beerId)){
                         dialog.show();
                     }else{
                         Toast.makeText(mContext, mContext.getString(R.string.no_network) + "\n"  +

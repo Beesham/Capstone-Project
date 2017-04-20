@@ -1,10 +1,9 @@
 package com.beesham.beerac.ui;
 
-import junit.framework.TestCase;
+import com.beesham.beerac.utils.MathUtils;
+import com.beesham.beerac.utils.Utils;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -22,7 +21,7 @@ public class UtilsTest{
         double bodyWeight = 170;
         double timePassed = 4.5; //hours
 
-        double bac = Utils.calculateBAC(numOfBeers,
+        double bac = MathUtils.calculateBAC(numOfBeers,
                 abv,
                 standardDrinkSize,
                 gender,
@@ -34,10 +33,10 @@ public class UtilsTest{
 
     @Test
     public void convertMillisToHourAndMins() throws Exception {
-        long time =  Utils.timeInMillis(13, 15); // 13 hours (1pm), 15 mins
+        long time =  MathUtils.timeInMillis(13, 15); // 13 hours (1pm), 15 mins
         int[] timeArray;
 
-        timeArray = Utils.convertTimeMillisToHourAndMins(time);
+        timeArray = MathUtils.convertTimeMillisToHourAndMins(time);
 
         assertEquals(13, timeArray[0]);
         assertEquals(15, timeArray[1]);

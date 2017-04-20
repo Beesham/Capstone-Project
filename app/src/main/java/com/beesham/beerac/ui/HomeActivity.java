@@ -8,11 +8,12 @@ import android.support.v7.widget.Toolbar;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
+import com.beesham.beerac.utils.BeerUtils;
+import com.beesham.beerac.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.fragment;
 import static com.beesham.beerac.service.BeerACIntentService.buildBeerByIdUri;
 
 public class HomeActivity extends AppCompatActivity implements TimePickerFragment.TimeSetter{
@@ -38,7 +39,7 @@ public class HomeActivity extends AppCompatActivity implements TimePickerFragmen
             mTwoPane = true;
 
             Bundle args = new Bundle();
-            args.putString(getString(R.string.beer_details_uri_key), buildBeerByIdUri(Utils.getBeerIdFromPrefs(this)));
+            args.putString(getString(R.string.beer_details_uri_key), buildBeerByIdUri(BeerUtils.getBeerIdFromPrefs(this)));
             args.putString(FRAG_FROM_HOME_ACT_KEY, TAG); //Determines whether or not to inflate the image view in details
 
             DetailsFragment fragment = new DetailsFragment();
