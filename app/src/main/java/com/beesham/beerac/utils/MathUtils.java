@@ -151,7 +151,7 @@ public class MathUtils {
         return Double.valueOf(threeDForm.format(bac));
     }
 
-    public static String getCalculationsAsString(int numOfBeers,
+    private static String getCalculationsAsString(int numOfBeers,
                                                  double abv,
                                                  double drinkSize,
                                                  String gender,

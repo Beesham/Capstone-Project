@@ -167,4 +167,9 @@ public class Utils {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
+
+    public static String getBacCalculationsFromPrefs(Context context){
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return defaultPreferences.getString(context.getString(R.string.bac_calculation_string_key), "No calculations done yet");
+    }
 }

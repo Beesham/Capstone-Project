@@ -30,6 +30,7 @@
     <string name="label_time_picker" translatable="true">Started Drinking Time</string>
     <string name="label_beer_volume" translatable="true">Drink Size</string>
     <string name="label_beer_count" translatable="true">Beer Count</string>
+    <string name="label_bac">BAC</string>
     <string name="beers_had"><xliff:g id="beers_had">%d</xliff:g> beers had</string>
     <string name="bac_format">BAC: <xliff:g id="bac_format">%.03f</xliff:g>%%</string>
     <string name="title_activity_details">Details</string>

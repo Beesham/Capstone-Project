@@ -3,6 +3,7 @@ package com.beesham.beerac.ui;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,6 +57,7 @@ import butterknife.ButterKnife;
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
+import static com.beesham.beerac.ui.HomeActivity.LOG_TAG;
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
@@ -71,9 +73,16 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @BindView(R.id.decrement_beers_button) ImageButton mDecrementBeerButton;
     @BindView(R.id.volume_spinner) Spinner mVolumeSpinner;
     @BindView(R.id.drinking_time_start_text_view) EditText mStartDrinkTimeEditTextView;
+    @BindView(R.id.info_time_image_button) ImageButton mInfoTimeImageButton;
+    @BindView(R.id.info_drink_size_image_button) ImageButton mInfoDrinkSizeImageButton;
+    @BindView(R.id.info_bac_image_button) ImageButton mInfoBacImageButton;
 
     public static final int INC_BEER_FLAG = 1;
     public static final int DEC_BEER_FLAG = 0;
+
+    private static final String INFO_TIME = "info_time";
+    private static final String INFO_DRINK_SIZE = "info_drink_size";
+    private static final String INFO_BAC = "info_bac";
 
     private static final int LOADER_FIRST_LAUNCH_ID = 0;
     private static final int LOADER_ID = 1;
@@ -321,6 +330,27 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }
         });
+
+        mInfoBacImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInfoDialog(INFO_BAC);
+            }
+        });
+
+        mInfoDrinkSizeImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInfoDialog(INFO_DRINK_SIZE);
+            }
+        });
+
+        mInfoTimeImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInfoDialog(INFO_TIME);
+            }
+        });
     }
 
     private void setupVolumeSpinner(){
@@ -404,6 +434,32 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 .apply();
 
         updateBAC();
+    }
+
+    private void showInfoDialog(String infoToShow){
+        AlertDialog.Builder infoDialogBuilder = new AlertDialog.Builder(getActivity());
+
+        switch (infoToShow){
+            case INFO_TIME:
+                infoDialogBuilder.setTitle(getString(R.string.label_time_picker))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setMessage("Time started drinking");   //TODO move to strings
+                break;
+
+            case INFO_DRINK_SIZE:
+                infoDialogBuilder.setTitle(getString(R.string.label_beer_volume))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setMessage("Drink size");  //TODO move to strings
+                break;
+
+            case INFO_BAC:
+                infoDialogBuilder.setTitle(getString(R.string.label_bac))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setMessage(Utils.getBacCalculationsFromPrefs(getActivity()));  //TODO make look nice
+                break;
+        }
+
+        infoDialogBuilder.create().show();
     }
 
     @Override
