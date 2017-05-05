@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.ui.HomeFragment;
@@ -28,13 +29,6 @@ import static com.beesham.beerac.utils.MathUtils.timeInMillis;
  */
 
 public class Utils {
-
-    public static String getCalculationsAsString(){
-
-
-
-        return null;
-    }
 
     public static double getTimePassed(Context context){
         Calendar calendar = Calendar.getInstance();

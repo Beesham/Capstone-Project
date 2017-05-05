@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
@@ -13,6 +14,10 @@ import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.beesham.beerac.model.BacConstants.ALC_DIST_FEMALE;
+import static com.beesham.beerac.model.BacConstants.ALC_DIST_MALE;
+import static com.beesham.beerac.model.BacConstants.AVG_ALC_ELIM_RATE;
+import static com.beesham.beerac.model.BacConstants.LIQ_OZ_TO_WGHT_OZ;
 import static com.beesham.beerac.utils.Utils.getTimePassed;
 
 /**
@@ -103,6 +108,10 @@ public class MathUtils {
                         Integer.parseInt(context.getString(R.string.default_volume))));
 
 
+        defaultPreferences.edit()
+                .putString(context.getString(R.string.bac_calculation_string_key),
+                        getCalculationsAsString(numOfBeers, abv, drinkSize, gender, bodyWeight, timePassed))
+                .apply();
         return calculateBAC(numOfBeers, abv, drinkSize, gender, bodyWeight, timePassed);
     }
 
@@ -125,10 +134,6 @@ public class MathUtils {
                                       String gender,
                                       double bodyWeight,
                                       double timePassed){
-        final double AVG_ALC_ELIM_RATE = 0.015;
-        final double LIQ_OZ_TO_WGHT_OZ = 5.14;   //conversion factor of .823 x 100/16, wherein .823 is used to convert liquid ounces to ounces of weight
-        final double ALC_DIST_MALE = 0.73;
-        final double ALC_DIST_FEMALE = 0.66;
         double bac = 0.00;
 
         double a = numOfBeers * drinkSize * (abv/100);
@@ -146,4 +151,35 @@ public class MathUtils {
         return Double.valueOf(threeDForm.format(bac));
     }
 
+    public static String getCalculationsAsString(int numOfBeers,
+                                                 double abv,
+                                                 double drinkSize,
+                                                 String gender,
+                                                 double bodyWeight,
+                                                 double timePassed){
+
+        double a = numOfBeers * drinkSize * (abv/100);
+
+        StringBuilder calcAsString = new StringBuilder("((" + Double.toString(a));
+        calcAsString.append(" * ")
+                .append(LIQ_OZ_TO_WGHT_OZ + ")")
+                .append(" / ")
+                .append("(" + bodyWeight)
+                .append(" * ");
+
+        Log.v("Util", "calculations: " + calcAsString);
+
+        if(gender.equals("Male")){
+            calcAsString.append(ALC_DIST_MALE + "))");
+        }else{
+            calcAsString.append(ALC_DIST_FEMALE + "))");
+        }
+
+        calcAsString.append(" - ")
+                .append(AVG_ALC_ELIM_RATE)
+                .append(" * ")
+                .append(timePassed);
+
+        return calcAsString.toString();
+    }
 }

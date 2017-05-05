@@ -26,15 +26,29 @@
 
         <View style="@style/Divider"/>
 
-        <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/drinking_time_start_text_view"
-                tools:text="3:00PM"
-                android:contentDescription="@string/a11y_started_drinking_time"
-                android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:editable="false"/>
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/drinking_time_start_text_view"
+                    tools:text="3:00PM"
+                    android:contentDescription="@string/a11y_started_drinking_time"
+                    android:layout_centerInParent="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:editable="false"/>
+
+            <ImageButton
+                    android:id="@+id/info_time_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_info_black_24dp"
+                    android:layout_toRightOf="@+id/drinking_time_start_text_view"
+                    android:tint="@color/lightGrey"
+                    android:background="?android:selectableItemBackground"/>
+        </RelativeLayout>
 
         <TextView
                 android:text="@string/label_beer_volume"
@@ -59,12 +73,22 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/a11y_beer_volume"/>
 
+            <ImageButton
+                    android:id="@+id/info_drink_size_image_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_info_black_24dp"
+                    android:layout_toRightOf="@+id/bac_text_view"
+                    android:tint="@color/lightGrey"
+                    android:background="?android:selectableItemBackground"/>
+
         </LinearLayout>
 
         <TextView
                 android:text="@string/label_beer_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/separator_padding"
                 android:layout_gravity="left"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textSize="@dimen/label_text_size"/>
@@ -74,53 +98,67 @@
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-        <LinearLayout
-                android:id="@+id/linear_layout"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
+            <LinearLayout
+                    android:id="@+id/linear_layout"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
 
-            <ImageButton
-                    android:id="@+id/decrement_beers_button"
-                    app:srcCompat="@drawable/button_decrease"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/a11y_decrement_beer_count"/>
+                <ImageButton
+                        android:id="@+id/decrement_beers_button"
+                        app:srcCompat="@drawable/button_decrease"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/a11y_decrement_beer_count"/>
 
-            <EditText
-                    android:focusable="false"
-                    android:id="@+id/total_beers_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/a11y_beer_count"
-                    tools:text="0 beers had"
-                    android:textAlignment="center"
-                    android:inputType="number"/>
+                <EditText
+                        android:focusable="false"
+                        android:id="@+id/total_beers_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/a11y_beer_count"
+                        tools:text="0 beers had"
+                        android:textAlignment="center"
+                        android:inputType="number"/>
 
-            <ImageButton
-                    android:id="@+id/increment_beers_button"
-                    app:srcCompat="@drawable/button_increase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/a11y_increment_beer_count"/>
-        </LinearLayout>
+                <ImageButton
+                        android:id="@+id/increment_beers_button"
+                        app:srcCompat="@drawable/button_increase"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/a11y_increment_beer_count"/>
+            </LinearLayout>
         </FrameLayout>
 
         <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
-        <TextView
-                android:id="@+id/bac_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/a11y_bac"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textAlignment="center"
-                android:gravity="center"
-                tools:text="BAC: 0.000%"
-                android:padding="@dimen/default_padding"/>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:id="@+id/bac_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/a11y_bac"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textAlignment="center"
+                        android:layout_centerInParent="true"
+                        tools:text="BAC: 0.000%"
+                        android:padding="@dimen/default_padding"/>
+
+                <ImageButton
+                        android:id="@+id/info_bac_image_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_info_black_24dp"
+                        android:layout_toRightOf="@+id/bac_text_view"
+                        android:tint="@color/lightGrey"
+                        android:background="?android:selectableItemBackground"/>
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
     </LinearLayout>

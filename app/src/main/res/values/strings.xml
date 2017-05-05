@@ -9,9 +9,10 @@
     <string name="beer_volume_key">beer_volume</string>
     <string name="bac_key">bac</string>
 
+    <string name="bac_calculation_string_key">bac_calculation</string>
+
     <string name="default_preferred_beer">oeGSxs</string>
     <string name="default_volume">355</string>
-
 
     <string name="pref_version_code_key">version_code</string>
 

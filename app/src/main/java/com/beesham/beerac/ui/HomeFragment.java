@@ -388,7 +388,9 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         Calendar calendar = new GregorianCalendar(1990, 1, 1, hourOfDay, minute);
 
         if(!DateFormat.is24HourFormat(getActivity())){
-            if(hourOfDay > 12){ //PM
+            if(hourOfDay == 12){
+                mStartDrinkTimeEditTextView.setText(String.format("%d : %02d PM", 12, minute));
+            }else if(hourOfDay >= 12){ //PM
                 mStartDrinkTimeEditTextView.setText(String.format("%d : %02d PM", calendar.get(Calendar.HOUR), minute));
             }else{  //AM
                 mStartDrinkTimeEditTextView.setText(String.format("%d : %02d AM", calendar.get(Calendar.HOUR), minute));
