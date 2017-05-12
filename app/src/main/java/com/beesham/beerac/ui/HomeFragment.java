@@ -443,13 +443,13 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             case INFO_TIME:
                 infoDialogBuilder.setTitle(getString(R.string.label_time_picker))
                         .setPositiveButton(android.R.string.ok, null)
-                        .setMessage("Time started drinking");   //TODO move to strings
+                        .setMessage(R.string.time_description);
                 break;
 
             case INFO_DRINK_SIZE:
                 infoDialogBuilder.setTitle(getString(R.string.label_beer_volume))
                         .setPositiveButton(android.R.string.ok, null)
-                        .setMessage("Drink size");  //TODO move to strings
+                        .setMessage(R.string.drink_size_description);
                 break;
 
             case INFO_BAC:

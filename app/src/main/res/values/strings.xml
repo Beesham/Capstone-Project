@@ -38,6 +38,9 @@
 
     <string name="no_weight_toast" translatable="true">Please set Weight in app Settings</string>
 
+    <string name="time_description">Started drinking time is the time that you initially had your first beer. Example, 7:00 PM</string>
+    <string name="drink_size_description">This is the size of one beer that you are currently consuming. Example, 12oz</string>
+
     <!-- Home Units Spinner -->
     <string-array name="units">
         <item>oZ</item>

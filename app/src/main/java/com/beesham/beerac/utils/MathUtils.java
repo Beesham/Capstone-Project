@@ -160,14 +160,21 @@ public class MathUtils {
 
         double a = numOfBeers * drinkSize * (abv/100);
 
-        StringBuilder calcAsString = new StringBuilder("((" + Double.toString(a));
+        StringBuilder calcAsString = new StringBuilder();
+        calcAsString.append("A = liquid ounces of alcohol consumed\n");
+        calcAsString.append("W = a person’s weight in pounds (converted if using Kg)\n");
+        calcAsString.append("r = a gender constant of alcohol distribution (.73 for men and .66 for women)\n");
+        calcAsString.append("H = hours elapsed since drinking commenced\n\n");
+
+        calcAsString.append("% BAC = (A x 5.14 / W x r) – .015 x H\n\n");
+
+        calcAsString.append("% BAC = ");
+        calcAsString.append("((" + Double.toString(a));
         calcAsString.append(" * ")
                 .append(LIQ_OZ_TO_WGHT_OZ + ")")
                 .append(" / ")
                 .append("(" + bodyWeight)
                 .append(" * ");
-
-        Log.v("Util", "calculations: " + calcAsString);
 
         if(gender.equals("Male")){
             calcAsString.append(ALC_DIST_MALE + "))");
@@ -178,7 +185,7 @@ public class MathUtils {
         calcAsString.append(" - ")
                 .append(AVG_ALC_ELIM_RATE)
                 .append(" * ")
-                .append(timePassed);
+                .append(String.format("%.2f", timePassed));
 
         return calcAsString.toString();
     }
