@@ -455,7 +455,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
             case INFO_BAC:
                 infoDialogBuilder.setTitle(getString(R.string.label_bac))
                         .setPositiveButton(android.R.string.ok, null)
-                        .setMessage(Utils.getBacCalculationsFromPrefs(getActivity()));  //TODO make look nice
+                        .setMessage(Utils.getBacCalculationsFromPrefs(getActivity()));
                 break;
         }
 

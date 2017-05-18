@@ -33,6 +33,8 @@ import com.beesham.beerac.analytics.AnalyticsApplication;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.service.BeerACIntentService;
+import com.beesham.beerac.utils.Utils;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
