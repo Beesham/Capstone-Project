@@ -125,7 +125,6 @@ public class SettingsActivity extends PreferenceActivity {
                 String text = "";
 
                 if(!TextUtils.isEmpty(stringValue)){
-                    //text = Double.toString(Math.ceil(Double.parseDouble(stringValue)));
                     text = Double.toString(Double.parseDouble(stringValue));
                 }
 

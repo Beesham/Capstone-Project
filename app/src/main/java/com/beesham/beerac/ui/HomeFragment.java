@@ -258,6 +258,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //OK
+                        Toast.makeText(getActivity(), R.string.no_weight_toast, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .create();

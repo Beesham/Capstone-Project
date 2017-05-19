@@ -113,8 +113,6 @@ public class WeightPreference extends DialogPreference {
         String text = "";
         if(!TextUtils.isEmpty(PreferenceManager.getDefaultSharedPreferences(view.getContext())
                 .getString(view.getContext().getString(R.string.pref_body_weight_key), ""))) {
-            /*text = Double.toString(Math.ceil(Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(view.getContext())
-                    .getString(view.getContext().getString(R.string.pref_body_weight_key), null))));*/
 
             text = Double.toString(Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(view.getContext())
                     .getString(view.getContext().getString(R.string.pref_body_weight_key), null)));
