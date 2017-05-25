@@ -47,7 +47,8 @@
                     app:srcCompat="@drawable/ic_info_black_24dp"
                     android:layout_toRightOf="@+id/drinking_time_start_text_view"
                     android:tint="@color/lightGrey"
-                    android:background="?android:selectableItemBackground"/>
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/a11y_more_info_time"/>
         </RelativeLayout>
 
         <TextView
@@ -80,7 +81,8 @@
                     app:srcCompat="@drawable/ic_info_black_24dp"
                     android:layout_toRightOf="@+id/bac_text_view"
                     android:tint="@color/lightGrey"
-                    android:background="?android:selectableItemBackground"/>
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/a11y_more_info_drink_size"/>
 
         </LinearLayout>
 
@@ -157,7 +159,8 @@
                         app:srcCompat="@drawable/ic_info_black_24dp"
                         android:layout_toRightOf="@+id/bac_text_view"
                         android:tint="@color/lightGrey"
-                        android:background="?android:selectableItemBackground"/>
+                        android:background="?android:selectableItemBackground"
+                        android:contentDescription="@string/a11y_more_info_bac_reading"/>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 

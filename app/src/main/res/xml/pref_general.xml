@@ -45,6 +45,10 @@
                 android:summary="@string/pref_about_description"
                 android:dialogMessage="@string/pref_about_extended_description"/>
 
+        <!-- How it works -->
+        <com.beesham.beerac.ui.preferences.HowItWorksPreference
+                android:title="@string/how_it_works_label"/>
+
         <!-- Disclaimer -->
         <com.beesham.beerac.ui.preferences.AboutPreference
                 android:title="@string/disclaimer_label"

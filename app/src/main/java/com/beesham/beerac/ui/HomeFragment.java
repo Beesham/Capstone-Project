@@ -57,7 +57,7 @@ import butterknife.ButterKnife;
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
-import static com.beesham.beerac.ui.HomeActivity.LOG_TAG;
+
 
 /**
  * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         if(Utils.checkForFirstLaunch(getActivity())){
             initializeFirstLaunchVariables();
             getActivity().getSupportLoaderManager().initLoader(LOADER_FIRST_LAUNCH_ID, null, this);
-            displayDisclaimer();
+            displayDisclaimer();    //Chains into howitworks dialog
         }else{
             if(mBeerId != null) {
                 getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
@@ -154,6 +154,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
         //set soft keyboard hidden when app launches
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
 
         return view;
     }
@@ -258,12 +259,36 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //OK
-                        Toast.makeText(getActivity(), R.string.no_weight_toast, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        displayHowItWorks();
                     }
                 })
                 .create();
 
         alertDialog.show();
+    }
+
+    private void displayHowItWorks(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(R.layout.how_it_works_dialog)
+                .setTitle("How It Works")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(), R.string.no_weight_toast, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        Toast.makeText(getActivity(), R.string.no_weight_toast, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        builder.show();
     }
 
     private void setupViews(){

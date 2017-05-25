@@ -148,6 +148,12 @@
         \n\nBeerAC uses the BreweryDB API but is not endorsed or certified by PintLabs.
         \n\nPlease do not drink and drive\n\nDrink responsibly</string>
 
+    <!-- How it works -->
+    <string name="how_it_works_label" translatable="true">How It Works</string>
+    <string name="how_it_works_step_1" translatable="true">Search for the beer you are drinking</string>
+    <string name="how_it_works_step_2" translatable="true">Select the glass icon to let the app know you are drinking this beer. The alcohol content of the beer will be automatically included in the calculations.</string>
+    <string name="how_it_works_note" translatable="true">You could also save your beer by hitting the heart icon in the beer details</string>
+
     <!-- Stock Beer -->
     <string name="stock_beer_name">Stock Beer</string>
     <string name="stock_beer_id">stock_beer</string>
@@ -171,8 +177,16 @@
     <string name="a11y_increment_beer_count" translatable="true">Increment beer count</string>
     <string name="a11y_decrement_beer_count" translatable="true">Decrement beer count</string>
 
+    <string name="a11y_more_info_time" translatable="true">More info on started drinking time</string>
+    <string name="a11y_more_info_drink_size" translatable="true">More info on drink size</string>
+    <string name="a11y_more_info_bac_reading" translatable="true">More info on B A C reading</string>
+
+
     <string name="a11y_fab" translatable="true">Save this beer</string>
     <string name="a11y_drink_beer" translatable="true">Drink this beer</string>
+
+    <string name="a11y_search_bar_image" translatable="true">Search bar image</string>
+    <string name="a11y_search_result_image" translatable="true">Search result image with glass icon</string>
 
     <!-- Ads moved to gradle.properties-->
 
@@ -186,7 +200,6 @@
 
 
     <string name="add_widget">Add widget</string>
-
 
 
 </resources>

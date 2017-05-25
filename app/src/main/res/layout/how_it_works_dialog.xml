@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="@dimen/default_padding">
+
+    <TextView
+            android:id="@+id/step_1_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/how_it_works_step_1"/>
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search_bar"
+            android:contentDescription="@string/a11y_search_bar_image"/>
+
+    <TextView
+            android:id="@+id/step_2_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/how_it_works_step_2"/>
+
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search_result"
+            android:contentDescription="@string/a11y_search_result_image"/>
+
+    <TextView
+            android:id="@+id/note_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/how_it_works_note"/>
+
+</LinearLayout>
