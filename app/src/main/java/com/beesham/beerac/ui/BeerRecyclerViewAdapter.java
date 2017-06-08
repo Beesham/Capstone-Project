@@ -130,8 +130,7 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
             //with a beer uri
             if(SearchActivity.mTwoPane || SavesActivity.mTwoPane){
                 args.putString(mContext.getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(
-                        mCursor.getString(
-                                mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
+                        mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))));
                 mOnClickHandler.onClick(args, BeerViewHolder.this);
                 mICM.onClick(BeerViewHolder.this);
             }else{

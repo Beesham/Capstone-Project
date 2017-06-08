@@ -22,6 +22,7 @@ import com.beesham.beerac.R;
 import com.beesham.beerac.data.BeerProvider;
 import com.beesham.beerac.data.Columns;
 import com.beesham.beerac.model.Beer;
+import com.beesham.beerac.service.BeerACIntentService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -135,12 +136,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursor = data;
         mPagerAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mCursor = null;
-        mPagerAdapter.notifyDataSetChanged();
 
         // Select the start ID
         if (!TextUtils.isEmpty(mStartId)) {
@@ -156,7 +151,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
             }
             mStartId = "";
         }
+    }
 
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCursor = null;
+        mPagerAdapter.notifyDataSetChanged();
     }
 
     private class BeerDetailsPagerAdapter extends FragmentPagerAdapter{
@@ -175,8 +175,14 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         public Fragment getItem(int position) {
             mCursor.moveToPosition(position);
 
+            Bundle args = new Bundle();
+            args.putString(getApplication().getString(R.string.beer_details_uri_key),
+                    BeerACIntentService.buildBeerByIdUri(
+                            mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
+                    ));
+
             DetailsFragment fragment = new DetailsFragment();
-            fragment.setArguments(mBundle);
+            fragment.setArguments(args);
 
             return fragment;
         }
