@@ -51,13 +51,13 @@ import static com.beesham.beerac.ui.HomeActivity.FRAG_FROM_HOME_ACT_KEY;
  */
 public class DetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Beer>{
 
-    @BindView(R.id.description_text_view) TextView descriptionTextView;
+    @BindView(R.id.description_text_view) TextView mDescriptionTextView;
     @BindView(R.id.abv_text_view) TextView mAbvTextView;
     @BindView(R.id.style_name_text_view) TextView mBeerStyleNameTextView;
     @BindView(R.id.style_description_text_view) TextView mBeerStyleDescriptionTextView;
     @BindView(R.id.food_pairings_text_view) TextView mFoodPairingsTextView;
-    @BindView(R.id.photo) ImageView beerImageView;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.photo) ImageView mBeerImageView;
+    @BindView(R.id.progressBar) ProgressBar mProgressBar;
     @BindView(R.id.fab) FloatingActionButton mFab;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.empty_view) TextView mEmptyView;
@@ -115,9 +115,9 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         if(bundle != null){
             if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
                 if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)) {
-                    beerImageView.setVisibility(View.GONE);
+                    mBeerImageView.setVisibility(View.GONE);
                 }else{
-                    beerImageView.setVisibility(View.VISIBLE);
+                    mBeerImageView.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -259,14 +259,14 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
     public void onLoadFinished(Loader<Beer> loader, Beer data) {
         beer = data;
         if(beer == null) {
-            beerImageView.setImageResource(R.drawable.stockbeer);
-            progressBar.setVisibility(View.GONE);
+            mBeerImageView.setImageResource(R.drawable.stockbeer);
+            mProgressBar.setVisibility(View.GONE);
             mFab.setVisibility(View.GONE);
 
             if(Utils.isOnline(getContext())) {
                 mEmptyView.setVisibility(View.GONE);
                 mAbvTextView.setText(getString(R.string.abv_format, getString(R.string.stock_beer_abv)));
-                descriptionTextView.setText(getString(R.string.stock_beer_description));
+                mDescriptionTextView.setText(getString(R.string.stock_beer_description));
             }
             return;
         }
@@ -274,11 +274,11 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         if(BeerUtils.checkIfBeerExists(getActivity(), beer.getId()))
             mFab.setImageResource(R.drawable.ic_favourite_fill);
 
-        progressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
         mEmptyView.setVisibility(View.GONE);
         mCollapsingToolbar.setTitle(beer.getName());
 
-        descriptionTextView.setText(beer.getDescription());
+        mDescriptionTextView.setText(beer.getDescription());
         mBeerStyleNameTextView.setText(beer.getStyleName());
         mAbvTextView.setText(getString(R.string.abv_format, beer.getAbv()));
         mBeerStyleDescriptionTextView.setText(beer.getStyleDescription());
@@ -292,13 +292,13 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         if(!HomeActivity.mTwoPane)
             mListener.onFragmentInteraction(beer);
 
-        if(beerImageView != null) {
+        if(mBeerImageView != null) {
             if (!TextUtils.isEmpty(beer.getUrl_large())) {
                 Picasso.with(getContext())
                         .load(beer.getUrl_large())
                         .placeholder(R.drawable.stockbeer)
                         .error(R.drawable.stockbeer)
-                        .into(beerImageView);
+                        .into(mBeerImageView);
             }
         }
     }

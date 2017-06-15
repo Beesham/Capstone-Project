@@ -96,6 +96,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
                     mCursor.moveToPosition(position);
                 }
                 mSelectedItemId = mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID));
+                mTitle.setText(mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.NAME)));
             }
 
             @Override
@@ -107,7 +108,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
     @Override
     public void onFragmentInteraction(Beer beer) {
-        mTitle.setText(beer.getName());
+        //we use to set actionbat title here but no more
     }
 
     @Override
@@ -140,6 +141,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         // Select the start ID
         if (!TextUtils.isEmpty(mStartId)) {
             mCursor.moveToFirst();
+            mTitle.setText(mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.NAME)));
             // TODO: optimize
             while (!mCursor.isAfterLast()) {
                 if (mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID)) == mStartId) {
