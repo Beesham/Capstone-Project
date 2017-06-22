@@ -27,7 +27,6 @@ import com.beesham.beerac.service.BeerACIntentService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.attr.fragment;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener, LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -43,16 +42,18 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     private String mStartId;
     private String mSelectedItemId;
 
+    //TODO: fix crash on details when coming from home/favs
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
 
-        getSupportLoaderManager().initLoader(0, null, this);
-
         mBundle = getIntent().getExtras();
         mStartId = Uri.parse(mBundle.getString(getString(R.string.beer_details_uri_key))).getPathSegments().get(2);
+
+        getSupportLoaderManager().initLoader(0, null, this);
 
         DetailsFragment fragment = new DetailsFragment();
         fragment.setArguments(mBundle);
@@ -108,7 +109,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
     @Override
     public void onFragmentInteraction(Beer beer) {
-        //we use to set actionbat title here but no more
+        //we use to set actionbar title here but not with the view pager
     }
 
     @Override
@@ -140,18 +141,19 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
         // Select the start ID
         if (!TextUtils.isEmpty(mStartId)) {
-            mCursor.moveToFirst();
-            mTitle.setText(mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.NAME)));
-            // TODO: optimize
-            while (!mCursor.isAfterLast()) {
-                if (mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID)) == mStartId) {
-                    final int position = mCursor.getPosition();
-                    mViewPager.setCurrentItem(position, false);
-                    break;
+            if(mCursor.moveToFirst()) {
+                mTitle.setText(mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.NAME)));
+                // TODO: optimize
+                while (!mCursor.isAfterLast()) {
+                    if (mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID)).equals(mStartId)) {
+                        final int position = mCursor.getPosition();
+                        mViewPager.setCurrentItem(position, false);
+                        break;
+                    }
+                    mCursor.moveToNext();
                 }
-                mCursor.moveToNext();
+                mStartId = "";
             }
-            mStartId = "";
         }
     }
 
