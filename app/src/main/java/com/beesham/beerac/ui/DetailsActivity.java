@@ -67,10 +67,10 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         // Loads data based on if the beer is selected from Home or Search
         if(mBundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
             if (mBundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeFragment.TAG)) {
-                getSupportLoaderManager().initLoader(LOADER_ID_SEARCHED_BEER, null, this);
+                getSupportLoaderManager().initLoader(LOADER_ID_SAVED_BEER, null, this);
             }
         }else{
-            getSupportLoaderManager().initLoader(LOADER_ID_SAVED_BEER, null, this);
+            getSupportLoaderManager().initLoader(LOADER_ID_SEARCHED_BEER, null, this);
         }
 
         if(savedInstanceState == null){

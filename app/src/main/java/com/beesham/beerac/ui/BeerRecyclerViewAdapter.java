@@ -139,21 +139,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
                                 mCursor.getString(mCursor.getColumnIndex(Columns.SearchedBeerColumns.BEERID))
                         ));
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Pair<View, String> beerImagePair = Pair.create((View)beerImageView, beerImageView.getTransitionName());
-
-                    Bundle transitionsBundle = ActivityOptionsCompat
-                            .makeSceneTransitionAnimation(
-                                    (Activity) mContext,
-                                    beerImagePair
-                            ).toBundle();
-
-                    mContext.startActivity(new Intent(mContext, DetailsActivity.class)
-                            .putExtras(args), transitionsBundle);
-                }else {
-                    mContext.startActivity(new Intent(mContext, DetailsActivity.class)
-                            .putExtras(args));
-                }
+                mContext.startActivity(new Intent(mContext, DetailsActivity.class)
+                        .putExtras(args));
             }
         }
     }
