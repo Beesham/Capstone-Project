@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -27,10 +28,16 @@ import com.beesham.beerac.service.BeerACIntentService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.R.attr.data;
+import static com.beesham.beerac.ui.HomeActivity.FRAG_FROM_HOME_ACT_KEY;
+
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String LOG_TAG = DetailsActivity.class.getSimpleName();
+    private final int PATH_SEGMENT_BEER_ID = 2;
+    private final int LOADER_ID_SEARCHED_BEER = 0;
+    private final int LOADER_ID_SAVED_BEER = 1;
 
     @BindView(R.id.title_text_view) TextView mTitle;
     @BindView(R.id.pager) ViewPager mViewPager;
@@ -42,7 +49,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     private String mStartId;
     private String mSelectedItemId;
 
-    //TODO: fix crash on details when coming from home/favs
+    //Todo: fix return animation shows next beer image in list
+    //Todo: fix does not return to item that was being viewed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +59,19 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         ButterKnife.bind(this);
 
         mBundle = getIntent().getExtras();
-        mStartId = Uri.parse(mBundle.getString(getString(R.string.beer_details_uri_key))).getPathSegments().get(2);
-
-        getSupportLoaderManager().initLoader(0, null, this);
+        mStartId = Uri.parse(mBundle.getString(getString(R.string.beer_details_uri_key))).getPathSegments().get(PATH_SEGMENT_BEER_ID);
 
         DetailsFragment fragment = new DetailsFragment();
         fragment.setArguments(mBundle);
+
+        // Loads data based on if the beer is selected from Home or Search
+        if(mBundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
+            if (mBundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeFragment.TAG)) {
+                getSupportLoaderManager().initLoader(LOADER_ID_SEARCHED_BEER, null, this);
+            }
+        }else{
+            getSupportLoaderManager().initLoader(LOADER_ID_SAVED_BEER, null, this);
+        }
 
         if(savedInstanceState == null){
             mSelectedItemId = mStartId;
@@ -114,7 +129,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        final String[] projections = {
+        final String[] projectionsSearchedBeer = {
                 Columns.SearchedBeerColumns.BEERID,
                 Columns.SearchedBeerColumns.NAME,
                 Columns.SearchedBeerColumns.DESCRIPTION,
@@ -124,14 +139,44 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
                 Columns.SearchedBeerColumns.IMAGEURLMEDIUM
         };
 
-        return new CursorLoader(
-                this,
-                BeerProvider.SearchedBeers.CONTENT_URI,
-                projections,
-                null,
-                null,
-                null
-        );
+        final String[] projectionsSavedBeer = {
+                Columns.SavedBeerColumns.BEERID,
+                Columns.SavedBeerColumns.NAME,
+                Columns.SavedBeerColumns.DESCRIPTION,
+                Columns.SavedBeerColumns.STYLE_NAME,
+                Columns.SavedBeerColumns.STYLE_DESCRIPTION,
+                Columns.SavedBeerColumns.FOOD_PARINGS,
+                Columns.SavedBeerColumns.ISORGANIC,
+                Columns.SavedBeerColumns.YEAR,
+                Columns.SavedBeerColumns.ABV,
+                Columns.SavedBeerColumns.LABELS,
+                Columns.SavedBeerColumns.IMAGEURLICON,
+                Columns.SavedBeerColumns.IMAGEURLLARGE,
+                Columns.SavedBeerColumns.IMAGEURLMEDIUM
+        };
+
+        switch (id) {
+            case 0:
+                return new CursorLoader(
+                        this,
+                        BeerProvider.SearchedBeers.CONTENT_URI,
+                        projectionsSearchedBeer,
+                        null,
+                        null,
+                        null
+                );
+            case 1:
+                return new CursorLoader(
+                        this,
+                        BeerProvider.SavedBeers.CONTENT_URI,
+                        projectionsSavedBeer,
+                        null,
+                        null,
+                        null
+                );
+        }
+
+        return null;
     }
 
     @Override

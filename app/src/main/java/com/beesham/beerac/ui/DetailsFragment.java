@@ -67,7 +67,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
     private static final int LOADER_BEER_EXISTS_ID = 0;
     private static final int LOADER_SEARCHED_BEER_ID = 1;
 
-    Uri mUri;
+    private Uri mUri;
 
     private Tracker mTracker;
     private Beer beer;
@@ -114,7 +114,7 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         Bundle bundle = getArguments();
         if(bundle != null){
             if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
-                if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)) {
+                if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)  && HomeActivity.mTwoPane) {
                     mBeerImageView.setVisibility(View.GONE);
                 }else{
                     mBeerImageView.setVisibility(View.VISIBLE);

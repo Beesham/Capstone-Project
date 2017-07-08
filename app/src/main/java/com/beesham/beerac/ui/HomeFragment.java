@@ -57,6 +57,7 @@ import butterknife.ButterKnife;
 import static android.content.Context.MODE_PRIVATE;
 import static com.beesham.beerac.service.BeerACIntentService.ACTION_GET_BEER_DETAILS;
 import static com.beesham.beerac.service.BeerACIntentService.RESPONSE_HAS_LABELS;
+import static com.beesham.beerac.ui.HomeActivity.FRAG_FROM_HOME_ACT_KEY;
 
 
 /**
@@ -76,6 +77,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
     @BindView(R.id.info_time_image_button) ImageButton mInfoTimeImageButton;
     @BindView(R.id.info_drink_size_image_button) ImageButton mInfoDrinkSizeImageButton;
     @BindView(R.id.info_bac_image_button) ImageButton mInfoBacImageButton;
+
+    public static final String TAG = HomeFragment.class.getSimpleName();
 
     public static final int INC_BEER_FLAG = 1;
     public static final int DEC_BEER_FLAG = 0;
@@ -296,12 +299,13 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         mBeerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle args = (new Bundle());
+                Bundle args = new Bundle();
                 Intent detailsActivityIntent = new Intent(getActivity(), DetailsActivity.class);
 
                 if (mBeerId != null) {
                     if(!HomeActivity.mTwoPane) {
                         args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
+                        args.putString(FRAG_FROM_HOME_ACT_KEY, TAG);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             Pair<View, String> beerImagePair = Pair.create((View)mBeerImage, mBeerImage.getTransitionName());
