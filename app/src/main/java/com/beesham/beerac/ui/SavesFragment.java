@@ -35,11 +35,9 @@ import butterknife.ButterKnife;
 
 import static android.R.attr.data;
 
-/**
- *
- */
+
 public class SavesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private static final String LOG_TAG = SavesFragment.class.getSimpleName();
+    public static final String TAG = SavesFragment.class.getSimpleName();
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.empty_view) TextView mEmptyView;
@@ -70,6 +68,9 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_saves, container, false);
 
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.activity_breadcrumb_key), TAG);
+
         ButterKnife.bind(this, view);
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
@@ -82,11 +83,14 @@ public class SavesFragment extends Fragment implements LoaderManager.LoaderCallb
                 mPosition = beerViewHolder.getAdapterPosition();
             }
         }, mChoiceMode);
+        mBeerRecyclerViewAdapter.setBundle(bundle);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.beer_recycler_view);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mBeerRecyclerViewAdapter);
+
+
 
         if(savedInstanceState != null){
             if(savedInstanceState.containsKey(SELECTED_KEY)){

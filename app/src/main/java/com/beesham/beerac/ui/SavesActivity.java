@@ -36,7 +36,7 @@ public class SavesActivity extends AppCompatActivity implements SavesFragment.On
 
             args.putString(getString(R.string.beer_details_uri_key),
                     buildBeerByIdUri(BeerUtils.getBeerIdFromPrefs(this)));
-            args.putString(FRAG_FROM_SAVE_ACT_KEY, TAG); //Determines whether or not to inflate the image view in details
+            args.putString(getString(R.string.activity_breadcrumb_key), TAG); //Determines whether or not to inflate the image view in details
             fragment.setArguments(args);
 
             if (savedInstanceState == null) {
@@ -53,7 +53,7 @@ public class SavesActivity extends AppCompatActivity implements SavesFragment.On
     @Override
     public void onFragmentInteraction(Bundle bundle) {
         DetailsFragment fragment = new DetailsFragment();
-        bundle.putString(FRAG_FROM_SAVE_ACT_KEY, TAG);
+        bundle.putString(getString(R.string.activity_breadcrumb_key), TAG);
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()

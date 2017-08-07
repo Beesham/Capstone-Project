@@ -2,6 +2,7 @@
     <string name="app_name">BeerAC</string>
     <string name="title_activity_home">Home</string>
 
+    <!-- Shared Prefs keys -->
     <string name="beer_details_uri_key">beer_uri</string>
     <string name="preferred_beer_key">preferred_beer</string>
     <string name="start_drinking_time_key">start_drinking_time</string>
@@ -19,6 +20,8 @@
     <string name="pref_file">com.beesham.beerac.PREF_FILE</string>
 
     <string name="launch_key">launch</string>
+
+    <string name="activity_breadcrumb_key">breadcrumb</string>
 
     <!-- Menu -->
     <string name="menu_settings">Settings</string>

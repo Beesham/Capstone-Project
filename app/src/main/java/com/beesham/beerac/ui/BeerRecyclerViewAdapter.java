@@ -48,6 +48,8 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
     private Cursor mCursor;
     private static String PREF_FILE;
 
+    private Bundle mBundle;
+
 
     public interface BeerRecyclerViewAdapterOnClickHandler{
         void onClick(Bundle bundle, BeerViewHolder beerViewHolder);
@@ -124,7 +126,10 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
         @Override
         public void onClick(View view) {
             mCursor.moveToPosition(getAdapterPosition());
-            Bundle args = new Bundle();
+            Bundle args;
+
+            if(mBundle == null) args = new Bundle();
+            else args = mBundle;
 
             //If we are in twoPane mode return a bundle with the beer uri else start details activity
             //with a beer uri
@@ -215,6 +220,10 @@ public class BeerRecyclerViewAdapter extends RecyclerView.Adapter<BeerRecyclerVi
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
+    }
+
+    public void setBundle(Bundle bundle) {
+        mBundle = bundle;
     }
 
     public Cursor getCursor() {

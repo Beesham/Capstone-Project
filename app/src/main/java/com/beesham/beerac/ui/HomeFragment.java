@@ -305,7 +305,7 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mBeerId != null) {
                     if(!HomeActivity.mTwoPane) {
                         args.putString(getString(R.string.beer_details_uri_key), BeerACIntentService.buildBeerByIdUri(mBeerId));
-                        args.putString(FRAG_FROM_HOME_ACT_KEY, TAG);
+                        args.putString(getString(R.string.activity_breadcrumb_key), TAG);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             Pair<View, String> beerImagePair = Pair.create((View)mBeerImage, mBeerImage.getTransitionName());

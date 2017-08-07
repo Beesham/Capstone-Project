@@ -113,8 +113,8 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
 
         Bundle bundle = getArguments();
         if(bundle != null){
-            if(bundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
-                if (bundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeActivity.TAG)  && HomeActivity.mTwoPane) {
+            if(bundle.containsKey(getString(R.string.activity_breadcrumb_key))) {
+                if (bundle.getString(getString(R.string.activity_breadcrumb_key)).equals(HomeActivity.TAG)  && HomeActivity.mTwoPane) {
                     mBeerImageView.setVisibility(View.GONE);
                 }else{
                     mBeerImageView.setVisibility(View.VISIBLE);
@@ -133,7 +133,6 @@ public class DetailsFragment extends Fragment implements LoaderManager.LoaderCal
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(!BeerUtils.checkIfBeerExists(getContext(), beer.getId())) {
                     BeerUtils.logBeers(getContext(), beer.toContentValues());
                     mFab.setImageResource(R.drawable.ic_favourite_fill);

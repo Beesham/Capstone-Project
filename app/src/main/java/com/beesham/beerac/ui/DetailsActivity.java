@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -27,9 +26,6 @@ import com.beesham.beerac.service.BeerACIntentService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.R.attr.data;
-import static com.beesham.beerac.ui.HomeActivity.FRAG_FROM_HOME_ACT_KEY;
 
 
 public class DetailsActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener, LoaderManager.LoaderCallbacks<Cursor>{
@@ -49,8 +45,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     private String mStartId;
     private String mSelectedItemId;
 
-    //Todo: fix return animation shows next beer image in list
-    //Todo: fix does not return to item that was being viewed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +58,10 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         DetailsFragment fragment = new DetailsFragment();
         fragment.setArguments(mBundle);
 
-        // Loads data based on if the beer is selected from Home or Search
-        if(mBundle.containsKey(FRAG_FROM_HOME_ACT_KEY)) {
-            if (mBundle.getString(FRAG_FROM_HOME_ACT_KEY).equals(HomeFragment.TAG)) {
+        // Loads data based on if the beer is selected from Home or Search or Saves
+        if(mBundle.containsKey(getString(R.string.activity_breadcrumb_key))) {
+            String launchedFromTag = mBundle.getString(getString(R.string.activity_breadcrumb_key));
+            if (launchedFromTag.equals(SavesFragment.TAG) || launchedFromTag.equals(HomeFragment.TAG)) {
                 getSupportLoaderManager().initLoader(LOADER_ID_SAVED_BEER, null, this);
             }
         }else{
